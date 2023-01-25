@@ -133,7 +133,7 @@ final class TypeExtendsReader {
 
     if (!extendsTypes.isEmpty()) {
 
-      return extendsTypes.get(extendsTypes.size()-1);
+      return extendsTypes.get(extendsTypes.size() - 1);
     }
     return interfaceTypes.get(0);
   }
