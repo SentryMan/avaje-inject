@@ -19,9 +19,15 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
-/**
- * Read the inheritance types for a given bean type.
- */
+import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+
+import io.avaje.inject.Factory;
+import io.avaje.inject.spi.Proxy;
+
+/** Read the inheritance types for a given bean type. */
 final class TypeExtendsReader {
 
   private static final String JAVA_LANG_OBJECT = "java.lang.Object";
@@ -33,15 +39,12 @@ final class TypeExtendsReader {
   private final List<UType> interfaceTypes = new ArrayList<>();
   private final List<UType> providesTypes = new ArrayList<>();
   private final String beanSimpleName;
-  private final String baseTypeRaw;
   private final boolean baseTypeIsInterface;
   private final boolean publicAccess;
   private final boolean autoProvide;
   private final boolean proxyBean;
   private boolean closeable;
-  /**
-   * The implied qualifier name based on naming convention.
-   */
+  /** The implied qualifier name based on naming convention. */
   private String qualifierName;
   private String providesAspect = "";
 
@@ -50,7 +53,6 @@ final class TypeExtendsReader {
     this.baseType = baseType;
     this.extendsInjection = new TypeExtendsInjection(baseType, factory, importTypes);
     this.beanSimpleName = baseType.getSimpleName().toString();
-    this.baseTypeRaw = Util.unwrapProvider(baseUType.toString());
     this.baseTypeIsInterface = baseType.getKind() == ElementKind.INTERFACE;
     this.publicAccess = baseType.getModifiers().contains(Modifier.PUBLIC);
     this.autoProvide = autoProvide();
@@ -124,6 +126,13 @@ final class TypeExtendsReader {
     }
     if (baseTypeIsInterface || interfaceTypes.isEmpty()) {
       return Util.unwrapProvider(baseType.asType());
+    }
+     if (!interfaceTypes.isEmpty()) {
+      return interfaceTypes.get(0);
+    }
+
+    if (!extendsTypes.isEmpty()) {
+      return extendsTypes.get(extendsTypes.size() - 1);
     }
     return interfaceTypes.get(0);
   }
