@@ -132,7 +132,16 @@ final class TypeExtendsReader {
     }
 
     if (!extendsTypes.isEmpty()) {
-      return extendsTypes.get(extendsTypes.size() - 1);
+
+      for (var i = extendsTypes.size() - 1; i >= 0; i--) {
+
+        final var superType = extendsTypes.get(i);
+
+        if (context.element(Util.trimGenerics(superType)).getModifiers().contains(Modifier.PUBLIC))
+          return superType;
+      }
+
+      return null;
     }
     return interfaceTypes.get(0);
   }
