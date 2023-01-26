@@ -25,6 +25,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 
 import io.avaje.inject.Factory;
+import io.avaje.inject.spi.Generated;
 import io.avaje.inject.spi.Proxy;
 
 /** Read the inheritance types for a given bean type. */
