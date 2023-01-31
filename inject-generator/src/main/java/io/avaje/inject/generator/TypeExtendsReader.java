@@ -25,6 +25,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 
 import io.avaje.inject.Factory;
+import io.avaje.inject.InjectModule.AutoProvideLevel;
 import io.avaje.inject.spi.Generated;
 import io.avaje.inject.spi.Proxy;
 
@@ -45,7 +46,9 @@ final class TypeExtendsReader {
   private final boolean autoProvide;
   private final boolean proxyBean;
   private boolean closeable;
-  /** The implied qualifier name based on naming convention. */
+  /**
+   * The implied qualifier name based on naming convention.
+   */
   private String qualifierName;
   private String providesAspect = "";
 
@@ -130,9 +133,8 @@ final class TypeExtendsReader {
     }
      if (!interfaceTypes.isEmpty()) {
       return interfaceTypes.get(0);
-    }
 
-    if (!extendsTypes.isEmpty()) {
+    } else if (!extendsTypes.isEmpty()) {
 
       return extendsTypes.get(extendsTypes.size() - 1);
     }

@@ -29,6 +29,7 @@ final class ProcessingContext {
     private final Set<String> optionalTypes = new LinkedHashSet<>();
     private final Map<String, AspectImportPrism> aspectImportPrisms = new HashMap<>();
     private final List<TypeElement> delayQueue = new ArrayList<>();
+    private AutoProvideLevel autoProvideLv;
     private boolean validated;
 
     public Ctx(Set<String> moduleFileProvided) {
@@ -188,5 +189,13 @@ final class ProcessingContext {
 
   static void processingOver(boolean over) {
     processingOver = over;
+  }
+
+  public void setAutoProvideLv(AutoProvideLevel autoProvideScope) {
+    CTX.get().autoProvideLv = autoProvideScope;
+  }
+
+  public AutoProvideLevel autoProvideLv() {
+    return autoProvideLv;
   }
 }
