@@ -19,13 +19,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
-
 import io.avaje.inject.Factory;
-import io.avaje.inject.InjectModule.AutoProvideLevel;
 import io.avaje.inject.spi.Generated;
 import io.avaje.inject.spi.Proxy;
 
@@ -51,6 +45,7 @@ final class TypeExtendsReader {
    */
   private String qualifierName;
   private String providesAspect = "";
+  private final AutoProvideStrategy autoProvideLv;
 
   TypeExtendsReader(UType baseUType, TypeElement baseType, boolean factory, ImportTypeMap importTypes, boolean proxyBean) {
     this.baseUType = baseUType;
@@ -59,12 +54,14 @@ final class TypeExtendsReader {
     this.beanSimpleName = baseType.getSimpleName().toString();
     this.baseTypeIsInterface = baseType.getKind() == ElementKind.INTERFACE;
     this.publicAccess = baseType.getModifiers().contains(Modifier.PUBLIC);
+    this.autoProvideLv = ProcessingContext.autoProvideStrategy();
     this.autoProvide = autoProvide();
     this.proxyBean = proxyBean;
   }
 
   private boolean autoProvide() {
-    return publicAccess
+    return autoProvideLv != AutoProvideStrategy.NONE
+      && publicAccess
       && !FactoryPrism.isPresent(baseType)
       && !ProxyPrism.isPresent(baseType)
       && !GeneratedPrism.isPresent(baseType)
@@ -132,7 +129,12 @@ final class TypeExtendsReader {
       return Util.unwrapProvider(baseType.asType());
     }
      if (!interfaceTypes.isEmpty()) {
-      return interfaceTypes.get(0);
+
+    } else if (autoProvideLv == AutoProvideStrategy.ALL) {
+
+      return interfaceTypes.stream().filter(Util::isAspectProvider).findFirst().orElse(baseTypeRaw);
+
+    } else if (!interfaceTypes.isEmpty()) {
 
     } else if (!extendsTypes.isEmpty()) {
 

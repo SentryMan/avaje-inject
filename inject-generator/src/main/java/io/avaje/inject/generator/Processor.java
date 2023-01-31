@@ -267,7 +267,7 @@ public final class Processor extends AbstractProcessor {
           final var annotation = InjectModulePrism.getInstanceOn(element);
           if (annotation != null) {
             defaultScope.details(annotation.name(), element);
-            context.setAutoProvideLv(annotation.autoProvideLv());
+            context.setAutoProvideStrategy(AutoProvideStrategy.valueOf(annotation.autoProvideStrategy()));
           }
         }
       });

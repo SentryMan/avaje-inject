@@ -29,7 +29,7 @@ final class ProcessingContext {
     private final Set<String> optionalTypes = new LinkedHashSet<>();
     private final Map<String, AspectImportPrism> aspectImportPrisms = new HashMap<>();
     private final List<TypeElement> delayQueue = new ArrayList<>();
-    private AutoProvideLevel autoProvideLv;
+    private AutoProvideStrategy autoProvideStrategy;
     private boolean validated;
 
     public Ctx(Set<String> moduleFileProvided) {
@@ -191,11 +191,11 @@ final class ProcessingContext {
     processingOver = over;
   }
 
-  public void setAutoProvideLv(AutoProvideLevel autoProvideScope) {
-    CTX.get().autoProvideLv = autoProvideScope;
+  static void setAutoProvideStrategy(AutoProvideStrategy autoProvideScope) {
+    CTX.get().autoProvideStrategy = autoProvideScope;
   }
 
-  public AutoProvideLevel autoProvideLv() {
-    return autoProvideLv;
+  static AutoProvideStrategy autoProvideStrategy() {
+    return CTX.get().autoProvideStrategy;
   }
 }
