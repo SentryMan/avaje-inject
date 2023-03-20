@@ -13,6 +13,9 @@ public interface PropertyRequiresPlugin {
   /** Return a configuration value that might not exist. */
   Optional<String> get(String property);
 
+  /** Set configuration value. */
+  void set(String property, String value);
+
   /** Return true if the property is defined. */
   boolean contains(String property);
 
@@ -30,4 +33,5 @@ public interface PropertyRequiresPlugin {
    * Return true if the property is not defined or not equal to the given value.
    */
   boolean notEqualTo(String property, String value);
+
 }

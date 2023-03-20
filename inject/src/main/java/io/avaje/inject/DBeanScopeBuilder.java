@@ -185,6 +185,8 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
       initPropertyPlugin();
     }
 
+    bean(PropertyRequiresPlugin.class, propertyRequiresPlugin);
+    
     ServiceLoader.load(Plugin.class, classLoader).forEach(plugin -> plugin.apply(this));
     // sort factories by dependsOn
     FactoryOrder factoryOrder = new FactoryOrder(parent, includeModules, !suppliedBeans.isEmpty());
