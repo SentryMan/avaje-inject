@@ -170,10 +170,13 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
   }
 
   private void initPropertyPlugin() {
+
     propertyRequiresPlugin =
-      ServiceLoader.load(PropertyRequiresPlugin.class, classLoader)
-        .findFirst()
-        .orElse(new DSystemProps());
+        parent != null
+            ? parent.get(PropertyRequiresPlugin.class)
+            : ServiceLoader.load(PropertyRequiresPlugin.class, classLoader)
+                .findFirst()
+                .orElse(new DSystemProps());
   }
 
   @Override
