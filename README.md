@@ -113,7 +113,7 @@ module org.example {
 | @Conditional | [@RequiresBean and @RequiresProperty](https://avaje.io/inject/#conditional) |
 | @Primary | [@Primary](https://avaje.io/inject/#primary) |
 | @Secondary | [@Secondary](https://avaje.io/inject/#secondary) |
-| @Profile | [@Profile](https://avaje.io/inject/#profile) |
+| - | [@AssistFactory](https://avaje.io/inject/#assistInject) |
 
 ## Generated Code
 
