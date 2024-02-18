@@ -16,10 +16,6 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
-import io.avaje.inject.Factory;
-import io.avaje.inject.spi.Generated;
-import io.avaje.inject.spi.Proxy;
-
 /** Read the inheritance types for a given bean type. */
 final class TypeExtendsReader {
 
@@ -121,14 +117,24 @@ final class TypeExtendsReader {
   List<UType> autoProvides() {
     if (!autoProvide || !providesAspect.isEmpty()) {
       return List.of();
-    }
-    if (baseTypeIsInterface) {
+    } else if (autoProvideLv == AutoProvideStrategy.ALL_SUPER_TYPES) {
+      var autoProvides = new ArrayList<>(interfaceTypes);
+      autoProvides.addAll(extendsTypes);
+      autoProvides.add(Util.unwrapProvider(baseType.asType()));
+      return autoProvides;
+    } else if (baseTypeIsInterface) {
       return List.of(Util.unwrapProvider(baseType.asType()));
+    } else if (!interfaceTypes.isEmpty()) {
+
+      return List.of(interfaceTypes.get(0));
+
+    } else if (!extendsTypes.isEmpty()) {
+
+      return List.of(extendsTypes.get(extendsTypes.size() - 1));
+
+    } else {
+      return List.of();
     }
-    var autoProvides = new ArrayList<>(interfaceTypes);
-    autoProvides.addAll(extendsTypes);
-    autoProvides.add(Util.unwrapProvider(baseType.asType()));
-    return autoProvides;
   }
 
   List<UType> provides() {

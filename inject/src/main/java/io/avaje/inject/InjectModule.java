@@ -69,10 +69,7 @@ public @interface InjectModule {
    */
   Class<?>[] provides() default {};
 
-  /**
-   * Set autoprovide strategy. By default will only expose the top level interfaces/classes to other
-   * modules
-   */
+  /** Configures the auto-provide generation strategy. */
   AutoProvideStrategy autoProvideStrategy() default AutoProvideStrategy.TOP_LEVEL_CLASSES;
 
   /**
@@ -107,11 +104,11 @@ public @interface InjectModule {
 
   public enum AutoProvideStrategy {
 
-    /** Auto provide only the top level interfaces/classes of this module's beans. */
+    /** This module's will expose only the top level interfaces/classes of its beans to other avaje modules. */
     TOP_LEVEL_CLASSES,
-    /** Auto provide all the beans of this module as they are defined. */
-    ALL,
-    /** Disable Auto Provide. */
+    /** This module's will expose all the potential types of its beans to other avaje modules. */
+    ALL_SUPER_TYPES,
+    /** Disables the Auto-Provides Feature. */
     NONE
   }
 }
