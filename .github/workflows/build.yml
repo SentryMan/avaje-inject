@@ -22,6 +22,10 @@ jobs:
       with:
         java-version: ${{ matrix.java_version }}
         distribution: 'zulu'
+    - name: Google-Java-Format
+      uses: axel-op/googlejavaformat-action@v3
+      with:
+        args: "--skip-sorting-imports --replace"
     - name: Maven cache
       uses: actions/cache@v3
       env:
