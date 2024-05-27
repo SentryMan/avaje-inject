@@ -7,8 +7,7 @@ import jakarta.inject.Singleton;
 @Singleton
 class FieldInjectProvider {
 
-  @Inject
-  Provider<AProv> aProvProvider;
+  @Inject Provider<AProv> aProvProvider;
 
   AProv testGet() {
     return aProvProvider.get();

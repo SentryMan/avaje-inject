@@ -43,10 +43,11 @@ class StoreManagerWithNamedTest {
 
   @Test
   void mapParent() {
-    try (BeanScope parent = BeanScope.builder()
-      .bean(SomeStore.class, new LocalStore())
-      .modules(new BeanScopeBuilderAddTest.SillyModule())
-      .build()) {
+    try (BeanScope parent =
+        BeanScope.builder()
+            .bean(SomeStore.class, new LocalStore())
+            .modules(new BeanScopeBuilderAddTest.SillyModule())
+            .build()) {
 
       try (BeanScope beanScope = BeanScope.builder().parent(parent).build()) {
         Map<String, SomeStore> stores = beanScope.map(SomeStore.class);

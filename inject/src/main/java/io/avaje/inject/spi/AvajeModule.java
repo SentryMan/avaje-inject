@@ -2,33 +2,23 @@ package io.avaje.inject.spi;
 
 import java.lang.reflect.Type;
 
-/**
- * A AvajeModule that can be included in BeanScope.
- */
+/** A AvajeModule that can be included in BeanScope. */
 public interface AvajeModule {
 
-  /**
-   * Empty array of classes.
-   */
+  /** Empty array of classes. */
   Class<?>[] EMPTY_CLASSES = {};
 
-  /**
-   * Return the set of types this module explicitly provides to other modules.
-   */
+  /** Return the set of types this module explicitly provides to other modules. */
   default Type[] provides() {
     return EMPTY_CLASSES;
   }
 
-  /**
-   * Return the types this module needs to be provided externally or via other modules.
-   */
+  /** Return the types this module needs to be provided externally or via other modules. */
   default Type[] requires() {
     return EMPTY_CLASSES;
   }
 
-  /**
-   * Return the packages this module needs to be provided via other modules.
-   */
+  /** Return the packages this module needs to be provided via other modules. */
   default Type[] requiresPackages() {
     return EMPTY_CLASSES;
   }
@@ -80,14 +70,9 @@ public interface AvajeModule {
    */
   Class<?>[] classes();
 
-  /**
-   * Build all the beans.
-   */
+  /** Build all the beans. */
   void build(Builder builder);
 
-  /**
-   * Marker for custom scoped modules.
-   */
-  interface Custom extends AvajeModule {
-  }
+  /** Marker for custom scoped modules. */
+  interface Custom extends AvajeModule {}
 }

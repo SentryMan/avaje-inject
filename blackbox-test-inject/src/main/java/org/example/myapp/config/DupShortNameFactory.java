@@ -11,15 +11,11 @@ public class DupShortNameFactory {
     return new MyDup();
   }
 
-  /**
-   * Requires fully qualified name as short name of MyDup clashes.
-   */
+  /** Requires fully qualified name as short name of MyDup clashes. */
   @Bean
   org.example.myapp.config.MyDup two() {
     return new org.example.myapp.config.MyDup();
   }
 
-  public static class MyDup {
-
-  }
+  public static class MyDup {}
 }

@@ -21,16 +21,15 @@ public class NestedInterfaceTest {
   @Test
   void test_provided() {
 
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .mock(Some.Nested.class, nested -> when(nested.doNested()).thenReturn("myMock"))
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .forTesting()
+            .mock(Some.Nested.class, nested -> when(nested.doNested()).thenReturn("myMock"))
+            .build()) {
 
       final Some.Nested nestedInterface = context.get(Some.Nested.class);
       assertNotNull(nestedInterface);
       assertEquals("myMock", nestedInterface.doNested());
     }
-
   }
-
 }

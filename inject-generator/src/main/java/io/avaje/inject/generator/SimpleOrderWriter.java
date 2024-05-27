@@ -38,7 +38,8 @@ final class SimpleOrderWriter {
 
   private void writeServicesFile() {
     try {
-      FileObject jfo = createMetaInfWriterFor("META-INF/services/io.avaje.inject.spi.ModuleOrdering");
+      FileObject jfo =
+          createMetaInfWriterFor("META-INF/services/io.avaje.inject.spi.ModuleOrdering");
       if (jfo != null) {
         Writer writer = jfo.openWriter();
         writer.write(fullName);
@@ -53,32 +54,34 @@ final class SimpleOrderWriter {
   private void writePackage() {
     writer.append("package %s;", modulePackage).eol().eol();
     writer
-      .append(
-        "import static java.util.Map.entry;\n"
-          + "import static java.util.List.of;\n"
-          + "\n"
-          + "import java.util.List;\n"
-          + "import java.util.Map;\n"
-          + "import java.util.Set;\n"
-          + "import io.avaje.inject.spi.Generated;\n"
-          + "import io.avaje.inject.spi.ModuleOrdering;\n"
-          + "import io.avaje.inject.spi.AvajeModule;")
-      .eol();
+        .append(
+            "import static java.util.Map.entry;\n"
+                + "import static java.util.List.of;\n"
+                + "\n"
+                + "import java.util.List;\n"
+                + "import java.util.Map;\n"
+                + "import java.util.Set;\n"
+                + "import io.avaje.inject.spi.Generated;\n"
+                + "import io.avaje.inject.spi.ModuleOrdering;\n"
+                + "import io.avaje.inject.spi.AvajeModule;")
+        .eol();
 
     writer.eol();
   }
 
   private void writeStartClass() {
     writer.append(
-      "/**\n" +
-        " * Ordering of modules based on module provides and requires dependencies.\n" +
-        " * Refer to target/avaje-module-dependencies.csv for details.\n" +
-        " */\n"
-    );
+        "/**\n"
+            + " * Ordering of modules based on module provides and requires dependencies.\n"
+            + " * Refer to target/avaje-module-dependencies.csv for details.\n"
+            + " */\n");
     writer.append(Constants.AT_GENERATED).eol();
     writer.append("public final class %s implements ModuleOrdering {", shortName).eol().eol();
 
-    writer.append("  private final AvajeModule[] sortedModules = new AvajeModule[%s];", ordering.size()).eol();
+    writer
+        .append(
+            "  private final AvajeModule[] sortedModules = new AvajeModule[%s];", ordering.size())
+        .eol();
     writer.append("  private static final Map<String, Integer> INDEXES = Map.ofEntries(").eol();
     var size = ordering.size();
     var count = 0;
@@ -94,29 +97,29 @@ final class SimpleOrderWriter {
 
   private void writeBuildMethods() {
     writer.append(
-      "\n"
-        + "  @Override\n"
-        + "  public List<AvajeModule> factories() {\n"
-        + "    return List.of(sortedModules);\n"
-        + "  }\n"
-        + "\n"
-        + "  @Override\n"
-        + "  public Set<String> orderModules() {\n"
-        + "    return INDEXES.keySet();\n"
-        + "  }\n"
-        + "\n"
-        + "  @Override\n"
-        + "  public void add(AvajeModule module) {\n"
-        + "    final var index = INDEXES.get(module.getClass().getTypeName());\n"
-        + "    if (index != null) {\n"
-        + "      sortedModules[index] = module;\n"
-        + "    }\n"
-        + "  }\n"
-        + "\n"
-        + "  @Override\n"
-        + "  public boolean isEmpty() {\n"
-        + "    return sortedModules.length == 0;\n"
-        + "  }\n"
-        + "}");
+        "\n"
+            + "  @Override\n"
+            + "  public List<AvajeModule> factories() {\n"
+            + "    return List.of(sortedModules);\n"
+            + "  }\n"
+            + "\n"
+            + "  @Override\n"
+            + "  public Set<String> orderModules() {\n"
+            + "    return INDEXES.keySet();\n"
+            + "  }\n"
+            + "\n"
+            + "  @Override\n"
+            + "  public void add(AvajeModule module) {\n"
+            + "    final var index = INDEXES.get(module.getClass().getTypeName());\n"
+            + "    if (index != null) {\n"
+            + "      sortedModules[index] = module;\n"
+            + "    }\n"
+            + "  }\n"
+            + "\n"
+            + "  @Override\n"
+            + "  public boolean isEmpty() {\n"
+            + "    return sortedModules.length == 0;\n"
+            + "  }\n"
+            + "}");
   }
 }

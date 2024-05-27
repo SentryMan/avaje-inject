@@ -1,7 +1,6 @@
 package org.example.myapp.r4j;
 
 import io.avaje.inject.BeanScope;
-import io.avaje.inject.aop.InvocationException;
 import org.example.myapp.resilience4j.RetryProvider;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +17,8 @@ class Resilience4J_retry_Test {
       myExample = beanScope.get(MyExample.class);
 
       assertThatThrownBy(myExample::doingItWithRetry)
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("no");
+          .isInstanceOf(IllegalArgumentException.class)
+          .hasMessage("no");
     }
 
     assertThat(myExample.barfCounter).isEqualTo(3);

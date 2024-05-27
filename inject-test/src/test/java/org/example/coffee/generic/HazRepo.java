@@ -2,9 +2,7 @@ package org.example.coffee.generic;
 
 import jakarta.inject.Singleton;
 
-/**
- * Implementation of a generic interface.
- */
+/** Implementation of a generic interface. */
 @Singleton
 public class HazRepo implements Repository<Haz, Long> {
 

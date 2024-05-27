@@ -9,9 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static java.lang.System.Logger.Level.DEBUG;
 import static java.lang.System.Logger.Level.TRACE;
 
-/**
- * Holds the global BeanScope used for all tests.
- */
+/** Holds the global BeanScope used for all tests. */
 final class GlobalTestBeans implements ExtensionContext.Store.CloseableResource {
 
   private static final System.Logger log = AppLog.getLogger("io.avaje.inject");
@@ -36,12 +34,13 @@ final class GlobalTestBeans implements ExtensionContext.Store.CloseableResource 
   private void initialise(ExtensionContext context) {
     globalBeans = GlobalInitialise.initialise(false);
     log.log(TRACE, "register global test BeanScope with beans {0}", globalBeans);
-    context.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put(InjectExtension.class.getCanonicalName(), this);
+    context
+        .getRoot()
+        .getStore(ExtensionContext.Namespace.GLOBAL)
+        .put(InjectExtension.class.getCanonicalName(), this);
   }
 
-  /**
-   * Global shutdown of JUnit.
-   */
+  /** Global shutdown of JUnit. */
   @Override
   public void close() {
     lock.lock();
@@ -55,23 +54,20 @@ final class GlobalTestBeans implements ExtensionContext.Store.CloseableResource 
     }
   }
 
-  /**
-   * The BeanScopes and plugin scope that can be used for InjectTests.
-   */
+  /** The BeanScopes and plugin scope that can be used for InjectTests. */
   static final class Beans {
 
     private final Plugin.Scope plugin;
 
     /**
-     * Entire application wired (with testScope as parent replacing those beans).
-     * This can be used when a test only injects beans and there are no mocks,
-     * spies, or setup methods.
+     * Entire application wired (with testScope as parent replacing those beans). This can be used
+     * when a test only injects beans and there are no mocks, spies, or setup methods.
      */
     private final BeanScope allBeans;
 
     /**
-     * The TestScope beans, used as the parent scope when a new BeanScope
-     * needs to be wired for a test (due to mocks, spies or setup methods).
+     * The TestScope beans, used as the parent scope when a new BeanScope needs to be wired for a
+     * test (due to mocks, spies or setup methods).
      */
     private final BeanScope baseBeans;
 
@@ -114,5 +110,4 @@ final class GlobalTestBeans implements ExtensionContext.Store.CloseableResource 
       return "All[" + allBeans + "] Test[" + baseBeans + "]";
     }
   }
-
 }

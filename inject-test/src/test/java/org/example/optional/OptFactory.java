@@ -32,5 +32,4 @@ class OptFactory {
   Optional<NoImpHere> anOptional() {
     return Optional.empty();
   }
-
 }

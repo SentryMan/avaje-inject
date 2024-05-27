@@ -1,4 +1,3 @@
 package org.example.myapp.i347;
 
-public class MyMetaData {
-}
+public class MyMetaData {}

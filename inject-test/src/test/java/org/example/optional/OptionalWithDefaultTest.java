@@ -18,9 +18,8 @@ class OptionalWithDefaultTest {
   @Test
   void whenOptionalSupplied() {
     OptionalService supplied = new Supplied();
-    try (BeanScope beanScope = BeanScope.builder()
-      .bean("supplied", OptionalService.class, supplied)
-      .build()) {
+    try (BeanScope beanScope =
+        BeanScope.builder().bean("supplied", OptionalService.class, supplied).build()) {
       OptBax bax = beanScope.get(OptBax.class);
       assertThat(bax.hi()).isEqualTo("supplied");
     }

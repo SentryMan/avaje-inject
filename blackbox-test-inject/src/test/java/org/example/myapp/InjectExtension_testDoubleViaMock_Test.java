@@ -2,7 +2,6 @@ package org.example.myapp;
 
 import io.avaje.inject.test.InjectExtension;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,5 +20,4 @@ class InjectExtension_testDoubleViaMock_Test {
     assertEquals("hello+ImAConcreteTestDouble", helloService.hello());
     assertEquals("ImAConcreteTestDouble", mockData.helloData());
   }
-
 }

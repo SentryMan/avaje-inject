@@ -30,8 +30,10 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
   private static final System.Logger log = AppLog.getLogger("io.avaje.inject");
 
   private final List<SuppliedBean> suppliedBeans = new ArrayList<>();
+
   @SuppressWarnings("rawtypes")
   private final List<EnrichBean> enrichBeans = new ArrayList<>();
+
   private final Set<AvajeModule> includeModules = new LinkedHashSet<>();
   private final List<Runnable> postConstructList = new ArrayList<>();
   private final List<Consumer<BeanScope>> postConstructConsumerList = new ArrayList<>();
@@ -114,7 +116,8 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
   }
 
   @Override
-  public <D> BeanScopeBuilder provideDefault(@Nullable String name, Type type, Supplier<D> supplier) {
+  public <D> BeanScopeBuilder provideDefault(
+      @Nullable String name, Type type, Supplier<D> supplier) {
     final Provider<D> provider = supplier::get;
     suppliedBeans.add(SuppliedBean.secondary(name, type, provider));
     return this;
@@ -178,7 +181,8 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
     return mock(type, null, consumer);
   }
 
-  private <D> BeanScopeBuilder.ForTesting mock(Class<D> type, @Nullable String name, @Nullable Consumer<D> consumer) {
+  private <D> BeanScopeBuilder.ForTesting mock(
+      Class<D> type, @Nullable String name, @Nullable Consumer<D> consumer) {
     suppliedBeans.add(SuppliedBean.of(name, type, consumer));
     return this;
   }
@@ -198,12 +202,14 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
     return spy(type, null, consumer);
   }
 
-  private <D> BeanScopeBuilder.ForTesting spy(Class<D> type, @Nullable String name, @Nullable Consumer<D> consumer) {
+  private <D> BeanScopeBuilder.ForTesting spy(
+      Class<D> type, @Nullable String name, @Nullable Consumer<D> consumer) {
     enrichBeans.add(new EnrichBean<>(type, name, consumer));
     return this;
   }
 
-  private <D> BeanScopeBuilder.ForTesting spy(Type type, @Nullable String name, @Nullable Consumer<D> consumer) {
+  private <D> BeanScopeBuilder.ForTesting spy(
+      Type type, @Nullable String name, @Nullable Consumer<D> consumer) {
     enrichBeans.add(new EnrichBean<>(type, name, consumer));
     return this;
   }
@@ -216,9 +222,9 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
 
   private void initPropertyPlugin() {
     propertyRequiresPlugin =
-      ServiceLoader.load(PropertyRequiresPlugin.class, classLoader)
-        .findFirst()
-        .orElse(defaultPropertyPlugin());
+        ServiceLoader.load(PropertyRequiresPlugin.class, classLoader)
+            .findFirst()
+            .orElse(defaultPropertyPlugin());
   }
 
   private PropertyRequiresPlugin defaultPropertyPlugin() {
@@ -240,10 +246,10 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
   private void initProfiles() {
     if (profiles == null) {
       profiles =
-        propertyRequiresPlugin
-          .get("avaje.profiles")
-          .map(p -> Set.of(p.split(",")))
-          .orElse(emptySet());
+          propertyRequiresPlugin
+              .get("avaje.profiles")
+              .map(p -> Set.of(p.split(",")))
+              .orElse(emptySet());
     }
   }
 
@@ -262,11 +268,13 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
     ServiceLoader.load(InjectPlugin.class, classLoader).forEach(plugin -> plugin.apply(this));
     ServiceLoader.load(Plugin.class, classLoader).forEach(plugin -> plugin.apply(this));
     // sort factories by dependsOn
-    ModuleOrdering factoryOrder = new FactoryOrder(parent, includeModules, !suppliedBeans.isEmpty());
+    ModuleOrdering factoryOrder =
+        new FactoryOrder(parent, includeModules, !suppliedBeans.isEmpty());
 
     if (factoryOrder.isEmpty()) {
       // prefer generated ModuleOrdering if provided
-      factoryOrder = ServiceLoader.load(ModuleOrdering.class, classLoader).findFirst().orElse(factoryOrder);
+      factoryOrder =
+          ServiceLoader.load(ModuleOrdering.class, classLoader).findFirst().orElse(factoryOrder);
 
       ServiceLoader.load(AvajeModule.class).forEach(factoryOrder::add);
       ServiceLoader.load(Module.class).forEach(factoryOrder::add);
@@ -275,17 +283,18 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
     final var moduleNames = factoryOrder.orderModules();
     if (moduleNames.isEmpty()) {
       throw new IllegalStateException(
-        "Could not find any avaje modules."
-          + " Perhaps using Gradle and IDEA but with a setup issue?"
-          + " Review IntelliJ Settings / Build / Build tools / Gradle - 'Build and run using' value and set that to 'Gradle'. "
-          + " Refer to https://avaje.io/inject#gradle");
+          "Could not find any avaje modules. Perhaps using Gradle and IDEA but with a setup issue?"
+              + " Review IntelliJ Settings / Build / Build tools / Gradle - 'Build and run using'"
+              + " value and set that to 'Gradle'.  Refer to https://avaje.io/inject#gradle");
     }
 
     final var level = propertyRequiresPlugin.contains("printModules") ? INFO : DEBUG;
     initProfiles();
     log.log(level, "building with avaje modules {0} profiles {1}", moduleNames, profiles);
 
-    final var builder = Builder.newBuilder(profiles, propertyRequiresPlugin, suppliedBeans, enrichBeans, parent, parentOverride);
+    final var builder =
+        Builder.newBuilder(
+            profiles, propertyRequiresPlugin, suppliedBeans, enrichBeans, parent, parentOverride);
     for (final var factory : factoryOrder.factories()) {
       builder.currentModule(factory.getClass());
       factory.build(builder);
@@ -305,7 +314,7 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
     if (Object.class.equals(suppliedSuper)) {
       return suppliedClass;
     }
-  // prefer to use the super type of the supplied bean (test double)
+    // prefer to use the super type of the supplied bean (test double)
     return suppliedSuper;
   }
 
@@ -334,8 +343,8 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
     public void add(AvajeModule module) {
       final var factoryState = new FactoryState(module);
       providesMap
-        .computeIfAbsent(module.getClass().getTypeName(), s -> new FactoryList())
-        .add(factoryState);
+          .computeIfAbsent(module.getClass().getTypeName(), s -> new FactoryList())
+          .add(factoryState);
 
       addFactoryProvides(factoryState, module.provides());
       addFactoryProvides(factoryState, module.autoProvides());
@@ -357,7 +366,9 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
 
     private void addFactoryProvides(FactoryState factoryState, Type[] provides) {
       for (final var feature : provides) {
-        providesMap.computeIfAbsent(feature.getTypeName(), s -> new FactoryList()).add(factoryState);
+        providesMap
+            .computeIfAbsent(feature.getTypeName(), s -> new FactoryList())
+            .add(factoryState);
       }
     }
 
@@ -405,11 +416,17 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
           unsatisfiedRequires(sb, factory.requiresPackages(), "requiresPackages");
           unsatisfiedRequires(sb, factory.autoRequires(), "autoRequires");
         }
-        sb.append(" - none of the loaded modules ").append(moduleNames).append(" have this in their @InjectModule( provides = ... ). ");
+        sb.append(" - none of the loaded modules ")
+            .append(moduleNames)
+            .append(" have this in their @InjectModule( provides = ... ). ");
         if (parent != null) {
-          sb.append("The parent BeanScope ").append(parent).append(" also does not provide this dependency. ");
+          sb.append("The parent BeanScope ")
+              .append(parent)
+              .append(" also does not provide this dependency. ");
         }
-        sb.append("Either @InjectModule requires/provides are not aligned? or add external dependencies via BeanScopeBuilder.bean()?");
+        sb.append(
+            "Either @InjectModule requires/provides are not aligned? or add external dependencies"
+                + " via BeanScopeBuilder.bean()?");
         throw new IllegalStateException(sb.toString());
       }
     }
@@ -453,9 +470,9 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
     /** Return true if the (module) requires dependencies are satisfied for this factory. */
     private boolean satisfiedDependencies(FactoryState factory) {
       return satisfiedDependencies(factory.requires())
-        && satisfiedDependencies(factory.requiresPackages())
-        && satisfiedDependencies(factory.autoRequiresAspects())
-        && satisfiedDependencies(factory.autoRequires());
+          && satisfiedDependencies(factory.requiresPackages())
+          && satisfiedDependencies(factory.autoRequiresAspects())
+          && satisfiedDependencies(factory.autoRequires());
     }
 
     private boolean satisfiedDependencies(Type[] requires) {
@@ -518,8 +535,10 @@ final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {
     }
 
     boolean isRequiresEmpty() {
-      return isEmpty(factory.requires()) && isEmpty(factory.requiresPackages())
-        && isEmpty(factory.autoRequires()) && isEmpty(factory.autoRequiresAspects());
+      return isEmpty(factory.requires())
+          && isEmpty(factory.requiresPackages())
+          && isEmpty(factory.autoRequires())
+          && isEmpty(factory.autoRequiresAspects());
     }
 
     boolean explicitlyProvides() {

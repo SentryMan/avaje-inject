@@ -10,8 +10,7 @@ class ConcreteExtendTest {
   @Test
   void obtainViaInterface() {
 
-    try (BeanScope context = BeanScope.builder()
-      .build()) {
+    try (BeanScope context = BeanScope.builder().build()) {
 
       final IfaseBase ifaseBase = context.get(IfaseBase.class);
       final IfaceExtend ifaceExtend = context.get(IfaceExtend.class);

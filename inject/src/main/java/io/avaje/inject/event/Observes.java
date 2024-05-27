@@ -11,8 +11,7 @@ import java.lang.annotation.Target;
  * of a bean class.
  *
  * <pre>{@code
- *
- *   public void afterLogin(@Observes LoggedInEvent event) { ... }
+ * public void afterLogin(@Observes LoggedInEvent event) { ... }
  *
  * }</pre>
  *
@@ -33,8 +32,7 @@ import java.lang.annotation.Target;
  * has occurred.
  *
  * <pre>{@code
- *
- *   public void afterLogin(@Observes LoggedInEvent event, @Manager User user, Logger log) { ... }
+ * public void afterLogin(@Observes LoggedInEvent event, @Manager User user, Logger log) { ... }
  *
  * }</pre>
  */

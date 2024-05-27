@@ -4,6 +4,5 @@ import jakarta.inject.Singleton;
 
 public class InnerClassBean {
   @Singleton
-  public static class MyBean {
-  }
+  public static class MyBean {}
 }

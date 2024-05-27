@@ -5,7 +5,7 @@ import io.avaje.inject.Factory;
 import org.example.inherit.notpublic.PubExposed;
 
 @Factory
-public class InhPub  {
+public class InhPub {
 
   @Bean
   PubExposed exposed() {

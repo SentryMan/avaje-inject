@@ -14,5 +14,4 @@ public class MegaStoreManager {
     this.blue = blue;
     this.noQualifier = noQualifier;
   }
-
 }

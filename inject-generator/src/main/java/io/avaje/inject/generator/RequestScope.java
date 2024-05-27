@@ -3,9 +3,7 @@ package io.avaje.inject.generator;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Handling detection of request scoped dependencies and appropriate BeanFactory generation.
- */
+/** Handling detection of request scoped dependencies and appropriate BeanFactory generation. */
 final class RequestScope {
 
   private static final String JEX_CONTEXT = "io.avaje.jex.Context";
@@ -19,6 +17,7 @@ final class RequestScope {
   private static final String HELIDON_REACTIVE_RES = "io.helidon.reactive.webserver.ServerResponse";
 
   private static final Map<String, Handler> TYPES = new HashMap<>();
+
   static {
     TYPES.put(JEX_CONTEXT, new JexHandler());
     TYPES.put(JAVALIN_CONTEXT, new JavalinHandler());
@@ -33,46 +32,31 @@ final class RequestScope {
     TYPES.put(NIMA_RES, helidonNima);
   }
 
-  /**
-   * Return true if the type is a request scoped type.
-   */
+  /** Return true if the type is a request scoped type. */
   static boolean check(String type) {
     return TYPES.containsKey(type);
   }
 
-  /**
-   * Return the Handler given the request scoped type.
-   */
+  /** Return the Handler given the request scoped type. */
   static Handler handler(String type) {
     return TYPES.get(type);
   }
 
-  /**
-   * Handle BeanFactory (request scoped) generation.
-   */
+  /** Handle BeanFactory (request scoped) generation. */
   interface Handler {
 
-    /**
-     * Generate appropriate BeanFactory interface.
-     */
+    /** Generate appropriate BeanFactory interface. */
     void factoryInterface(Append writer, String parentType);
 
-    /**
-     * Add appropriate imports.
-     */
+    /** Add appropriate imports. */
     void addImports(ImportTypeMap importTypes);
 
-    /**
-     * Add dependencies and create method.
-     */
+    /** Add dependencies and create method. */
     void writeCreateMethod(Append writer, String parentType);
 
-    /**
-     * Return the argument name based on the parameter type.
-     */
+    /** Return the argument name based on the parameter type. */
     String argumentName(String paramType);
   }
-
 
   private static final class JexHandler extends ContextHandler {
     private JexHandler() {
@@ -104,11 +88,8 @@ final class RequestScope {
     }
   }
 
-
-  /**
-   * Single Context based handlers.
-   */
-  private static abstract class ContextHandler implements Handler {
+  /** Single Context based handlers. */
+  private abstract static class ContextHandler implements Handler {
 
     final String contextType;
 
@@ -138,10 +119,8 @@ final class RequestScope {
     }
   }
 
-  /**
-   * ServerRequest ServerResponse based Handlers.
-   */
-  private static abstract class RequestResponseHandler implements Handler {
+  /** ServerRequest ServerResponse based Handlers. */
+  private abstract static class RequestResponseHandler implements Handler {
 
     final String reqType;
     final String resType;
@@ -165,7 +144,10 @@ final class RequestScope {
 
     @Override
     public void writeCreateMethod(Append writer, String parentType) {
-      writer.append("  public %s create(ServerRequest request, ServerResponse response) {", parentType).eol();
+      writer
+          .append(
+              "  public %s create(ServerRequest request, ServerResponse response) {", parentType)
+          .eol();
     }
 
     @Override

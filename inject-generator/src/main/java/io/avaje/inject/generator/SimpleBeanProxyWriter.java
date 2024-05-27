@@ -111,5 +111,4 @@ final class SimpleBeanProxyWriter {
     JavaFileObject jfo = createSourceFile(originName + suffix);
     return jfo.openWriter();
   }
-
 }

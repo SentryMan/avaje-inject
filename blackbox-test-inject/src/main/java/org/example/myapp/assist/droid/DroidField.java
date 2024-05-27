@@ -12,7 +12,9 @@ public class DroidField implements DroidFactory.Droid {
   @Assisted Model model;
   @Inject Engine wiring;
 
-  @Named("red") @Inject Radio radio;
+  @Named("red")
+  @Inject
+  Radio radio;
 
   public int personality() {
     return personality;

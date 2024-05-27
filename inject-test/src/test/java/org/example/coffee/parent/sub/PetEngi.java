@@ -5,5 +5,4 @@ public abstract class PetEngi extends Engi {
   String fuel() {
     return "Pet";
   }
-
 }

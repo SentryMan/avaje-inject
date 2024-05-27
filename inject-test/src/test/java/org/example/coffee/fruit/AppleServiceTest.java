@@ -20,9 +20,7 @@ public class AppleServiceTest {
 
       AppleService appleService = beanScope.get(AppleService.class);
 
-      doNothing()
-        .when(appleService)
-        .apple(anyString(), anyString(), anyString());
+      doNothing().when(appleService).apple(anyString(), anyString(), anyString());
 
       assertThat(appleService.bananaService).isNotNull();
       assertThat(appleService.peachService).isNotNull();
@@ -47,5 +45,4 @@ public class AppleServiceTest {
       appleService.apple("one", "two", "three");
     }
   }
-
 }

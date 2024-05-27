@@ -15,20 +15,18 @@ import java.util.concurrent.CompletionStage;
  * injected:
  *
  * <pre>{@code
- *
- *   @Inject
- *   Event<LoggedInEvent> loggedInEvent;
+ * @Inject
+ * Event<LoggedInEvent> loggedInEvent;
  *
  * }</pre>
  *
  * <p>The <code>fire()</code> method accepts an event object:
  *
  * <pre>{@code
- *
- *   public void login() {
- *     ...
- *     loggedInEvent.fire(new LoggedInEvent(user));
- *   }
+ * public void login() {
+ *   ...
+ *   loggedInEvent.fire(new LoggedInEvent(user));
+ * }
  *
  * }</pre>
  *
@@ -75,20 +73,24 @@ public abstract class Event<T> {
     var exceptionHandler = new CollectingExceptionHandler();
 
     return observers.stream()
-      .sorted(PRIORITY)
-      .reduce(CompletableFuture.<Void>completedFuture(null), (future, observer) ->
-          future.thenRun(() -> {
-            try {
-              observer.observe(event, qualifier, true);
-            } catch (Exception e) {
-              exceptionHandler.handle(e);
-            }
-          }),
-        (future1, future2) -> future1)
-      .thenApply(v -> {
-        handleExceptions(exceptionHandler);
-        return event;
-      });
+        .sorted(PRIORITY)
+        .reduce(
+            CompletableFuture.<Void>completedFuture(null),
+            (future, observer) ->
+                future.thenRun(
+                    () -> {
+                      try {
+                        observer.observe(event, qualifier, true);
+                      } catch (Exception e) {
+                        exceptionHandler.handle(e);
+                      }
+                    }),
+            (future1, future2) -> future1)
+        .thenApply(
+            v -> {
+              handleExceptions(exceptionHandler);
+              return event;
+            });
   }
 
   /**
@@ -136,9 +138,9 @@ public abstract class Event<T> {
     var handledExceptions = handler.handledExceptions();
     if (!handledExceptions.isEmpty()) {
       var exception =
-        handledExceptions.size() == 1
-          ? new CompletionException(handledExceptions.get(0))
-          : new CompletionException(null);
+          handledExceptions.size() == 1
+              ? new CompletionException(handledExceptions.get(0))
+              : new CompletionException(null);
 
       for (Throwable handledException : handledExceptions) {
         exception.addSuppressed(handledException);

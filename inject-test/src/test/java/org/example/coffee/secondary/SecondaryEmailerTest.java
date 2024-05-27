@@ -13,5 +13,4 @@ public class SecondaryEmailerTest {
     SEmailer bean = ApplicationScope.get(SEmailer.class);
     assertThat(bean.email()).isEqualTo("other");
   }
-
 }

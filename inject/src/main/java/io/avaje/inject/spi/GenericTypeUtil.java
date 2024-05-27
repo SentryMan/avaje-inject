@@ -7,14 +7,10 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
-/**
- * Cut down version of GenericTypeUtil from Helidon project Apache 2 license.
- */
+/** Cut down version of GenericTypeUtil from Helidon project Apache 2 license. */
 final class GenericTypeUtil {
 
-  /**
-   * Return the Type for type parameter of {@code GenericType<T>}.
-   */
+  /** Return the Type for type parameter of {@code GenericType<T>}. */
   static Type typeArgument(Class<?> clazz) {
     // collect superclasses
     Deque<Type> superclasses = new ArrayDeque<>();
@@ -57,6 +53,7 @@ final class GenericTypeUtil {
       // needed type argument not supplied - break and throw exception
       break;
     }
-    throw new IllegalArgumentException(currentType + " does not specify the type parameter T of GenericType<T>");
+    throw new IllegalArgumentException(
+        currentType + " does not specify the type parameter T of GenericType<T>");
   }
 }

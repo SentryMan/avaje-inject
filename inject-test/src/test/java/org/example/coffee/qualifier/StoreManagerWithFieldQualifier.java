@@ -6,9 +6,7 @@ import jakarta.inject.Singleton;
 @Singleton
 public class StoreManagerWithFieldQualifier {
 
-  @Inject
-  @Blue
-  SomeStore store;
+  @Inject @Blue SomeStore store;
 
   public String store() {
     return store.store();

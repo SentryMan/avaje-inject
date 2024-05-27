@@ -1,8 +1,6 @@
 package org.example.inherit.notpublic;
 
-/**
- * Package protected (NOT public)
- */
+/** Package protected (NOT public) */
 class NonPubBase {
 
   public String hello() {

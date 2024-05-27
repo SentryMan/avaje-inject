@@ -3,8 +3,6 @@ package org.example.myapp.external;
 import io.avaje.inject.Component;
 import io.avaje.jsonb.Jsonb;
 
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.example.external.aspect.MyExternalAspect;
@@ -20,9 +18,7 @@ public class HasExternalDependencies {
   public final Supplier<String> stringSupplier;
 
   public HasExternalDependencies(
-      Jsonb jsonb,
-      OtherComponent otherComponent,
-      Supplier<String> stringSupplier) {
+      Jsonb jsonb, OtherComponent otherComponent, Supplier<String> stringSupplier) {
     this.fromPlugin = jsonb;
     this.fromExternal = otherComponent;
     this.stringSupplier = stringSupplier;

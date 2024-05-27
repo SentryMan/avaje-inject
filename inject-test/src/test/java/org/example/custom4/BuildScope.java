@@ -4,6 +4,5 @@ import io.avaje.inject.InjectModule;
 import jakarta.inject.Scope;
 
 @Scope
-@InjectModule(requires = Build.class )
-public @interface BuildScope {
-}
+@InjectModule(requires = Build.class)
+public @interface BuildScope {}

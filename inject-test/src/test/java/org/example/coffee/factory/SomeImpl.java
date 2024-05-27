@@ -10,7 +10,5 @@ public class SomeImpl implements Something {
   }
 
   @Override
-  public void otherThing() {
-
-  }
+  public void otherThing() {}
 }

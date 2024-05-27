@@ -40,10 +40,12 @@ final class AnnotationCopier {
     return Util.trimAnnotationString(toAnnotationString("", annotationMirror, true)).substring(1);
   }
 
-  static String toAnnotationString(String indent, AnnotationMirror annotationMirror, boolean simpleEnums) {
+  static String toAnnotationString(
+      String indent, AnnotationMirror annotationMirror, boolean simpleEnums) {
     final String annotationName = annotationMirror.getAnnotationType().toString();
 
-    final StringBuilder sb = new StringBuilder(indent).append("@").append(annotationName).append("(");
+    final StringBuilder sb =
+        new StringBuilder(indent).append("@").append(annotationName).append("(");
     boolean first = true;
 
     for (final var entry : sortedValues(annotationMirror)) {
@@ -58,19 +60,26 @@ final class AnnotationCopier {
     return sb.append(")").toString().replace("()", "");
   }
 
-  private static List<Entry<? extends ExecutableElement, ? extends AnnotationValue>> sortedValues(AnnotationMirror annotationMirror) {
+  private static List<Entry<? extends ExecutableElement, ? extends AnnotationValue>> sortedValues(
+      AnnotationMirror annotationMirror) {
     return APContext.elements().getElementValuesWithDefaults(annotationMirror).entrySet().stream()
-      .sorted(AnnotationCopier::compareBySimpleName)
-      .collect(toList());
+        .sorted(AnnotationCopier::compareBySimpleName)
+        .collect(toList());
   }
 
-  private static int compareBySimpleName(Entry<? extends ExecutableElement, ? extends AnnotationValue> entry1,
-                                         Entry<? extends ExecutableElement, ? extends AnnotationValue> entry2) {
-    return entry1.getKey().getSimpleName().toString().compareTo(entry2.getKey().getSimpleName().toString());
+  private static int compareBySimpleName(
+      Entry<? extends ExecutableElement, ? extends AnnotationValue> entry1,
+      Entry<? extends ExecutableElement, ? extends AnnotationValue> entry2) {
+    return entry1
+        .getKey()
+        .getSimpleName()
+        .toString()
+        .compareTo(entry2.getKey().getSimpleName().toString());
   }
 
   @SuppressWarnings("unchecked")
-  private static void writeVal(final StringBuilder sb, final AnnotationValue annotationValue, boolean simpleEnums) {
+  private static void writeVal(
+      final StringBuilder sb, final AnnotationValue annotationValue, boolean simpleEnums) {
     final var value = annotationValue.getValue();
     if (value instanceof List) {
       // handle array values

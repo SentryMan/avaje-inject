@@ -109,39 +109,25 @@ public class AppConfig {
     return new MyAbstract() {};
   }
 
-  public static class Builder {
-  }
+  public static class Builder {}
 
-  public static class BuilderThrows {
-  }
+  public static class BuilderThrows {}
 
-  public static class Generated {
-  }
+  public static class Generated {}
 
-  public static class MySecType {
-  }
+  public static class MySecType {}
 
-  public static class MySecTypeThrows {
-  }
+  public static class MySecTypeThrows {}
 
-  public static class MySecOptType {
-  }
+  public static class MySecOptType {}
 
-  public static class Provider {
+  public static class Provider {}
 
-  }
+  public static class MyGen<T> {}
 
-  public static class MyGen<T> {
+  public interface MyInterface {}
 
-  }
-
-  public interface MyInterface {
-
-  }
-
-  public interface SomeInterface {
-
-  }
+  public interface SomeInterface {}
 
   private static class SomeInterfaceWithClose implements SomeInterface, AutoCloseable {
 
@@ -155,17 +141,15 @@ public class AppConfig {
     }
   }
 
-
   public static class MyPrim {
     public final String val;
+
     public MyPrim(String val) {
       this.val = val;
     }
   }
 
-  public abstract class MyAbstract {
-
-  }
+  public abstract class MyAbstract {}
 
   @Component
   public static class BuilderUser {

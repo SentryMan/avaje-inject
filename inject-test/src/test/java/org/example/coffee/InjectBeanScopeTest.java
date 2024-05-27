@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Test that we can inject BeanScope.
- */
+/** Test that we can inject BeanScope. */
 class InjectBeanScopeTest {
 
   @Test

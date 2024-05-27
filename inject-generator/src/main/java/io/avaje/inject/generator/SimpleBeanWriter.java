@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -21,15 +20,16 @@ import javax.tools.JavaFileObject;
 
 import io.avaje.inject.generator.MethodReader.MethodParam;
 
-/**
- * Write the source code for the bean.
- */
+/** Write the source code for the bean. */
 final class SimpleBeanWriter {
 
-  private static final String CODE_COMMENT = "/**\n * Generated source - dependency injection builder for %s.\n */";
-  private static final String CODE_COMMENT_FACTORY = "/**\n * Generated source - dependency injection factory for request scoped %s.\n */";
+  private static final String CODE_COMMENT =
+      "/**\n * Generated source - dependency injection builder for %s.\n */";
+  private static final String CODE_COMMENT_FACTORY =
+      "/**\n * Generated source - dependency injection factory for request scoped %s.\n */";
   private static final String CODE_COMMENT_BUILD = "  /**\n   * Create and register %s.\n   */";
-  private static final String CODE_COMMENT_BUILD_PROVIDER = "  /**\n   * Register %s provider.\n   */";
+  private static final String CODE_COMMENT_BUILD_PROVIDER =
+      "  /**\n   * Register %s provider.\n   */";
 
   private final BeanReader beanReader;
   private final String originName;
@@ -76,10 +76,10 @@ final class SimpleBeanWriter {
   private void writeGenericTypeFields() {
     // collect all types to prevent duplicates
     Set<UType> genericTypes =
-      beanReader.allGenericTypes().stream()
-        .map(Util::unwrapProvider)
-        .filter(UType::isGeneric)
-        .collect(toSet());
+        beanReader.allGenericTypes().stream()
+            .map(Util::unwrapProvider)
+            .filter(UType::isGeneric)
+            .collect(toSet());
 
     if (!genericTypes.isEmpty()) {
       final Map<String, String> seenShortNames = new HashMap<>();
@@ -95,8 +95,10 @@ final class SimpleBeanWriter {
           continue;
         }
 
-        writer.append("  public static final Type TYPE_%s =", fieldName).eol()
-          .append("      new GenericType<");
+        writer
+            .append("  public static final Type TYPE_%s =", fieldName)
+            .eol()
+            .append("      new GenericType<");
         writeGenericType(type, seenShortNames, writer);
         // use fully qualified types here rather than use type.writeShort(writer)
         writer.append(">(){}.type();").eol();
@@ -109,7 +111,8 @@ final class SimpleBeanWriter {
     final var typeShortName = Util.shortName(type.mainType());
     final var mainType = seenShortNames.computeIfAbsent(typeShortName, k -> type.mainType());
     if (type.isGeneric()) {
-      final var shortName = Objects.equals(type.mainType(), mainType) ? typeShortName : type.mainType();
+      final var shortName =
+          Objects.equals(type.mainType(), mainType) ? typeShortName : type.mainType();
       writer.append(shortName);
       writer.append("<");
       boolean first = true;
@@ -124,7 +127,8 @@ final class SimpleBeanWriter {
       }
       writer.append(">");
     } else {
-      final var shortName = Objects.equals(type.mainType(), mainType) ? typeShortName : type.mainType();
+      final var shortName =
+          Objects.equals(type.mainType(), mainType) ? typeShortName : type.mainType();
       writer.append(shortName);
     }
   }
@@ -145,7 +149,10 @@ final class SimpleBeanWriter {
 
   private void writeFactoryBeanMethod(MethodReader method) {
     method.commentBuildMethod(writer);
-    writer.append("  public static void build_%s(%s builder) {", method.name(), beanReader.builderType()).eol();
+    writer
+        .append(
+            "  public static void build_%s(%s builder) {", method.name(), beanReader.builderType())
+        .eol();
     method.buildConditional(writer);
     method.buildAddFor(writer);
     method.builderGetFactory(writer, beanReader.hasConditions());
@@ -164,7 +171,11 @@ final class SimpleBeanWriter {
   private void writeStaticFactoryMethod() {
     MethodReader constructor = beanReader.constructor();
     if (constructor == null) {
-      logError(beanReader.beanType(), "Unable to determine constructor to use for %s? Add explicit @Inject to one of the constructors.", beanReader.beanType());
+      logError(
+          beanReader.beanType(),
+          "Unable to determine constructor to use for %s? Add explicit @Inject to one of the"
+              + " constructors.",
+          beanReader.beanType());
       return;
     }
     writeBuildMethodStart();
@@ -181,7 +192,11 @@ final class SimpleBeanWriter {
     beanReader.buildAddFor(writer);
     if (beanReader.registerProvider()) {
       indent += "  ";
-      writer.append("      builder.%s(() -> {", beanReader.lazy() ? "registerProvider" : "asPrototype().registerProvider").eol();
+      writer
+          .append(
+              "      builder.%s(() -> {",
+              beanReader.lazy() ? "registerProvider" : "asPrototype().registerProvider")
+          .eol();
     }
     constructor.startTry(writer);
     writeCreateBean(constructor);
@@ -246,35 +261,38 @@ final class SimpleBeanWriter {
         writer.append(";").eol();
       }
 
-      writer.indent(indent).append("Consumer<%s> %s = ", shortWithoutAnnotations, methodReader.name());
+      writer
+          .indent(indent)
+          .append("Consumer<%s> %s = ", shortWithoutAnnotations, methodReader.name());
 
       var observeTypeString =
-        !observeUtype.isGeneric() || observeUtype.param0().kind() == TypeKind.WILDCARD
-          ? Util.shortName(observeUtype.mainType()) + ".class"
-          : "TYPE_" + Util.shortName(observeUtype).replace(".", "_");
+          !observeUtype.isGeneric() || observeUtype.param0().kind() == TypeKind.WILDCARD
+              ? Util.shortName(observeUtype.mainType()) + ".class"
+              : "TYPE_" + Util.shortName(observeUtype).replace(".", "_");
 
       if (methodReader.params().size() == 1) {
         writer.append("%s::%s;", bean, methodReader.name());
       } else {
-        var injectParamNames = injectParams.stream()
-          .map(p -> methodReader.name() + "$" + p.simpleName())
-          .collect(joining(", "));
+        var injectParamNames =
+            injectParams.stream()
+                .map(p -> methodReader.name() + "$" + p.simpleName())
+                .collect(joining(", "));
         writer.append("e -> bean.%s(e, %s);", methodReader.name(), injectParamNames);
       }
       final var observesPrism = ObservesPrism.getInstanceOn(observeEvent.element());
       writer
-        .eol()
-        .indent(indent)
-        .append(
-          "%s.<%s>registerObserver(%s, %s, %s, %s, \"%s\");",
-          builder,
-          shortWithoutAnnotations,
-          observeTypeString,
-          observesPrism.priority(),
-          observesPrism.async(),
-          methodReader.name(),
-          observeEvent.qualifier())
-        .eol();
+          .eol()
+          .indent(indent)
+          .append(
+              "%s.<%s>registerObserver(%s, %s, %s, %s, \"%s\");",
+              builder,
+              shortWithoutAnnotations,
+              observeTypeString,
+              observesPrism.priority(),
+              observesPrism.async(),
+              methodReader.name(),
+              observeEvent.qualifier())
+          .eol();
     }
   }
 

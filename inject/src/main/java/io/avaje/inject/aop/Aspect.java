@@ -34,17 +34,13 @@ public @interface Aspect {
    */
   int ordering() default 1000;
 
-  /**
-   * Marks an External Annotation as being used for aspects
-   */
+  /** Marks an External Annotation as being used for aspects */
   @Retention(SOURCE)
   @Repeatable(List.class)
   @Target({PACKAGE, TYPE, MODULE})
   @interface Import {
 
-    /**
-     * Annotation type to import
-     */
+    /** Annotation type to import */
     Class<? extends Annotation> value();
 
     /**

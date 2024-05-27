@@ -6,8 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class AnnotationReader {
-  private AnnotationReader() {
-  }
+  private AnnotationReader() {}
 
   private static final Pattern ANNOTATION_TYPE_PATTERN = Pattern.compile("@([\\w.]+)\\.");
 
@@ -25,7 +24,7 @@ final class AnnotationReader {
     StringBuilder sb = new StringBuilder();
     while (valueAttributeMatcher.find()) {
       valueAttributeMatcher.appendReplacement(
-        sb, valueAttributeMatcher.group(1) + "=" + shortType(valueAttributeMatcher.group(2)));
+          sb, valueAttributeMatcher.group(1) + "=" + shortType(valueAttributeMatcher.group(2)));
     }
     valueAttributeMatcher.appendTail(sb);
     return rearrangeAnnotations(sb.toString());

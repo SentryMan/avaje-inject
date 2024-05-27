@@ -8,8 +8,6 @@ package io.avaje.inject.spi;
  */
 public interface BeanFactory<T, R> {
 
-  /**
-   * Create and return the bean.
-   */
+  /** Create and return the bean. */
   T create(R argument);
 }

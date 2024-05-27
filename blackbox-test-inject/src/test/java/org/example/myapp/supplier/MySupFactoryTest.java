@@ -12,9 +12,10 @@ class MySupFactoryTest {
 
   @Test
   void supplierOfFoo() {
-    try (var beanScope = BeanScope.builder()
-      .modules(new ExampleExternalAspectModule(), new OneModule(), new MyappModule())
-      .build()) {
+    try (var beanScope =
+        BeanScope.builder()
+            .modules(new ExampleExternalAspectModule(), new OneModule(), new MyappModule())
+            .build()) {
 
       MySupConsumer supConsumer = beanScope.get(MySupConsumer.class);
       MySupFactory.SupFoo current = supConsumer.current();
@@ -26,6 +27,5 @@ class MySupFactoryTest {
       MySupFactory.SupFoo next2 = supConsumer.next();
       assertThat(next2.id()).isEqualTo(3);
     }
-
   }
 }

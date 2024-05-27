@@ -19,5 +19,4 @@ class NoImpUserTest {
     assertThat(bean.hasNoImplementationViaField()).isTrue();
     assertThat(bean.hasNoImplementationViaMethod()).isTrue();
   }
-
 }

@@ -1,5 +1,4 @@
 module io.avaje.inject {
-
   exports io.avaje.inject;
   exports io.avaje.inject.aop;
   exports io.avaje.inject.event;
@@ -17,5 +16,4 @@ module io.avaje.inject {
   uses io.avaje.inject.spi.InjectPlugin;
   uses io.avaje.inject.spi.Plugin;
   uses io.avaje.inject.spi.PropertyRequiresPlugin;
-
 }

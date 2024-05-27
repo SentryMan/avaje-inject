@@ -26,7 +26,8 @@ class OptionalTest {
   void empty_withName() {
     try (BeanScope scope = BeanScope.builder().build()) {
 
-      Optional<IllegalStateException> orEmpty = scope.getOptional(IllegalStateException.class, null);
+      Optional<IllegalStateException> orEmpty =
+          scope.getOptional(IllegalStateException.class, null);
       assertThat(orEmpty).isEmpty();
 
       Optional<OFooService> foo = scope.getOptional(Otherthing.class, "blue");

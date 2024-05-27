@@ -6,9 +6,7 @@ import jakarta.inject.Singleton;
 
 import java.util.Optional;
 
-/**
- * Optional with method injection.
- */
+/** Optional with method injection. */
 @Singleton
 public class AllQue3 {
 
@@ -27,7 +25,6 @@ public class AllQue3 {
   }
 
   String whichSet() {
-    return "f:"+frodo+"s:"+sam+"b:"+bilbo;
+    return "f:" + frodo + "s:" + sam + "b:" + bilbo;
   }
-
 }

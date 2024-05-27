@@ -12,8 +12,10 @@ class MzCrudServiceTest {
   void test() {
     try (BeanScope beanScope = BeanScope.builder().build()) {
       MzCrudService crud = beanScope.get(MzCrudService.class);
-      ReadService<MzObj,Integer> read = beanScope.get(MzCrudService$DI.TYPE_ReadServiceMzObjInteger);
-      CreateService<MzObj,Integer> create = beanScope.get(MzCrudService$DI.TYPE_CreateServiceMzObjInteger);
+      ReadService<MzObj, Integer> read =
+          beanScope.get(MzCrudService$DI.TYPE_ReadServiceMzObjInteger);
+      CreateService<MzObj, Integer> create =
+          beanScope.get(MzCrudService$DI.TYPE_CreateServiceMzObjInteger);
 
       assertNotNull(crud);
       assertThat(crud).isSameAs(read);

@@ -12,5 +12,4 @@ public class Controller1 extends Controller {
     context.put("something", "1");
     return context;
   }
-
 }

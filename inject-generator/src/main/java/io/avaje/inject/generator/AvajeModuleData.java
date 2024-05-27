@@ -20,8 +20,10 @@ final class AvajeModuleData {
 
   AvajeModuleData(String[] moduleCsv) {
     this.fqn = moduleCsv[0];
-    this.provides = Arrays.stream(moduleCsv[1].split(",")).filter(not(String::isBlank)).collect(toList());
-    this.requires = Arrays.stream(moduleCsv[2].split(",")).filter(not(String::isBlank)).collect(toList());
+    this.provides =
+        Arrays.stream(moduleCsv[1].split(",")).filter(not(String::isBlank)).collect(toList());
+    this.requires =
+        Arrays.stream(moduleCsv[2].split(",")).filter(not(String::isBlank)).collect(toList());
   }
 
   List<String> provides() {
@@ -38,6 +40,12 @@ final class AvajeModuleData {
 
   @Override
   public String toString() {
-    return "AvajeModuleData [fqn=" + fqn + ", provides=" + provides + ", requires=" + requires + "]";
+    return "AvajeModuleData [fqn="
+        + fqn
+        + ", provides="
+        + provides
+        + ", requires="
+        + requires
+        + "]";
   }
 }

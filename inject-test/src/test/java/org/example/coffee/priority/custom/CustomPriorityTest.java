@@ -19,6 +19,5 @@ public class CustomPriorityTest {
     assertThat(sorted.get(0)).isInstanceOf(COtheri.class);
     assertThat(sorted.get(1)).isInstanceOf(BOtheri.class);
     assertThat(sorted.get(2)).isInstanceOf(AOtheri.class);
-
   }
 }

@@ -21,14 +21,16 @@ class DContextEntryTest {
 
   @Test
   void get_when_twoPrimary() {
-    assertThrows(IllegalStateException.class, () -> {
-      DContextEntry entry = new DContextEntry();
-      entry.add(DContextEntryBean.of("P", null, BeanEntry.PRIMARY, null));
-      entry.add(DContextEntryBean.of("N", null, BeanEntry.NORMAL, null));
-      entry.add(DContextEntryBean.of("S", null, BeanEntry.PRIMARY, null));
+    assertThrows(
+        IllegalStateException.class,
+        () -> {
+          DContextEntry entry = new DContextEntry();
+          entry.add(DContextEntryBean.of("P", null, BeanEntry.PRIMARY, null));
+          entry.add(DContextEntryBean.of("N", null, BeanEntry.NORMAL, null));
+          entry.add(DContextEntryBean.of("S", null, BeanEntry.PRIMARY, null));
 
-      entry.get(null, null);
-    });
+          entry.get(null, null);
+        });
   }
 
   @Test
@@ -40,7 +42,6 @@ class DContextEntryTest {
 
     assertEquals(entry.get(null, null), "N");
   }
-
 
   @Test
   void get_when_oneNormal2() {
@@ -56,13 +57,15 @@ class DContextEntryTest {
   @Test
   void get_when_multiSecondaryOnly() {
 
-    assertThrows(IllegalStateException.class, () -> {
-      DContextEntry entry = new DContextEntry();
-      entry.add(DContextEntryBean.of("S1", null, BeanEntry.SECONDARY, null));
-      entry.add(DContextEntryBean.of("S2", null, BeanEntry.SECONDARY, null));
+    assertThrows(
+        IllegalStateException.class,
+        () -> {
+          DContextEntry entry = new DContextEntry();
+          entry.add(DContextEntryBean.of("S1", null, BeanEntry.SECONDARY, null));
+          entry.add(DContextEntryBean.of("S2", null, BeanEntry.SECONDARY, null));
 
-      entry.get(null, null);
-    });
+          entry.get(null, null);
+        });
   }
 
   @Test
@@ -182,8 +185,8 @@ class DContextEntryTest {
     public Class<?>[] classes() {
       return new Class[0];
     }
+
     @Override
-    public void build(Builder builder) {
-    }
+    public void build(Builder builder) {}
   }
 }

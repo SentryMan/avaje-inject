@@ -45,5 +45,4 @@ class OptionalFactoryTest {
     AllQue6 allQue = ApplicationScope.get(AllQue6.class);
     assertThat(allQue.whichSet()).isEqualTo("f:frodos:samb:null");
   }
-
 }

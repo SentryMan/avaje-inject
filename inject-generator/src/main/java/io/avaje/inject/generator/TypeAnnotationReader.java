@@ -6,9 +6,7 @@ import javax.lang.model.type.DeclaredType;
 
 import static io.avaje.inject.generator.APContext.logWarn;
 
-/**
- * Read the annotations on the type.
- */
+/** Read the annotations on the type. */
 final class TypeAnnotationReader {
 
   private final TypeElement beanType;
@@ -17,7 +15,6 @@ final class TypeAnnotationReader {
   TypeAnnotationReader(TypeElement beanType) {
     this.beanType = beanType;
   }
-
 
   boolean hasQualifierName() {
     return qualifierName != null;
@@ -34,9 +31,10 @@ final class TypeAnnotationReader {
 
       if (QualifierPrism.isPresent(annotationType.asElement())) {
         var shortName = Util.shortName(annotationType.toString());
-        qualifierName = AnnotationCopier.toSimpleAnnotationString(annotationMirror)
-          .replaceFirst(annotationType.toString(), shortName)
-          .replace("\"", "\\\"");
+        qualifierName =
+            AnnotationCopier.toSimpleAnnotationString(annotationMirror)
+                .replaceFirst(annotationType.toString(), shortName)
+                .replace("\"", "\\\"");
 
       } else if (annType.indexOf('.') == -1) {
         logWarn("skip when no package on annotation " + annType);

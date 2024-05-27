@@ -38,5 +38,4 @@ class InjectExtension_viaAnnotation_Test {
   void hello_2() {
     assertEquals("hello+TestHelloData", helloService.hello());
   }
-
 }

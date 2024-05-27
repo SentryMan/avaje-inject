@@ -1,6 +1,5 @@
 package org.example.iface;
 
-
 import jakarta.inject.Singleton;
 
 @Singleton

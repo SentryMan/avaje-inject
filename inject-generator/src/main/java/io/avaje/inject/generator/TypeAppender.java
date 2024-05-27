@@ -1,6 +1,5 @@
 package io.avaje.inject.generator;
 
-import static java.lang.annotation.ElementType.LOCAL_VARIABLE;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -8,9 +7,7 @@ import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 
-/**
- * Helper for building the registration types.
- */
+/** Helper for building the registration types. */
 final class TypeAppender {
 
   private final ImportTypeMap importTypes;
@@ -33,10 +30,10 @@ final class TypeAppender {
 
   private static boolean isAddGenericType(UType type, List<UType> components) {
     return type.isGeneric()
-      && type.kind() != TypeKind.TYPEVAR
-      && (components.size() != 1 || components.get(0).kind() != TypeKind.WILDCARD)
-      && components.stream()
-      .noneMatch(u -> u.kind() == TypeKind.TYPEVAR || u.kind() == TypeKind.WILDCARD);
+        && type.kind() != TypeKind.TYPEVAR
+        && (components.size() != 1 || components.get(0).kind() != TypeKind.WILDCARD)
+        && components.stream()
+            .noneMatch(u -> u.kind() == TypeKind.TYPEVAR || u.kind() == TypeKind.WILDCARD);
   }
 
   void add(List<UType> sourceTypes) {

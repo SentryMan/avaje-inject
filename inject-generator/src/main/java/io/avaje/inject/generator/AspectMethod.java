@@ -39,22 +39,25 @@ final class AspectMethod {
 
   private ExecutableElement findFallback(ExecutableElement method) {
     var methods = ElementFilter.methodsIn(method.getEnclosingElement().getEnclosedElements());
-    var sameNameMethods = methods.stream().filter(m -> m.getSimpleName().contentEquals(simpleName)).collect(toList());
+    var sameNameMethods =
+        methods.stream().filter(m -> m.getSimpleName().contentEquals(simpleName)).collect(toList());
     var index = sameNameMethods.indexOf(method);
 
     return methods.stream()
-      .filter(e -> matchFallback(e, sameNameMethods, index))
-      .findFirst()
-      .orElse(null);
+        .filter(e -> matchFallback(e, sameNameMethods, index))
+        .findFirst()
+        .orElse(null);
   }
 
-  private boolean matchFallback(ExecutableElement e, List<ExecutableElement> sameNameMethods, int index) {
+  private boolean matchFallback(
+      ExecutableElement e, List<ExecutableElement> sameNameMethods, int index) {
     return AOPFallbackPrism.getOptionalOn(e)
-      .filter(v -> matchFallback(v, sameNameMethods, index))
-      .isPresent();
+        .filter(v -> matchFallback(v, sameNameMethods, index))
+        .isPresent();
   }
 
-  private boolean matchFallback(AOPFallbackPrism v, List<ExecutableElement> sameNameMethods, int index) {
+  private boolean matchFallback(
+      AOPFallbackPrism v, List<ExecutableElement> sameNameMethods, int index) {
     return v.value().contains(simpleName) && (sameNameMethods.size() == 1 || index == v.place());
   }
 
@@ -64,19 +67,23 @@ final class AspectMethod {
     }
     var returnType = ProcessorUtils.trimAnnotations(fallback.getReturnType().toString());
     if (!returnType.contains(Util.shortName(rawReturn))) {
-      APContext.logError(fallback, "An AOP fallback method must have the same return type as the target method");
+      APContext.logError(
+          fallback, "An AOP fallback method must have the same return type as the target method");
     }
 
     var fallParams = fallback.getParameters();
     final var size = fallParams.size();
-    if (fallParams.isEmpty() || size == 1 && fallParams.get(0).asType().toString().contains("Throwable")) {
+    if (fallParams.isEmpty()
+        || size == 1 && fallParams.get(0).asType().toString().contains("Throwable")) {
       return;
     }
 
     if (params.size() != size && size != params.size() + 1) {
       APContext.logError(
           fallback,
-          "Invalid fallback signature. An AOP fallback method can have either 0 arguments, one Throwable argument, all the target method's arguments, or all the target method's arguments with Throwable appended.");
+          "Invalid fallback signature. An AOP fallback method can have either 0 arguments, one"
+              + " Throwable argument, all the target method's arguments, or all the target method's"
+              + " arguments with Throwable appended.");
     }
   }
 
@@ -185,7 +192,11 @@ final class AspectMethod {
     for (AspectPair aspect : aspectPairs) {
       String name = Util.initLower(aspect.annotationShortName());
       String sn = aspect.annotationShortName();
-      writer.append("      %s%s = %s.interceptor(%s, %s.getAnnotation(%s.class));", localName, sn, name, localName, localName, sn).eol();
+      writer
+          .append(
+              "      %s%s = %s.interceptor(%s, %s.getAnnotation(%s.class));",
+              localName, sn, name, localName, localName, sn)
+          .eol();
     }
     writer.eol();
   }
@@ -232,12 +243,19 @@ final class AspectMethod {
     }
 
     writer.append("    } catch (RuntimeException $ex) {").eol();
-    writer.append("      $ex.addSuppressed(new InvocationException(\"%s proxy threw exception\"));", simpleName).eol();
+    writer
+        .append(
+            "      $ex.addSuppressed(new InvocationException(\"%s proxy threw exception\"));",
+            simpleName)
+        .eol();
     writer.append("      throw $ex;").eol();
     writeThrowsCatch(writer);
     if (thrownTypes.stream().map(Object::toString).noneMatch("java.lang.Throwable"::equals)) {
       writer.append("    } catch (Throwable $t) {").eol();
-      writer.append("      throw new InvocationException(\"%s proxy threw exception\", $t);", simpleName).eol();
+      writer
+          .append(
+              "      throw new InvocationException(\"%s proxy threw exception\", $t);", simpleName)
+          .eol();
     }
     writer.append("    }").eol();
   }
@@ -249,7 +267,8 @@ final class AspectMethod {
 
     var fallParams = fallback.getParameters();
     writer.eol().append("      .fallback(");
-    var hasThrowable = fallParams.stream().anyMatch(p -> p.asType().toString().contains("Throwable"));
+    var hasThrowable =
+        fallParams.stream().anyMatch(p -> p.asType().toString().contains("Throwable"));
 
     if (fallParams.size() == 1 && hasThrowable) {
       writer.append("this::%s", fallback.getSimpleName());
@@ -289,7 +308,11 @@ final class AspectMethod {
         .collect(collectingAndThen(joining(" | "), writer::append))
         .append(" e) {")
         .eol();
-    writer.append("      e.addSuppressed(new InvocationException(\"%s proxy threw exception\"));", simpleName).eol();
+    writer
+        .append(
+            "      e.addSuppressed(new InvocationException(\"%s proxy threw exception\"));",
+            simpleName)
+        .eol();
     writer.append("      throw e;").eol();
   }
 }

@@ -7,8 +7,7 @@ import org.example.coffee.core.Steamer;
 @Singleton
 public class InhOne extends InhBase {
 
-  @Inject
-  Steamer expectSetTopField;
+  @Inject Steamer expectSetTopField;
   Steamer topMethod;
   private boolean expectTrueTopMethodCalled;
 

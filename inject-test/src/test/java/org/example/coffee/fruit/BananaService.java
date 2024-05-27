@@ -7,8 +7,7 @@ import jakarta.inject.Singleton;
 @Singleton
 class BananaService {
 
-  @Inject
-  PeachService peachService;
+  @Inject PeachService peachService;
 
   String banana(String a, String b, String c) {
     System.out.println("banana> a: " + a + " b:" + b + " c:" + c);

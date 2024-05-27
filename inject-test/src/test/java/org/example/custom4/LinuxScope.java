@@ -5,5 +5,4 @@ import jakarta.inject.Scope;
 
 @Scope
 @InjectModule(requires = {MachineScope.class})
-public @interface LinuxScope {
-}
+public @interface LinuxScope {}

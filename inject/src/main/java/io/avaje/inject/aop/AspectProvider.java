@@ -11,8 +11,6 @@ import java.lang.reflect.Method;
 @FunctionalInterface
 public interface AspectProvider<T extends Annotation> {
 
-  /**
-   * Return the method interceptor to use for the given method and aspect annotation.
-   */
+  /** Return the method interceptor to use for the given method and aspect annotation. */
   MethodInterceptor interceptor(Method method, T aspectAnnotation);
 }

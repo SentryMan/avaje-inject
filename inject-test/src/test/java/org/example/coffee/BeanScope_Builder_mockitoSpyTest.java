@@ -28,9 +28,7 @@ class BeanScope_Builder_mockitoSpyTest {
     Pump pump = mock(Pump.class);
     Grinder grinder = mock(Grinder.class);
 
-    try (BeanScope context = BeanScope.builder()
-      .beans(pump, grinder)
-      .build()) {
+    try (BeanScope context = BeanScope.builder().beans(pump, grinder).build()) {
 
       CoffeeMaker coffeeMaker = context.get(CoffeeMaker.class);
       coffeeMaker.makeIt();
@@ -49,10 +47,7 @@ class BeanScope_Builder_mockitoSpyTest {
   @Test
   void withMockitoSpy_noSetup_expect_spyUsed() {
 
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .spy(Pump.class)
-      .build()) {
+    try (BeanScope context = BeanScope.builder().forTesting().spy(Pump.class).build()) {
 
       CoffeeMaker coffeeMaker = context.get(CoffeeMaker.class);
       assertThat(coffeeMaker).isNotNull();
@@ -66,11 +61,8 @@ class BeanScope_Builder_mockitoSpyTest {
   @Test
   void withMockitoSpy_postLoadSetup_expect_spyUsed() {
 
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .spy(Pump.class)
-      .spy(Grinder.class)
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder().forTesting().spy(Pump.class).spy(Grinder.class).build()) {
 
       // setup after load()
       Pump pump = context.get(Pump.class);
@@ -90,13 +82,16 @@ class BeanScope_Builder_mockitoSpyTest {
   @Test
   void withMockitoSpy_expect_spyUsed() {
 
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .spy(Pump.class, pump -> {
-        // setup the spy
-        doNothing().when(pump).pumpWater();
-      })
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .forTesting()
+            .spy(
+                Pump.class,
+                pump -> {
+                  // setup the spy
+                  doNothing().when(pump).pumpWater();
+                })
+            .build()) {
 
       // or setup here ...
       Pump pump = context.get(Pump.class);
@@ -114,10 +109,11 @@ class BeanScope_Builder_mockitoSpyTest {
   @Test
   void withMockitoSpy_whenPrimary_expect_spyUsed() {
 
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .spy(PEmailer.class) // has a primary
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .forTesting()
+            .spy(PEmailer.class) // has a primary
+            .build()) {
 
       UserOfPEmailer user = context.get(UserOfPEmailer.class);
       PEmailer emailer = context.get(PEmailer.class);
@@ -130,10 +126,11 @@ class BeanScope_Builder_mockitoSpyTest {
   @Test
   void withMockitoSpy_whenOnlySecondary_expect_spyUsed() {
 
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .spy(Widget.class) // only secondary
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .forTesting()
+            .spy(Widget.class) // only secondary
+            .build()) {
 
       WidgetUser widgetUser = context.get(WidgetUser.class);
 
@@ -148,14 +145,11 @@ class BeanScope_Builder_mockitoSpyTest {
     }
   }
 
-  /**
-   * Still matches when only 1 candidate even if the qualifier name doesn't exist.
-   */
+  /** Still matches when only 1 candidate even if the qualifier name doesn't exist. */
   @Test
   void withNamed_when_qualifierNameDoesNotExist_but_onlyOneCandidate() {
 
-    try (BeanScope context = BeanScope.builder()
-      .build()) {
+    try (BeanScope context = BeanScope.builder().build()) {
 
       WidgetUser widgetUser = context.get(WidgetUser.class);
 
@@ -172,10 +166,11 @@ class BeanScope_Builder_mockitoSpyTest {
   @Test
   void withMockitoSpy_whenSecondary_expect_spyUsed() {
 
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .spy(Something.class) // has a secondary and a normal
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .forTesting()
+            .spy(Something.class) // has a secondary and a normal
+            .build()) {
 
       Unused unused = context.get(Unused.class);
       Something something = context.get(Something.class);
@@ -196,15 +191,18 @@ class BeanScope_Builder_mockitoSpyTest {
 
     AtomicReference<Grinder> mock = new AtomicReference<>();
 
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .mock(Pump.class)
-      .mock(Grinder.class, grinder -> {
-        // setup the mock
-        when(grinder.grindBeans()).thenReturn("stub response");
-        mock.set(grinder);
-      })
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .forTesting()
+            .mock(Pump.class)
+            .mock(
+                Grinder.class,
+                grinder -> {
+                  // setup the mock
+                  when(grinder.grindBeans()).thenReturn("stub response");
+                  mock.set(grinder);
+                })
+            .build()) {
 
       Grinder grinder = context.get(Grinder.class);
       assertThat(grinder).isSameAs(mock.get());
@@ -219,5 +217,4 @@ class BeanScope_Builder_mockitoSpyTest {
       verify(grinder).grindBeans();
     }
   }
-
 }

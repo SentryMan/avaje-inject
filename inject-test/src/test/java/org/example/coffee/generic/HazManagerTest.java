@@ -20,10 +20,7 @@ class HazManagerTest {
 
   @Test
   void find_with_mockHaz() {
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .mock(HazRepo.class)
-      .build()) {
+    try (BeanScope context = BeanScope.builder().forTesting().mock(HazRepo.class).build()) {
 
       HazManager hazManager = context.get(HazManager.class);
       Haz haz = hazManager.find(42L);
@@ -34,12 +31,15 @@ class HazManagerTest {
 
   @Test
   void find_with_stubHazUsingMockito() {
-    try (BeanScope context = BeanScope.builder()
-      .forTesting()
-      .mock(HazRepo.class, hazRepo -> {
-        when(hazRepo.findById(anyLong())).thenReturn(new Haz(-23L));
-      })
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .forTesting()
+            .mock(
+                HazRepo.class,
+                hazRepo -> {
+                  when(hazRepo.findById(anyLong())).thenReturn(new Haz(-23L));
+                })
+            .build()) {
 
       HazManager hazManager = context.get(HazManager.class);
       Haz haz = hazManager.find(42L);
@@ -52,9 +52,8 @@ class HazManagerTest {
   void withBean_usingGenericType() {
     TDFoo testDouble = new TDFoo();
 
-    try (BeanScope context = BeanScope.builder()
-      .bean(HazRepo$DI.TYPE_RepositoryHazLong, testDouble)
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder().bean(HazRepo$DI.TYPE_RepositoryHazLong, testDouble).build()) {
 
       HazManager hazManager = context.get(HazManager.class);
       Haz haz = hazManager.find(42L);
@@ -67,9 +66,7 @@ class HazManagerTest {
   void find_with_testDouble() {
     TDHazRepo testDouble = new TDHazRepo();
 
-    try (BeanScope context = BeanScope.builder()
-      .beans(testDouble)
-      .build()) {
+    try (BeanScope context = BeanScope.builder().beans(testDouble).build()) {
 
       HazManager hazManager = context.get(HazManager.class);
 
@@ -94,9 +91,7 @@ class HazManagerTest {
     }
   }
 
-  /**
-   * Test double for HazRepo - nice when we want interesting test behaviour.
-   */
+  /** Test double for HazRepo - nice when we want interesting test behaviour. */
   static class TDHazRepo extends HazRepo {
 
     long id = 64L;

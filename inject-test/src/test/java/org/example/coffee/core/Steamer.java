@@ -14,5 +14,4 @@ public class Steamer {
   void onStop() {
     System.out.println("Chucking the toys");
   }
-
 }

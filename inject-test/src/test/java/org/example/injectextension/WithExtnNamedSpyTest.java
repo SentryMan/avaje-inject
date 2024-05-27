@@ -17,14 +17,13 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(InjectExtension.class)
 class WithExtnNamedSpyTest {
 
-  @Spy @Blue
-  SomeStore blueStore;
+  @Spy @Blue SomeStore blueStore;
 
-  @Spy @Named("green")
+  @Spy
+  @Named("green")
   SomeStore greenStore;
 
-  @Inject
-  StoreManagerWithSetterQualifier storeManager;
+  @Inject StoreManagerWithSetterQualifier storeManager;
 
   @Test
   void spy_verify() {
@@ -41,13 +40,15 @@ class WithExtnNamedSpyTest {
     @Test
     void test() {
 
-      try (BeanScope beanScope = BeanScope.builder()
-        .forTesting()
-        .spy(SomeStore.class, "blue")
-        .spy(SomeStore.class, "green")
-        .build()) {
+      try (BeanScope beanScope =
+          BeanScope.builder()
+              .forTesting()
+              .spy(SomeStore.class, "blue")
+              .spy(SomeStore.class, "green")
+              .build()) {
 
-        final StoreManagerWithSetterQualifier storeManager = beanScope.get(StoreManagerWithSetterQualifier.class);
+        final StoreManagerWithSetterQualifier storeManager =
+            beanScope.get(StoreManagerWithSetterQualifier.class);
         assertThat(storeManager.blueStore()).isEqualTo("blue");
 
         final SomeStore blueStore = beanScope.get(SomeStore.class, "blue");
@@ -57,7 +58,6 @@ class WithExtnNamedSpyTest {
         final SomeStore greenStore = beanScope.get(SomeStore.class, "green");
         verify(greenStore).store();
       }
-
     }
   }
 }

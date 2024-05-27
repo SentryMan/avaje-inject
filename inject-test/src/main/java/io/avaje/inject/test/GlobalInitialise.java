@@ -14,9 +14,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Internal helper to build the test scope BeanScope.
- * <p>
- * Takes into when Service loading does not work such as when using module-path.
- * In that case loads the META-INF services resources and uses reflection.
+ *
+ * <p>Takes into when Service loading does not work such as when using module-path. In that case
+ * loads the META-INF services resources and uses reflection.
  */
 final class GlobalInitialise {
 
@@ -26,17 +26,14 @@ final class GlobalInitialise {
   private final boolean shutdownHook;
 
   /**
-   * Create and return the test BeanScope. A BeanScope is created each
-   * time this method is called.
+   * Create and return the test BeanScope. A BeanScope is created each time this method is called.
    */
   @Nullable
   static BeanScope createTestBaseScope(boolean shutdownHook) {
     return new GlobalInitialise(shutdownHook).build();
   }
 
-  /**
-   * Return the test BeanScope only creating once.
-   */
+  /** Return the test BeanScope only creating once. */
   static GlobalTestBeans.Beans initialise(boolean shutdownHook) {
     lock.lock();
     try {
@@ -61,9 +58,7 @@ final class GlobalInitialise {
   }
 
   private static BeanScope createTestAllScope(BeanScope testBaseScope) {
-      return BeanScope.builder()
-        .parent(testBaseScope, false)
-        .build();
+    return BeanScope.builder().parent(testBaseScope, false).build();
   }
 
   @Nullable
@@ -81,19 +76,18 @@ final class GlobalInitialise {
 
   private BeanScope buildFromModules(List<TestModule> testModules) {
     return BeanScope.builder()
-      .modules(testModules.toArray(AvajeModule[]::new))
-      .shutdownHook(shutdownHook)
-      .build();
+        .modules(testModules.toArray(AvajeModule[]::new))
+        .shutdownHook(shutdownHook)
+        .build();
   }
 
-  /**
-   * Fallback when ServiceLoader does not work in module-path for generated test service.
-   */
+  /** Fallback when ServiceLoader does not work in module-path for generated test service. */
   @Nullable
   private BeanScope buildFromResources() {
     try {
       Set<Class<?>> testModuleClasses = new LinkedHashSet<>();
-      Enumeration<URL> urls = ClassLoader.getSystemResources("META-INF/services/io.avaje.inject.test.TestModule");
+      Enumeration<URL> urls =
+          ClassLoader.getSystemResources("META-INF/services/io.avaje.inject.test.TestModule");
       while (urls.hasMoreElements()) {
         String className = readServiceClassName(urls.nextElement());
         if (className != null) {
@@ -122,5 +116,4 @@ final class GlobalInitialise {
     }
     return null;
   }
-
 }

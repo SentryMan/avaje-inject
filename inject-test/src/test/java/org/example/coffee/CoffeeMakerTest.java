@@ -35,9 +35,7 @@ class CoffeeMakerTest {
 
   @Test
   void makeIt_via_BootContext_withNoShutdownHook() {
-    try (BeanScope context = BeanScope.builder()
-      .shutdownHook(false)
-      .build()) {
+    try (BeanScope context = BeanScope.builder().shutdownHook(false).build()) {
 
       String makeIt = context.get(CoffeeMaker.class).makeIt();
       assertThat(makeIt).isEqualTo("done");
@@ -54,13 +52,12 @@ class CoffeeMakerTest {
       assertThat(beanEntries).hasSizeGreaterThan(10);
 
       // all entries for an interface
-      final List<BeanEntry> someiEntries = beanEntries.stream()
-        .filter(beanEntry -> beanEntry.hasKey(Somei.class))
-        .collect(toList());
+      final List<BeanEntry> someiEntries =
+          beanEntries.stream().filter(beanEntry -> beanEntry.hasKey(Somei.class)).collect(toList());
       assertThat(someiEntries).hasSize(3);
 
-      final Optional<BeanEntry> bsomeEntry = someiEntries.stream()
-        .filter(entry -> entry.type().equals(BSomei.class)).findFirst();
+      final Optional<BeanEntry> bsomeEntry =
+          someiEntries.stream().filter(entry -> entry.type().equals(BSomei.class)).findFirst();
       assertThat(bsomeEntry).isPresent();
 
       final BeanEntry entry = bsomeEntry.get();
@@ -79,13 +76,17 @@ class CoffeeMakerTest {
 
       final List<BeanEntry> beanEntries = context.all();
 
-      final BeanEntry inhEntry = beanEntries.stream()
-        .filter(e -> e.hasKey(InhOne.class))
-        .findFirst().orElse(null);
+      final BeanEntry inhEntry =
+          beanEntries.stream().filter(e -> e.hasKey(InhOne.class)).findFirst().orElse(null);
 
       assertThat(inhEntry.keys())
-        .containsExactly(name(InhOne.class), name(InhBase.class), name(InhBaseBase.class),
-          name(InhBaseIface2.class), name(InhBaseIface3.class), name(InhBaseIface.class));
+          .containsExactly(
+              name(InhOne.class),
+              name(InhBase.class),
+              name(InhBaseBase.class),
+              name(InhBaseIface2.class),
+              name(InhBaseIface3.class),
+              name(InhBaseIface.class));
     }
   }
 
@@ -95,12 +96,12 @@ class CoffeeMakerTest {
 
       final List<BeanEntry> beanEntries = context.all();
 
-      final BeanEntry extendIfaces = beanEntries.stream()
-        .filter(e -> e.hasKey(ConcreteExtend.class))
-        .findFirst().orElse(null);
+      final BeanEntry extendIfaces =
+          beanEntries.stream().filter(e -> e.hasKey(ConcreteExtend.class)).findFirst().orElse(null);
 
       assertThat(extendIfaces.keys())
-        .containsExactly(name(ConcreteExtend.class), name(IfaceExtend.class), name(IfaseBase.class));
+          .containsExactly(
+              name(ConcreteExtend.class), name(IfaceExtend.class), name(IfaseBase.class));
     }
   }
 
@@ -110,12 +111,11 @@ class CoffeeMakerTest {
 
       final List<BeanEntry> beanEntries = context.all();
 
-      final BeanEntry hazRepo = beanEntries.stream()
-        .filter(e -> e.hasKey(HazRepo.class))
-        .findFirst().orElse(null);
+      final BeanEntry hazRepo =
+          beanEntries.stream().filter(e -> e.hasKey(HazRepo.class)).findFirst().orElse(null);
 
       assertThat(hazRepo.keys())
-        .containsExactly(name(HazRepo.class), name(HazRepo$DI.TYPE_RepositoryHazLong));
+          .containsExactly(name(HazRepo.class), name(HazRepo$DI.TYPE_RepositoryHazLong));
     }
   }
 
@@ -125,12 +125,12 @@ class CoffeeMakerTest {
 
       final List<BeanEntry> beanEntries = context.all();
 
-      final BeanEntry hazRepo = beanEntries.stream()
-        .filter(e -> e.hasKey(MyParam.class))
-        .findFirst().orElse(null);
+      final BeanEntry hazRepo =
+          beanEntries.stream().filter(e -> e.hasKey(MyParam.class)).findFirst().orElse(null);
 
       assertThat(hazRepo.keys())
-        .containsExactly(name(MyParam.class), name(IfaceParam.class), name(IfaceParamParent.class));
+          .containsExactly(
+              name(MyParam.class), name(IfaceParam.class), name(IfaceParamParent.class));
     }
   }
 
@@ -140,17 +140,14 @@ class CoffeeMakerTest {
 
       final List<BeanEntry> beanEntries = context.all();
 
-      final BeanEntry extendIfaces = beanEntries.stream()
-        .filter(e -> e.hasKey(AProvProvider.class))
-        .findFirst().orElse(null);
+      final BeanEntry extendIfaces =
+          beanEntries.stream().filter(e -> e.hasKey(AProvProvider.class)).findFirst().orElse(null);
 
-      assertThat(extendIfaces.keys())
-        .containsExactly(name(AProvProvider.class), name(AProv.class));
+      assertThat(extendIfaces.keys()).containsExactly(name(AProvProvider.class), name(AProv.class));
     }
   }
 
   String name(Type cls) {
     return cls.getTypeName();
   }
-
 }

@@ -5,9 +5,7 @@ import io.avaje.inject.BeanScopeBuilder;
 
 import java.util.Optional;
 
-/**
- * Wraps the underlying metadata (fields with annotations @Mock, @Spy, @Inject, @Captor).
- */
+/** Wraps the underlying metadata (fields with annotations @Mock, @Spy, @Inject, @Captor). */
 final class MetaInfo {
 
   private final MetaReader reader;
@@ -24,16 +22,12 @@ final class MetaInfo {
     return reader.hasInstanceInjection();
   }
 
-  /**
-   * Build for static fields class level scope.
-   */
+  /** Build for static fields class level scope. */
   TestBeans buildForClass(GlobalTestBeans.Beans globalTestScope) {
     return buildSet(globalTestScope, null);
   }
 
-  /**
-   * Build test instance per test scope.
-   */
+  /** Build test instance per test scope. */
   TestBeans buildForInstance(GlobalTestBeans.Beans globalTestScope, Object testInstance) {
     return buildSet(globalTestScope, testInstance);
   }
@@ -46,11 +40,12 @@ final class MetaInfo {
 
   private TestBeans buildTestBeans(GlobalTestBeans.Beans parent, Object testInstance) {
     // wiring profiles
-    String[] profiles = Optional.ofNullable(testInstance)
-      .map(Object::getClass)
-      .map(c -> c.getAnnotation(InjectTest.class))
-      .map(InjectTest::profiles)
-      .orElse(new String[0]);
+    String[] profiles =
+        Optional.ofNullable(testInstance)
+            .map(Object::getClass)
+            .map(c -> c.getAnnotation(InjectTest.class))
+            .map(InjectTest::profiles)
+            .orElse(new String[0]);
 
     if (profiles.length > 0 || reader.hasMocksOrSpies(testInstance)) {
       // need to build a BeanScope for this using baseBeans() as the parent
@@ -73,5 +68,4 @@ final class MetaInfo {
       return new TestBeans(parent);
     }
   }
-
 }

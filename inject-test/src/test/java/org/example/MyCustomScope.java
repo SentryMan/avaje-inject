@@ -11,5 +11,4 @@ import jakarta.inject.Scope;
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
 @InjectModule(requires = {LocalExternal.class})
-public @interface MyCustomScope {
-}
+public @interface MyCustomScope {}

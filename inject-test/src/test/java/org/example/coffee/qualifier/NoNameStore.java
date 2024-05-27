@@ -10,5 +10,4 @@ public class NoNameStore implements SomeStore {
   public String store() {
     return "noName";
   }
-
 }

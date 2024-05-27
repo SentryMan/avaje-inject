@@ -5,5 +5,4 @@ import jakarta.inject.Scope;
 
 @Scope
 @InjectModule(requires = {Ext0iface.class, Ext0conc.class})
-public @interface Ext0Scope {
-}
+public @interface Ext0Scope {}

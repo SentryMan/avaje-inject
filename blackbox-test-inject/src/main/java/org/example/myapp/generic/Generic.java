@@ -1,6 +1,3 @@
 package org.example.myapp.generic;
 
-public interface Generic<T> {
-
-
-}
+public interface Generic<T> {}

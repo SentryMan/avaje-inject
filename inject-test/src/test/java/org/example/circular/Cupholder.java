@@ -9,9 +9,7 @@ public class Cupholder {
 
   public final Provider<Seat> seatProvider;
 
-  /**
-   * Resolve circular dependency via Provider interface rather than field injection.
-   */
+  /** Resolve circular dependency via Provider interface rather than field injection. */
   @Inject
   public Cupholder(Provider<Seat> seatProvider) {
     this.seatProvider = seatProvider;

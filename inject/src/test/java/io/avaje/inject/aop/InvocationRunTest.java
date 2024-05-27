@@ -34,8 +34,8 @@ class InvocationRunTest {
 
   @Test
   void single() throws Throwable {
-    Invocation.Base<Void> call = new Invocation.Run(() -> this.doStuff(myArg))
-      .with(this, doStuffMethod, myArg);
+    Invocation.Base<Void> call =
+        new Invocation.Run(() -> this.doStuff(myArg)).with(this, doStuffMethod, myArg);
 
     new Inter0().invoke(call);
 
@@ -47,9 +47,10 @@ class InvocationRunTest {
 
   @Test
   void wrapped() throws Throwable {
-    Invocation.Base<Void> call = new Invocation.Run(() -> this.doStuff(myArg))
-      .with(this, doStuffMethod, myArg)
-      .wrap(new Inter0());
+    Invocation.Base<Void> call =
+        new Invocation.Run(() -> this.doStuff(myArg))
+            .with(this, doStuffMethod, myArg)
+            .wrap(new Inter0());
 
     new Inter1().invoke(call);
 
@@ -61,14 +62,17 @@ class InvocationRunTest {
 
   @Test
   void wrapped_wrapped() throws Throwable {
-    Invocation.Base<Void> call = new Invocation.Run(() -> this.doStuff(myArg))
-      .with(this, doStuffMethod, myArg)
-      .wrap(new Inter0())
-      .wrap(new Inter1());
+    Invocation.Base<Void> call =
+        new Invocation.Run(() -> this.doStuff(myArg))
+            .with(this, doStuffMethod, myArg)
+            .wrap(new Inter0())
+            .wrap(new Inter1());
 
     new Inter2().invoke(call);
 
-    assertThat(trace).containsExactly("b-Inter2", "b-Inter1", "b-Inter0", "doStuff", "a-Inter0", "a-Inter1", "a-Inter2");
+    assertThat(trace)
+        .containsExactly(
+            "b-Inter2", "b-Inter1", "b-Inter0", "doStuff", "a-Inter0", "a-Inter1", "a-Inter2");
     assertThat(usedArg).isSameAs(myArg);
     assertThat(methods).containsExactly(doStuffMethod, doStuffMethod, doStuffMethod);
     assertThat(args).containsExactly(myArg, myArg, myArg);

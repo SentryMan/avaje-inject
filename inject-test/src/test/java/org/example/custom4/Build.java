@@ -1,4 +1,3 @@
 package org.example.custom4;
 
-public class Build {
-}
+public class Build {}

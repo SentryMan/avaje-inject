@@ -5,8 +5,7 @@ import org.example.coffee.core.Steamer;
 
 public class InhBase extends InhBaseBase implements InhBaseIface2 {
 
-  @Inject
-  Steamer expectSetBaseField;
+  @Inject Steamer expectSetBaseField;
 
   private Steamer baseMethod;
   private boolean expectTrueBaseMethodCalled;

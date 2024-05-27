@@ -19,7 +19,8 @@ class MyAspectImplementation implements AspectProvider<MyExternalAspect>, Method
 
   @Override
   public void invoke(Invocation invoke) throws Throwable {
-    System.out.println("before args: " + Arrays.toString(invoke.arguments()) + " method: " + invoke.method());
+    System.out.println(
+        "before args: " + Arrays.toString(invoke.arguments()) + " method: " + invoke.method());
     try {
       invoke.invoke();
     } finally {

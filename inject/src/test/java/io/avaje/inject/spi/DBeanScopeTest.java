@@ -21,12 +21,12 @@ class DBeanScopeTest {
     final List<Object> result = DBeanScope.combine(emptyList(), list("A", "B"));
     assertThat(result).containsExactly("A", "B");
   }
+
   @Test
   void combine_both() {
-    final List<Object> result = DBeanScope.combine(list("A", "B"),list("C"));
+    final List<Object> result = DBeanScope.combine(list("A", "B"), list("C"));
     assertThat(result).containsExactly("A", "B", "C");
   }
-
 
   List<Object> list(String... vals) {
     return Arrays.asList(vals);

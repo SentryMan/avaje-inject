@@ -9,7 +9,6 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-
 final class AllScopes {
 
   private final Map<String, Data> scopeAnnotations = new HashMap<>();
@@ -79,9 +78,7 @@ final class AllScopes {
     }
   }
 
-  /**
-   * Find the scope by scope annotation type.
-   */
+  /** Find the scope by scope annotation type. */
   ScopeInfo get(String fullType) {
     final Data data = scopeAnnotations.get(fullType);
     return data == null ? null : data.scopeInfo;

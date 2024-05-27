@@ -10,8 +10,7 @@ import javax.lang.model.element.TypeElement;
 import java.util.*;
 
 /**
- * Read points for field injection and method injection
- * on baseType plus inherited injection points.
+ * Read points for field injection and method injection on baseType plus inherited injection points.
  */
 final class TypeExtendsInjection {
 
@@ -129,7 +128,8 @@ final class TypeExtendsInjection {
     if (AnnotationUtil.hasAnnotationWithName(element, "PreDestroy")) {
       preDestroyMethod = element;
       checkAspect = false;
-      PreDestroyPrism.getOptionalOn(element).ifPresent(preDestroy -> preDestroyPriority = preDestroy.priority());
+      PreDestroyPrism.getOptionalOn(element)
+          .ifPresent(preDestroy -> preDestroyPriority = preDestroy.priority());
     }
     if (checkAspect) {
       checkForAspect(methodElement);
@@ -149,7 +149,9 @@ final class TypeExtendsInjection {
 
   private void checkForAspect(ExecutableElement methodElement) {
     Set<Modifier> modifiers = methodElement.getModifiers();
-    if (modifiers.contains(Modifier.PRIVATE) || modifiers.contains(Modifier.STATIC) || modifiers.contains(Modifier.ABSTRACT)) {
+    if (modifiers.contains(Modifier.PRIVATE)
+        || modifiers.contains(Modifier.STATIC)
+        || modifiers.contains(Modifier.ABSTRACT)) {
       return;
     }
     int nameIndex = methodNameIndex(methodElement.getSimpleName().toString());
@@ -161,10 +163,10 @@ final class TypeExtendsInjection {
     }
   }
 
-
   private void addFactoryMethod(ExecutableElement methodElement, BeanPrism bean) {
     String qualifierName = Util.getNamed(methodElement);
-    factoryMethods.add(new MethodReader(methodElement, baseType, bean, qualifierName, importTypes).read());
+    factoryMethods.add(
+        new MethodReader(methodElement, baseType, bean, qualifierName, importTypes).read());
   }
 
   BeanAspects hasAspects() {

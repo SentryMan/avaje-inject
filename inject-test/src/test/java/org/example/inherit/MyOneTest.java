@@ -11,8 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(InjectExtension.class)
 public class MyOneTest extends MyOneAbstract {
 
-  @Inject
-  PubExposed something;
+  @Inject PubExposed something;
 
   @Test
   void test_expect_inheritedFieldIsInjected() {

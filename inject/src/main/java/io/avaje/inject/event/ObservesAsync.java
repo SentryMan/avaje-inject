@@ -7,12 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Identifies the event parameter of an asynchronous observer method. May be applied to a parameter of a method
- * of a bean class.
+ * Identifies the event parameter of an asynchronous observer method. May be applied to a parameter
+ * of a method of a bean class.
  *
  * <pre>{@code
- *
- *   public void afterLogin(@ObservesAsync LoggedInEvent event) { ... }
+ * public void afterLogin(@ObservesAsync LoggedInEvent event) { ... }
  *
  * }</pre>
  *
@@ -33,8 +32,7 @@ import java.lang.annotation.Target;
  * has occurred.
  *
  * <pre>{@code
- *
- *   public void afterLogin(@ObservesAsync LoggedInEvent event, @Manager User user, Logger log) { ... }
+ * public void afterLogin(@ObservesAsync LoggedInEvent event, @Manager User user, Logger log) { ... }
  *
  * }</pre>
  */
@@ -44,5 +42,4 @@ public @interface ObservesAsync {
 
   /** The priority of the observe method */
   int priority() default 1000;
-
 }

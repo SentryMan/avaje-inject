@@ -8,9 +8,7 @@ import org.example.coffee.CoffeeMaker;
 
 import jakarta.inject.Inject;
 
-/**
- * Factory bean (ala Micronaut @Factory or Spring @Configuration)
- */
+/** Factory bean (ala Micronaut @Factory or Spring @Configuration) */
 @Factory
 class Configuration {
 
@@ -18,9 +16,7 @@ class Configuration {
   private int countInit;
   private int countClose;
 
-  /**
-   * Factory beans can have dependencies.
-   */
+  /** Factory beans can have dependencies. */
   @Inject
   Configuration(StartConfig startConfig) {
     this.startConfig = startConfig;
@@ -32,9 +28,7 @@ class Configuration {
     return new AFact(userHome);
   }
 
-  /**
-   * Builder method that has dependencies.
-   */
+  /** Builder method that has dependencies. */
   @Bean(initMethod = "init", destroyMethod = "close")
   BFact buildB(AFact afact, CoffeeMaker maker) {
     return new BFact(afact, maker);

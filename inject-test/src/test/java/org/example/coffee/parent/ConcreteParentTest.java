@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * SuperSilly extends Silly which is a concrete <code>@Singleton</code>.
- */
+/** SuperSilly extends Silly which is a concrete <code>@Singleton</code>. */
 class ConcreteParentTest {
 
   @Test
@@ -30,5 +28,4 @@ class ConcreteParentTest {
     SuperSilly specificBean = ApplicationScope.get(SuperSilly.class);
     assertThat(specificBean).isSameAs(beanViaName);
   }
-
 }

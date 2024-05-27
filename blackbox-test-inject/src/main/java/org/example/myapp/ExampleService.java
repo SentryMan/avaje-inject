@@ -18,7 +18,7 @@ public class ExampleService {
     this.helloService = helloService;
   }
 
-  public String other(String param0, int param1) {//} throws IOException, IllegalStateException {
+  public String other(String param0, int param1) { // } throws IOException, IllegalStateException {
     return "other " + param0 + " " + param1;
   }
 

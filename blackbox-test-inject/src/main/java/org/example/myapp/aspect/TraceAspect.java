@@ -20,5 +20,4 @@ public class TraceAspect {
     trace.clear();
     return copy;
   }
-
 }

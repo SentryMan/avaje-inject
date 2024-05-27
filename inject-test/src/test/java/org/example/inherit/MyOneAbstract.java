@@ -5,6 +5,5 @@ import org.example.coffee.core.Steamer;
 
 public abstract class MyOneAbstract {
 
-  @Inject
-  Steamer steamer;
+  @Inject Steamer steamer;
 }

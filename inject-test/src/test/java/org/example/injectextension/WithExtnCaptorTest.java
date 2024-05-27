@@ -18,13 +18,10 @@ class WithExtnCaptorTest {
 
   ArgumentCaptor<String> plainCaptor = ArgumentCaptor.forClass(String.class);
 
-  @Captor
-  ArgumentCaptor<String> injectedCaptor;
+  @Captor ArgumentCaptor<String> injectedCaptor;
 
-  @Mock
-  PeachService peachService;
-  @Inject
-  AppleService appleService;
+  @Mock PeachService peachService;
+  @Inject AppleService appleService;
 
   @Test
   void verifyCaptor_when_plainCaptor() {
@@ -41,5 +38,4 @@ class WithExtnCaptorTest {
     verify(peachService).callIt(injectedCaptor.capture());
     assertThat(injectedCaptor.getValue()).isEqualTo("MyOtherArg");
   }
-
 }

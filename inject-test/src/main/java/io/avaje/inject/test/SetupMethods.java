@@ -45,7 +45,8 @@ final class SetupMethods {
         method.invoke(null, builder);
       }
     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-      throw new RuntimeException("Expecting method with single argument of BeanScopeBuilder but ... ", e);
+      throw new RuntimeException(
+          "Expecting method with single argument of BeanScopeBuilder but ... ", e);
     }
   }
 
@@ -55,8 +56,8 @@ final class SetupMethods {
         method.invoke(testInstance, builder);
       }
     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-      throw new RuntimeException("Expecting method with single argument of BeanScopeBuilder but ... ", e);
+      throw new RuntimeException(
+          "Expecting method with single argument of BeanScopeBuilder but ... ", e);
     }
   }
-
 }

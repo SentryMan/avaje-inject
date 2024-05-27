@@ -72,9 +72,7 @@ final class FieldReader {
     provides.remove(type);
   }
 
-  /**
-   * Check for request scoped dependency.
-   */
+  /** Check for request scoped dependency. */
   void checkRequest(BeanRequestParams requestParams) {
     requestParam = requestParams.check(utype.rawType(isBeanMap));
     if (requestParam) {
@@ -82,9 +80,7 @@ final class FieldReader {
     }
   }
 
-  /**
-   * Generate code for dependency inject for BeanFactory.
-   */
+  /** Generate code for dependency inject for BeanFactory. */
   void writeRequestDependency(Append writer) {
     if (!requestParam) {
       // just add as field dependency
@@ -95,9 +91,7 @@ final class FieldReader {
     }
   }
 
-  /**
-   * Generate code to set bean field dependencies as part of BeanFactory create().
-   */
+  /** Generate code to set bean field dependencies as part of BeanFactory create(). */
   void writeRequestInject(Append writer) {
     writer.append("    bean.%s = %s;", fieldName(), requestParamName).eol();
   }

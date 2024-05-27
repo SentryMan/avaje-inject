@@ -33,5 +33,4 @@ class InjectExtension_testDoubleViaMock2_Test {
     when(mockData.helloData()).thenReturn("LocalMock_2");
     assertEquals("hello+LocalMock_2", helloService.hello());
   }
-
 }

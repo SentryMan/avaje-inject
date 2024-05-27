@@ -48,13 +48,14 @@ class InvocationFallbackRawTest {
 
   @Test
   void invokeFallback() throws Throwable {
-    Invocation.Base<String> call = new Invocation.Call<>(() -> this.doStuff(myArg))
-      .with(this, doStuffMethod, myArg);
+    Invocation.Base<String> call =
+        new Invocation.Call<>(() -> this.doStuff(myArg)).with(this, doStuffMethod, myArg);
 
     MyInterceptor myInterceptor = new MyInterceptor();
 
     // fallback via reflection Method
-    Method fallbackMethod = InvocationFallbackRawTest.class.getDeclaredMethod("fallbackDoStuff", Object.class);
+    Method fallbackMethod =
+        InvocationFallbackRawTest.class.getDeclaredMethod("fallbackDoStuff", Object.class);
     myInterceptor.invokeFallback(call, fallbackMethod);
 
     assertThat(fallbackArg).isSameAs(myArg);
@@ -62,7 +63,11 @@ class InvocationFallbackRawTest {
 
     fallbackArg = null;
     // fallback via MethodHandle
-    MethodHandle handle = lookup.findVirtual(InvocationFallbackRawTest.class, "fallbackDoStuff", MethodType.methodType(String.class, Object.class));
+    MethodHandle handle =
+        lookup.findVirtual(
+            InvocationFallbackRawTest.class,
+            "fallbackDoStuff",
+            MethodType.methodType(String.class, Object.class));
     myInterceptor.invokeFallbackViaHandle(call, handle);
 
     assertThat(fallbackArg).isSameAs(myArg);
@@ -71,7 +76,8 @@ class InvocationFallbackRawTest {
 
   static class MyInterceptor {
 
-    void invokeFallback(Invocation call, Method fallbackMethod) throws InvocationTargetException, IllegalAccessException {
+    void invokeFallback(Invocation call, Method fallbackMethod)
+        throws InvocationTargetException, IllegalAccessException {
       fallbackMethod.invoke(call.instance(), call.arguments());
     }
 
@@ -84,10 +90,7 @@ class InvocationFallbackRawTest {
         case 2:
           call.result(handle.invoke(call.instance(), args[0], args[1]));
           break;
-
       }
-
     }
   }
-
 }

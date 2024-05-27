@@ -7,7 +7,7 @@ final class DSystemProps implements io.avaje.inject.spi.PropertyRequiresPlugin {
   @Override
   public Optional<String> get(String property) {
     return Optional.ofNullable(System.getProperty(property))
-      .or(() -> Optional.ofNullable(System.getenv(property)));
+        .or(() -> Optional.ofNullable(System.getenv(property)));
   }
 
   @Override

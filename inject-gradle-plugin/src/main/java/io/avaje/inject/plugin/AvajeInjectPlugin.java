@@ -12,9 +12,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
 
-/**
- * Plugin that discovers external avaje inject modules and plugins.
- */
+/** Plugin that discovers external avaje inject modules and plugins. */
 public class AvajeInjectPlugin implements Plugin<Project> {
 
   @Override
@@ -76,7 +74,8 @@ public class AvajeInjectPlugin implements Plugin<Project> {
     }
   }
 
-  private void writeProvidedModules(ClassLoader classLoader, FileWriter moduleWriter) throws IOException {
+  private void writeProvidedModules(ClassLoader classLoader, FileWriter moduleWriter)
+      throws IOException {
     final Set<String> providedTypes = new HashSet<>();
     List<AvajeModule> allModules = new ArrayList<>();
     ServiceLoader.load(io.avaje.inject.spi.Module.class, classLoader).forEach(allModules::add);
@@ -112,7 +111,8 @@ public class AvajeInjectPlugin implements Plugin<Project> {
 
   private static URL[] createClassPath(Project project) {
     try {
-      Set<File> compileClasspath = project.getConfigurations().getByName("compileClasspath").resolve();
+      Set<File> compileClasspath =
+          project.getConfigurations().getByName("compileClasspath").resolve();
       final List<URL> urls = new ArrayList<>(compileClasspath.size());
       for (File file : compileClasspath) {
         urls.add(file.toURI().toURL());

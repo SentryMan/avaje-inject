@@ -15,6 +15,5 @@ class FactoryTest {
       String b = bean.b();
       assertThat(b).isNotNull();
     }
-
   }
 }

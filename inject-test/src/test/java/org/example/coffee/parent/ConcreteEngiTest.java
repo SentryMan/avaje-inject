@@ -24,8 +24,8 @@ class ConcreteEngiTest {
   void getBean_usingSuperClassTypeAndName_other() {
     Engi engi = ApplicationScope.get(Engi.class, "Des");
     assertThat(engi.ignite()).isEqualTo("desEngi");
-    //DesEngi desEngi = ApplicationScope.get(DesEngi.class);
-    //assertThat(desEngi).isSameAs(engi);
+    // DesEngi desEngi = ApplicationScope.get(DesEngi.class);
+    // assertThat(desEngi).isSameAs(engi);
   }
 
   @Test

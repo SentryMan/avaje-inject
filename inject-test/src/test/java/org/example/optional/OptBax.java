@@ -17,5 +17,4 @@ public class OptBax {
   String hi() {
     return service.hi();
   }
-
 }

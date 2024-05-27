@@ -6,9 +6,7 @@ import jakarta.inject.Singleton;
 
 import javax.annotation.Nullable;
 
-/**
- * Nullable with method injection.
- */
+/** Nullable with method injection. */
 @Singleton
 public class AllQue4 {
 
@@ -27,7 +25,6 @@ public class AllQue4 {
   }
 
   String whichSet() {
-    return "f:"+frodo+"s:"+sam+"b:"+bilbo;
+    return "f:" + frodo + "s:" + sam + "b:" + bilbo;
   }
-
 }

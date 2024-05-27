@@ -1,4 +1,3 @@
 package org.example.customext1;
 
-public interface Ext1iface {
-}
+public interface Ext1iface {}

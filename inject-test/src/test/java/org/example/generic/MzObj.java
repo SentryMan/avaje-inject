@@ -1,4 +1,3 @@
 package org.example.generic;
 
-public class MzObj {
-}
+public class MzObj {}

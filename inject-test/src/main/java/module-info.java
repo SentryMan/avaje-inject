@@ -1,5 +1,4 @@
 module io.avaje.inject.test {
-
   exports io.avaje.inject.test;
 
   requires transitive io.avaje.inject;
@@ -8,8 +7,8 @@ module io.avaje.inject.test {
   requires static org.apiguardian.api; // needed for javadoc
   requires transitive org.mockito;
   requires transitive org.mockito.junit.jupiter;
-//  requires transitive org.assertj.core;
-//  requires transitive net.bytebuddy;
+  //  requires transitive org.assertj.core;
+  //  requires transitive net.bytebuddy;
   requires static java.net.http; // for testing only
 
   uses io.avaje.inject.test.TestModule;

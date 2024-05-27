@@ -9,8 +9,8 @@ import java.util.Map;
 
 /**
  * Entry for a given key (bean class, interface class or annotation class).
- * <p>
- * This holds a list of managed beans (which might be named).
+ *
+ * <p>This holds a list of managed beans (which might be named).
  */
 final class DContextEntry {
 
@@ -36,9 +36,7 @@ final class DContextEntry {
     return new EntryMatcher(name, currentModule).provider(entries);
   }
 
-  /**
-   * Get with strict name match for the single entry case.
-   */
+  /** Get with strict name match for the single entry case. */
   Object getStrict(String name) {
     if (entries.size() == 1) {
       return entries.get(0).beanIfNameMatch(name);
@@ -53,9 +51,7 @@ final class DContextEntry {
     return new EntryMatcher(name, currentModule).match(entries);
   }
 
-  /**
-   * Return all the beans.
-   */
+  /** Return all the beans. */
   List<Object> all() {
     List<Object> list = new ArrayList<>(entries.size());
     for (DContextEntryBean entry : entries) {
@@ -64,9 +60,7 @@ final class DContextEntry {
     return list;
   }
 
-  /**
-   * Return a map of beans keyed by qualifier name.
-   */
+  /** Return a map of beans keyed by qualifier name. */
   Map<String, Object> map() {
     Map<String, Object> map = new LinkedHashMap<>();
     for (DContextEntryBean entry : entries) {
@@ -80,9 +74,7 @@ final class DContextEntry {
     return map;
   }
 
-  /**
-   * Return a supplied bean is one of the entries.
-   */
+  /** Return a supplied bean is one of the entries. */
   DContextEntryBean supplied(String qualifierName) {
     for (DContextEntryBean entry : entries) {
       if (entry.isSupplied(qualifierName)) {
@@ -164,7 +156,11 @@ final class DContextEntry {
       }
       if (match.isPrimary()) {
         if (entry.isPrimary()) {
-          throw new IllegalStateException("Expecting only 1 bean match but have multiple primary beans " + match.bean() + " and " + entry.bean());
+          throw new IllegalStateException(
+              "Expecting only 1 bean match but have multiple primary beans "
+                  + match.bean()
+                  + " and "
+                  + entry.bean());
         }
         // leave as is, current primary wins
         return;
@@ -197,8 +193,12 @@ final class DContextEntry {
         match = entry;
         return;
       }
-      throw new IllegalStateException("Expecting only 1 bean match but have multiple matching beans " + match.bean()
-        + " and " + entry.bean() + ". Maybe need a rebuild is required after adding a @Named qualifier?");
+      throw new IllegalStateException(
+          "Expecting only 1 bean match but have multiple matching beans "
+              + match.bean()
+              + " and "
+              + entry.bean()
+              + ". Maybe need a rebuild is required after adding a @Named qualifier?");
     }
 
     private DContextEntryBean candidate() {
@@ -211,9 +211,12 @@ final class DContextEntry {
 
     private void checkSecondary() {
       if (match.isSecondary() && ignoredSecondaryMatch != null) {
-        throw new IllegalStateException("Expecting only 1 bean match but have multiple secondary beans " + match.bean() + " and " + ignoredSecondaryMatch.bean());
+        throw new IllegalStateException(
+            "Expecting only 1 bean match but have multiple secondary beans "
+                + match.bean()
+                + " and "
+                + ignoredSecondaryMatch.bean());
       }
     }
-
   }
 }

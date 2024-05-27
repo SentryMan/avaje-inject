@@ -10,7 +10,8 @@ public class UseNamedPEmailer {
   private final PEmailer other;
   private final PEmailer otherPEmailer;
 
-  public UseNamedPEmailer(@Named("Other") PEmailer emailer, PEmailer other, PEmailer otherPEmailer) {
+  public UseNamedPEmailer(
+      @Named("Other") PEmailer emailer, PEmailer other, PEmailer otherPEmailer) {
     this.emailer = emailer;
     this.other = other;
     this.otherPEmailer = otherPEmailer;
@@ -27,5 +28,4 @@ public class UseNamedPEmailer {
   public String emailOtherPEmailer() {
     return otherPEmailer.email();
   }
-
 }

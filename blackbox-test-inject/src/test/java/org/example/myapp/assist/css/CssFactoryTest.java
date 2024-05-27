@@ -37,5 +37,4 @@ class CssFactoryTest {
       assertThat(jsThing.qualScan("one")).isEqualTo("jsScanQual|path=one | somethin=hi");
     }
   }
-
 }

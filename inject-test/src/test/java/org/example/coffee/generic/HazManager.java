@@ -3,9 +3,7 @@ package org.example.coffee.generic;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-/**
- * Has a Dependency via generic interface.
- */
+/** Has a Dependency via generic interface. */
 @Singleton
 public class HazManager {
 

@@ -6,11 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Identify a bean as being the preferred bean to inject when multiple beans implement
- * the intended interface.
+ * Identify a bean as being the preferred bean to inject when multiple beans implement the intended
+ * interface.
  *
  * <pre>{@code
- *
  * @Primary
  * @Singleton
  * class PreferredEmailSender implements EmailSender {
@@ -21,5 +20,4 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Primary {
-}
+public @interface Primary {}

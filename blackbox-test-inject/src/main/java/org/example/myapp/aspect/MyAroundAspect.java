@@ -24,7 +24,8 @@ public class MyAroundAspect implements AspectProvider<MyAround>, MethodIntercept
   public void invoke(Invocation invoke) throws Throwable {
     TraceAspect.add("MyAroundAspect-begin");
     trace.add(invoke.method().getName() + " args:" + Arrays.toString(invoke.arguments()));
-    System.out.println("before args: " + Arrays.toString(invoke.arguments()) + " method: " + invoke.method());
+    System.out.println(
+        "before args: " + Arrays.toString(invoke.arguments()) + " method: " + invoke.method());
     try {
       invoke.invoke();
       invoke.invoke();

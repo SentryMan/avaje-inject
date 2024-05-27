@@ -1,7 +1,6 @@
 package org.example.myapp.config;
 
 import io.avaje.inject.Component;
-import io.avaje.lang.Nullable;
 
 import java.util.Optional;
 

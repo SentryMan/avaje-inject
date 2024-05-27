@@ -1,9 +1,6 @@
 package io.avaje.inject.generator;
 
-
-/**
- * Holds detection and details of request scoped dependencies.
- */
+/** Holds detection and details of request scoped dependencies. */
 final class BeanRequestParams {
 
   private final String parentType;
@@ -13,9 +10,7 @@ final class BeanRequestParams {
     this.parentType = parentType;
   }
 
-  /**
-   * Return true if this type is a request scoped type (e.g. Javalin Context).
-   */
+  /** Return true if this type is a request scoped type (e.g. Javalin Context). */
   boolean check(String paramType) {
     if (paramType != null && RequestScope.check(paramType)) {
       if (reqScopeHandler == null) {
@@ -26,9 +21,7 @@ final class BeanRequestParams {
     return false;
   }
 
-  /**
-   * Return true if the bean has request scoped dependencies.
-   */
+  /** Return true if the bean has request scoped dependencies. */
   boolean isRequestScopedController() {
     return reqScopeHandler != null;
   }
@@ -50,9 +43,7 @@ final class BeanRequestParams {
     reqScopeHandler.writeCreateMethod(writer, nm(parentType));
   }
 
-  /**
-   * Return the argument name based on the parameter type.
-   */
+  /** Return the argument name based on the parameter type. */
   String argumentName(String paramType) {
     return reqScopeHandler.argumentName(paramType);
   }

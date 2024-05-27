@@ -12,7 +12,7 @@ public class MyExample {
   public int retryWithFallbackCounter;
 
   @MyRetry
-  public void doingItWithRetry() throws Throwable, IllegalStateException{
+  public void doingItWithRetry() throws Throwable, IllegalStateException {
     barfCounter++;
     throw new IllegalArgumentException("no");
   }

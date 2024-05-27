@@ -9,8 +9,7 @@ class UseProtoTest {
 
   @Test
   void test_injectProvider() {
-    try (BeanScope scope = BeanScope.builder()
-      .build()) {
+    try (BeanScope scope = BeanScope.builder().build()) {
       UseProto useProto = scope.get(UseProto.class);
 
       MyProto one = useProto.myProto();
@@ -19,12 +18,9 @@ class UseProtoTest {
       // singleton dependency is same instance
       assertThat(one.pump()).isSameAs(two.pump());
 
-
       UseProto2 useProto2 = scope.get(UseProto2.class);
       assertThat(useProto2.myProto()).isNotSameAs(two);
       assertThat(useProto2.otherProto()).isNotSameAs(useProto.otherProto());
-
     }
   }
-
 }

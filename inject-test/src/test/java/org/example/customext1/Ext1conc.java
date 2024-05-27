@@ -1,4 +1,3 @@
 package org.example.customext1;
 
-public class Ext1conc {
-}
+public class Ext1conc {}

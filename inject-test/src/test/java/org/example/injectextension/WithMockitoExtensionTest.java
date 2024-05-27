@@ -16,8 +16,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class WithMockitoExtensionTest {
 
-  @Mock
-  MFoo foo;
+  @Mock MFoo foo;
 
   @Test
   void test() {

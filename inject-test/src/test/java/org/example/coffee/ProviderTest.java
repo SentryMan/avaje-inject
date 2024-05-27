@@ -19,6 +19,5 @@ class ProviderTest {
       ProvOther2 bean2 = context.get(ProvOther2.class);
       assertThat(bean2.getaProv()).isNotSameAs(bean.getaProv());
     }
-
   }
 }

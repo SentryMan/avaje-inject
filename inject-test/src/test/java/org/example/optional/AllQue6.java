@@ -6,22 +6,26 @@ import jakarta.inject.Singleton;
 
 import javax.annotation.Nullable;
 
-/**
- * Nullable with field injection.
- */
+/** Nullable with field injection. */
 @Singleton
 public class AllQue6 {
 
   private final Que frodo;
-  @Inject @Named("sam") Que sam;
-  @Inject @Nullable @Named("bilbo") Que bilbo;
+
+  @Inject
+  @Named("sam")
+  Que sam;
+
+  @Inject
+  @Nullable
+  @Named("bilbo")
+  Que bilbo;
 
   AllQue6(@Named("frodo") Que frodo) {
     this.frodo = frodo;
   }
 
   String whichSet() {
-    return "f:"+frodo+"s:"+sam+"b:"+bilbo;
+    return "f:" + frodo + "s:" + sam + "b:" + bilbo;
   }
-
 }

@@ -7,5 +7,4 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Qualifier
 @Retention(RUNTIME)
-public @interface Green {
-}
+public @interface Green {}

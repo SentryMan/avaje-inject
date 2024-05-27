@@ -5,9 +5,7 @@ import io.avaje.inject.spi.PropertyRequiresPlugin;
 
 import java.util.Optional;
 
-/**
- * Avaje-Config based implementation of PropertyRequiresPlugin.
- */
+/** Avaje-Config based implementation of PropertyRequiresPlugin. */
 final class DConfigProps implements PropertyRequiresPlugin {
 
   @Override

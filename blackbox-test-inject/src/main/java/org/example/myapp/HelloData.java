@@ -4,6 +4,5 @@ public interface HelloData {
 
   String helloData();
 
-  default void shutdown() {
-  }
+  default void shutdown() {}
 }

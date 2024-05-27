@@ -6,15 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Identify a bean as being the least preferred bean to inject when multiple beans implement
- * the intended interface.
- * <p>
- * This can use be used when we have a 'default' implementation that would only be used when
- * no other implementation is available in the scope to inject.
- * </p>
+ * Identify a bean as being the least preferred bean to inject when multiple beans implement the
+ * intended interface.
+ *
+ * <p>This can use be used when we have a 'default' implementation that would only be used when no
+ * other implementation is available in the scope to inject.
  *
  * <pre>{@code
- *
  * @Secondary
  * @Singleton
  * class DefaultEmailSender implements EmailSender {
@@ -25,5 +23,4 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Secondary {
-}
+public @interface Secondary {}

@@ -14,9 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HelloServiceTest {
 
-  /**
-   * No mocking, no use of <code>@TestScope</code> so just like main.
-   */
+  /** No mocking, no use of <code>@TestScope</code> so just like main. */
   @Test
   void basic() throws IOException {
     // just wire everything with no test scope, mocks etc
@@ -71,9 +69,9 @@ class HelloServiceTest {
 
     HelloService helloService = beanScope.get(HelloService.class);
     assertThatThrownBy(helloService::thisWillThrow)
-      .isInstanceOf(ArithmeticException.class)
-      .hasSuppressedException(new InvocationException("thisWillThrow proxy threw exception"))
-      .hasMessage("my interceptor throws this");
+        .isInstanceOf(ArithmeticException.class)
+        .hasSuppressedException(new InvocationException("thisWillThrow proxy threw exception"))
+        .hasMessage("my interceptor throws this");
   }
 
   @Test
@@ -83,8 +81,8 @@ class HelloServiceTest {
     HelloService helloService = beanScope.get(HelloService.class);
 
     assertThatThrownBy(helloService::appCodeThrowsUnchecked)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("appCodeUnchecked");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("appCodeUnchecked");
   }
 
   @Test
@@ -94,8 +92,7 @@ class HelloServiceTest {
     HelloService helloService = beanScope.get(HelloService.class);
 
     assertThatThrownBy(helloService::appCodeThrowsDeclared)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("appCodeDeclared");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("appCodeDeclared");
   }
-
 }

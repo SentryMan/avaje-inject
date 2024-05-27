@@ -7,8 +7,7 @@ import org.jetbrains.annotations.Nullable;
 @Singleton
 class NoImpUser2 {
 
-  @Inject @Nullable
-  NoImpHere viaField;
+  @Inject @Nullable NoImpHere viaField;
 
   private NoImpHere viaMethod;
 
@@ -24,5 +23,4 @@ class NoImpUser2 {
   boolean hasNoImplementationViaMethod() {
     return viaMethod == null;
   }
-
 }

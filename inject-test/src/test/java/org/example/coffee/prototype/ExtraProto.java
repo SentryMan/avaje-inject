@@ -12,8 +12,7 @@ public class ExtraProto implements Closeable {
 
   boolean initRun;
 
-  @Inject
-  MyProto fieldInjected;
+  @Inject MyProto fieldInjected;
 
   OtherProto methodInjected;
 
@@ -40,9 +39,7 @@ public class ExtraProto implements Closeable {
   }
 
   @Override
-  public void close() throws IOException {
-
-  }
+  public void close() throws IOException {}
 
   // Compilation error expected with PreDestroy
   // @PreDestroy

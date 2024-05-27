@@ -15,9 +15,7 @@ public class CombinedMapSomei {
 
   private final Map<String, Somei> somes;
 
-  /**
-   * Inject map of beans keyed by qualifier name.
-   */
+  /** Inject map of beans keyed by qualifier name. */
   @Inject
   public CombinedMapSomei(@QualifiedMap Map<String, Somei> somes) {
     this.somes = somes;
@@ -28,8 +26,6 @@ public class CombinedMapSomei {
   }
 
   public List<String> someVals() {
-    return somes.values().stream()
-      .map(Somei::some)
-      .collect(Collectors.toList());
+    return somes.values().stream().map(Somei::some).collect(Collectors.toList());
   }
 }

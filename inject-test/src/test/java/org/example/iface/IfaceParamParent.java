@@ -1,5 +1,3 @@
 package org.example.iface;
 
-public interface IfaceParamParent {
-
-}
+public interface IfaceParamParent {}

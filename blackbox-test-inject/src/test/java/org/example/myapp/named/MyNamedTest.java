@@ -18,6 +18,5 @@ class MyNamedTest {
       assertThat(myNamed2).isNotNull();
       assertThat(myNamed2).isSameAs(myNamed);
     }
-
   }
 }

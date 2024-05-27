@@ -1,4 +1,2 @@
-/**
- * Event support.
- */
+/** Event support. */
 package io.avaje.inject.event;

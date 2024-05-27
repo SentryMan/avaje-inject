@@ -4,19 +4,18 @@ import java.util.Map;
 
 final class PrimitiveUtil {
 
-  private PrimitiveUtil() {
-  }
+  private PrimitiveUtil() {}
 
   static final Map<String, String> wrapperMap =
-    Map.of(
-      "char", "Character",
-      "byte", "Byte",
-      "int", "Integer",
-      "long", "Long",
-      "short", "Short",
-      "double", "Double",
-      "float", "Float",
-      "boolean", "Boolean");
+      Map.of(
+          "char", "Character",
+          "byte", "Byte",
+          "int", "Integer",
+          "long", "Long",
+          "short", "Short",
+          "double", "Double",
+          "float", "Float",
+          "boolean", "Boolean");
 
   static String wrap(String shortName) {
     final var wrapped = wrapperMap.get(shortName);

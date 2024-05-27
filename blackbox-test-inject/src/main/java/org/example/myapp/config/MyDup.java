@@ -1,4 +1,3 @@
 package org.example.myapp.config;
 
-public class MyDup {
-}
+public class MyDup {}

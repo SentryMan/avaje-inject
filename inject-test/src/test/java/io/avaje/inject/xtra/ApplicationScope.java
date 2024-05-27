@@ -7,27 +7,26 @@ import java.util.List;
 
 /**
  * Provides a global system wide BeanScope that contains all the beans.
- * <p>
- * This will automatically get all the beans and wire them all as necessary. It will use
- * a shutdown hook to fire any <code>@PreDestroy</code> methods on beans.
- * </p>
+ *
+ * <p>This will automatically get all the beans and wire them all as necessary. It will use a
+ * shutdown hook to fire any <code>@PreDestroy</code> methods on beans.
  *
  * <h3>Example: get a bean</h3>
- * <pre>{@code
  *
- *   CoffeeMaker coffeeMaker = ApplicationScope.get(CoffeeMaker.class);
- *   coffeeMaker.brew();
+ * <pre>{@code
+ * CoffeeMaker coffeeMaker = ApplicationScope.get(CoffeeMaker.class);
+ * coffeeMaker.brew();
  *
  * }</pre>
  *
  * <h3>Example: get all the beans implementing an interface</h3>
+ *
  * <pre>{@code
+ * // e.g. register all WebRoutes for a web framework
  *
- *   // e.g. register all WebRoutes for a web framework
+ * List<WebRoute> routes = ApplicationScope.list(WebRoute.class);
  *
- *   List<WebRoute> routes = ApplicationScope.list(WebRoute.class);
- *
- *   // register all the routes ...
+ * // register all the routes ...
  *
  * }</pre>
  */
@@ -43,9 +42,7 @@ public class ApplicationScope {
     // hide
   }
 
-  /**
-   * Return the underlying BeanScope.
-   */
+  /** Return the underlying BeanScope. */
   public static BeanScope scope() {
     return appScope;
   }
@@ -54,9 +51,8 @@ public class ApplicationScope {
    * Return a single bean given the type.
    *
    * <pre>{@code
-   *
-   *   CoffeeMaker coffeeMaker = ApplicationScope.get(CoffeeMaker.class);
-   *   coffeeMaker.brew();
+   * CoffeeMaker coffeeMaker = ApplicationScope.get(CoffeeMaker.class);
+   * coffeeMaker.brew();
    *
    * }</pre>
    *
@@ -70,9 +66,8 @@ public class ApplicationScope {
    * Return a single bean given the type and name.
    *
    * <pre>{@code
-   *
-   *   Heater heater = ApplicationScope.get(Heater.class, "electric");
-   *   heater.heat();
+   * Heater heater = ApplicationScope.get(Heater.class, "electric");
+   * heater.heat();
    *
    * }</pre>
    *
@@ -83,15 +78,13 @@ public class ApplicationScope {
     return appScope.get(type, name);
   }
 
-
   /**
    * Return the list of beans that implement the interface.
    *
    * <pre>{@code
+   * // e.g. register all web routes with web a framework
    *
-   *   // e.g. register all web routes with web a framework
-   *
-   *   List<WebRoute> routes = ApplicationScope.list(WebRoute.class);
+   * List<WebRoute> routes = ApplicationScope.list(WebRoute.class);
    *
    * }</pre>
    *
@@ -105,10 +98,9 @@ public class ApplicationScope {
    * Return the list of beans that implement the interface ordering based on <code>@Priority</code>.
    *
    * <pre>{@code
+   * // e.g. register all web routes with web a framework
    *
-   *   // e.g. register all web routes with web a framework
-   *
-   *   List<WebRoute> routes = ApplicationScope.listByPriority(WebRoute.class);
+   * List<WebRoute> routes = ApplicationScope.listByPriority(WebRoute.class);
    *
    * }</pre>
    *
@@ -122,22 +114,19 @@ public class ApplicationScope {
    * Return the list of beans that have an annotation.
    *
    * <pre>{@code
+   * // e.g. register all controllers with web a framework
+   * // .. where Controller is an annotation on the beans
    *
-   *   // e.g. register all controllers with web a framework
-   *   // .. where Controller is an annotation on the beans
-   *
-   *   List<Object> controllers = ApplicationScope.listByAnnotation(Controller.class);
+   * List<Object> controllers = ApplicationScope.listByAnnotation(Controller.class);
    *
    * }</pre>
    *
-   * <p>
-   * The classic use case for this is registering controllers or routes to
-   * web frameworks like Sparkjava, Javalin, Rapidoid etc.
+   * <p>The classic use case for this is registering controllers or routes to web frameworks like
+   * Sparkjava, Javalin, Rapidoid etc.
    *
    * @param annotation An annotation class.
    */
   public static List<Object> listByAnnotation(Class<? extends Annotation> annotation) {
     return appScope.listByAnnotation(annotation);
   }
-
 }

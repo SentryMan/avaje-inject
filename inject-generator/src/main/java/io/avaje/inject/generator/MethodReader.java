@@ -13,7 +13,8 @@ import static io.avaje.inject.generator.Constants.*;
 
 final class MethodReader {
 
-  private static final String CODE_COMMENT_BUILD_FACTORYBEAN = "  /**\n   * Create and register %s via factory bean method %s#%s().\n   */";
+  private static final String CODE_COMMENT_BUILD_FACTORYBEAN =
+      "  /**\n   * Create and register %s via factory bean method %s#%s().\n   */";
 
   private final ExecutableElement element;
   private final String factoryType;
@@ -42,7 +43,12 @@ final class MethodReader {
     this(element, beanType, null, null, importTypes);
   }
 
-  MethodReader(ExecutableElement element, TypeElement beanType, BeanPrism bean, String qualifierName, ImportTypeMap importTypes) {
+  MethodReader(
+      ExecutableElement element,
+      TypeElement beanType,
+      BeanPrism bean,
+      String qualifierName,
+      ImportTypeMap importTypes) {
     this.element = element;
     if (bean != null) {
       prototype = PrototypePrism.isPresent(element);
@@ -87,7 +93,8 @@ final class MethodReader {
     } else {
       this.typeReader = new TypeReader(genericType, returnElement, importTypes);
       typeReader.process();
-      MethodLifecycleReader lifecycleReader = new MethodLifecycleReader(returnElement, initMethod, destroyMethod);
+      MethodLifecycleReader lifecycleReader =
+          new MethodLifecycleReader(returnElement, initMethod, destroyMethod);
       this.initMethod = lifecycleReader.initMethod();
       this.destroyMethod = lifecycleReader.destroyMethod();
     }
@@ -98,10 +105,7 @@ final class MethodReader {
 
   @Override
   public String toString() {
-    return "MethodReader{" +
-      "element=" + element +
-      ", params=" + params +
-      '}';
+    return "MethodReader{" + "element=" + element + ", params=" + params + '}';
   }
 
   void addDependsOnGeneric(Set<UType> set) {
@@ -140,13 +144,11 @@ final class MethodReader {
     List<String> dependsOn = new ArrayList<>(params.size() + 1);
     dependsOn.add(factoryType);
 
-    conditions.requireTypes.stream()
-      .map(t -> CONDITIONAL_DEPENDENCY + t)
-      .forEach(dependsOn::add);
+    conditions.requireTypes.stream().map(t -> CONDITIONAL_DEPENDENCY + t).forEach(dependsOn::add);
     conditions.missingTypes.stream()
-      .filter(t -> !t.equals(returnTypeRaw))
-      .map(t -> CONDITIONAL_DEPENDENCY + t)
-      .forEach(dependsOn::add);
+        .filter(t -> !t.equals(returnTypeRaw))
+        .map(t -> CONDITIONAL_DEPENDENCY + t)
+        .forEach(dependsOn::add);
     for (final MethodParam param : params) {
       dependsOn.add(Util.trimWildcard(param.paramType));
     }
@@ -200,7 +202,7 @@ final class MethodReader {
     writer.indent(indent).append("  builder");
     if (prototype) {
       writer.append(".asPrototype()");
-    } else if(secondary) {
+    } else if (secondary) {
       writer.append(".asSecondary()");
     }
 
@@ -248,9 +250,13 @@ final class MethodReader {
       if (notEmpty(initMethod)) {
         writer.indent(indent).append("builder.addPostConstruct($bean::%s);", initMethod).eol();
       }
-      var priority = destroyPriority == null || destroyPriority == 1000 ? "" : ", " + destroyPriority;
+      var priority =
+          destroyPriority == null || destroyPriority == 1000 ? "" : ", " + destroyPriority;
       if (notEmpty(destroyMethod)) {
-        writer.indent(indent).append("builder.addPreDestroy($bean::%s%s);", destroyMethod, priority).eol();
+        writer
+            .indent(indent)
+            .append("builder.addPreDestroy($bean::%s%s);", destroyMethod, priority)
+            .eol();
       } else if (typeReader != null && typeReader.isClosable()) {
         writer.indent(indent).append("builder.addPreDestroy($bean::close%s);", priority).eol();
       } else if (beanCloseable) {
@@ -263,7 +269,9 @@ final class MethodReader {
   }
 
   private boolean hasLifecycleMethods() {
-    return notEmpty(initMethod) || notEmpty(destroyMethod) || (typeReader != null && typeReader.isClosable() || beanCloseable);
+    return notEmpty(initMethod)
+        || notEmpty(destroyMethod)
+        || (typeReader != null && typeReader.isClosable() || beanCloseable);
   }
 
   private boolean notEmpty(String value) {
@@ -327,32 +335,29 @@ final class MethodReader {
     if (methodThrows()) {
       writer.setExtraIndent(null);
       writer.append(indent).append("      } catch (Throwable e) {").eol();
-      writer.append(indent).append("        throw new RuntimeException(\"Error during wiring\", e);").eol();
+      writer
+          .append(indent)
+          .append("        throw new RuntimeException(\"Error during wiring\", e);")
+          .eol();
       writer.append(indent).append("      }").eol();
     }
   }
 
-  /**
-   * Check for request scoped dependency.
-   */
+  /** Check for request scoped dependency. */
   void checkRequest(BeanRequestParams requestParams) {
     for (MethodParam param : params) {
       param.checkRequest(requestParams);
     }
   }
 
-  /**
-   * Generate code for dependency inject for BeanFactory.
-   */
+  /** Generate code for dependency inject for BeanFactory. */
   void writeRequestDependency(Append writer) {
     for (MethodParam param : params) {
       param.writeRequestDependency(writer);
     }
   }
 
-  /**
-   * Generate code constructor arguments.
-   */
+  /** Generate code constructor arguments. */
   void writeRequestConstructor(Append writer) {
     for (MethodParam param : params) {
       param.writeRequestConstructor(writer);
@@ -587,5 +592,4 @@ final class MethodReader {
       return named != null ? named : "";
     }
   }
-
 }

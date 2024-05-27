@@ -15,5 +15,4 @@ public class MyAutoB2TwoExplicit {
   public String two() {
     return two.who();
   }
-
 }

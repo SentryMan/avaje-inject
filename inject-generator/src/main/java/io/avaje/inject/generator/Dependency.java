@@ -44,8 +44,8 @@ final class Dependency {
 
   /**
    * Return true if a collection dependency which can be empty.
-   * <p>
-   * A soft dependency isn't absolutely required (inject empty lists, sets).
+   *
+   * <p>A soft dependency isn't absolutely required (inject empty lists, sets).
    */
   boolean isSoftDependency() {
     return softDependency;

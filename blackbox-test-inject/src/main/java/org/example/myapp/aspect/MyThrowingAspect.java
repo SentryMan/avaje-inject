@@ -6,8 +6,6 @@ import io.avaje.inject.aop.MethodInterceptor;
 import jakarta.inject.Singleton;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 public class MyThrowingAspect implements AspectProvider<MyThrowing>, MethodInterceptor {

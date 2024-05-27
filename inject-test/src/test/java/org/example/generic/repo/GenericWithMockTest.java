@@ -9,9 +9,7 @@ class GenericWithMockTest {
 
   @Test
   void withMock() {
-    try (BeanScope beanScope = BeanScope.builder().forTesting()
-      .mock(MapRepo1.class)
-      .build()) {
+    try (BeanScope beanScope = BeanScope.builder().forTesting().mock(MapRepo1.class).build()) {
 
       ServiceClass serviceClass = beanScope.get(ServiceClass.class);
       MapRepo1 mapRepo1 = beanScope.get(MapRepo1.class);

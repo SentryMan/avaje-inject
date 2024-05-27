@@ -11,16 +11,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Expresses a requirement for a bean to be wired/registered into the {@link BeanScope}.
  *
  * <pre>{@code
+ * @Factory
+ * public class MyAutoConfiguration {
  *
- *   @Factory
- *   public class MyAutoConfiguration {
- *
- *     @Bean
- *     @RequiresBean(OtherService.class)
- *     public MyService myService() {
- *         ...
- *     }
+ *   @Bean
+ *   @RequiresBean(OtherService.class)
+ *   public MyService myService() {
+ *       ...
  *   }
+ * }
  *
  * }</pre>
  *
@@ -47,8 +46,8 @@ public @interface RequiresBean {
   Class<?>[] missing() default {};
 
   /**
-   * Expresses that a {@link @Named} or {@link @Qualifier} annotation marker of the given name should be
-   * available in the {@link BeanScope}.
+   * Expresses that a {@link @Named} or {@link @Qualifier} annotation marker of the given name
+   * should be available in the {@link BeanScope}.
    *
    * @return the names of beans to check
    */
@@ -58,9 +57,7 @@ public @interface RequiresBean {
   @Target({TYPE, METHOD, ANNOTATION_TYPE})
   @interface Container {
 
-    /**
-     * The required dependencies.
-     */
+    /** The required dependencies. */
     RequiresBean[] value();
   }
 }

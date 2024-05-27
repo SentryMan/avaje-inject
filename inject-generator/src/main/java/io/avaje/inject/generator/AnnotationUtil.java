@@ -14,9 +14,7 @@ final class AnnotationUtil {
     return false;
   }
 
-  /**
-   * Return the short name of the element.
-   */
+  /** Return the short name of the element. */
   private static String shortName(Element element) {
     return element.getSimpleName().toString();
   }

@@ -3,9 +3,10 @@ package io.avaje.inject.spi;
 import java.lang.reflect.Type;
 
 /**
- * Represents a full type including generics declaration, to avoid information loss due to type erasure.
- * <p>
- * This is a cut down version of Helidon GenericType Apache 2 license.
+ * Represents a full type including generics declaration, to avoid information loss due to type
+ * erasure.
+ *
+ * <p>This is a cut down version of Helidon GenericType Apache 2 license.
  *
  * @param <T> the generic type parameter
  */
@@ -13,16 +14,12 @@ public class GenericType<T> implements Type {
 
   private final Type type;
 
-  /**
-   * Constructs a new generic type, deriving the generic type and class from type parameter.
-   */
+  /** Constructs a new generic type, deriving the generic type and class from type parameter. */
   protected GenericType() throws IllegalArgumentException {
     this.type = GenericTypeUtil.typeArgument(getClass());
   }
 
-  /**
-   * Return the type represented by this generic type instance.
-   */
+  /** Return the type represented by this generic type instance. */
   public Type type() {
     return type;
   }

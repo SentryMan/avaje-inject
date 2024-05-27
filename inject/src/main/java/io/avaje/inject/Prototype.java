@@ -7,11 +7,10 @@ import java.lang.annotation.Target;
 
 /**
  * Specify a bean that has prototype scope.
- * <p>
- * A new instance of this bean will be created each time it is requested or wired.
+ *
+ * <p>A new instance of this bean will be created each time it is requested or wired.
  *
  * <pre>{@code
- *
  * @Prototype
  * class EmailSendHandler {
  *
@@ -21,5 +20,4 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Prototype {
-}
+public @interface Prototype {}

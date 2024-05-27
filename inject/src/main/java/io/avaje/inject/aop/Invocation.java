@@ -6,8 +6,8 @@ import java.util.function.Function;
 
 /**
  * Method invocation using in {@link MethodInterceptor#invoke(Invocation)} for Aspects.
- * <p>
- * Represents a method invocation that can be intercepted with additional before and after
+ *
+ * <p>Represents a method invocation that can be intercepted with additional before and after
  * invocation logic.
  */
 public interface Invocation {
@@ -38,34 +38,28 @@ public interface Invocation {
 
   /**
    * Set the result that will be returned to the caller.
-   * <p>
-   * This will replace a prior result set by calling {@code #invoke} or can be used
-   * to provide a result allowing to skip calling {@code #invoke} altogether.
+   *
+   * <p>This will replace a prior result set by calling {@code #invoke} or can be used to provide a
+   * result allowing to skip calling {@code #invoke} altogether.
    *
    * @param result The result that will be returned to the caller.
    */
   void result(Object result);
 
-  /**
-   * Return the arguments used for this invocation.
-   */
+  /** Return the arguments used for this invocation. */
   Object[] arguments();
 
-  /**
-   * Return the method being called for this invocation.
-   */
+  /** Return the method being called for this invocation. */
   Method method();
 
   /**
    * Return the 'this' instance of the invocation.
-   * <p>
-   * This is typically used when invoking fallback/recovery methods.
+   *
+   * <p>This is typically used when invoking fallback/recovery methods.
    */
   Object instance();
 
-  /**
-   * Return whether this invocation has a registered recovery method
-   */
+  /** Return whether this invocation has a registered recovery method */
   boolean hasRecoveryMethod();
 
   /**
@@ -88,9 +82,7 @@ public interface Invocation {
     protected Object instance;
     protected T result;
 
-    /**
-     * Set the instance, method and arguments for the invocation.
-     */
+    /** Set the instance, method and arguments for the invocation. */
     public Base<T> with(Object instance, Method method, Object... args) {
       this.instance = instance;
       this.method = method;
@@ -104,9 +96,7 @@ public interface Invocation {
       this.result = (T) result;
     }
 
-    /**
-     * Return the final invocation result.
-     */
+    /** Return the final invocation result. */
     public T finalResult() {
       return result;
     }
@@ -128,8 +118,8 @@ public interface Invocation {
 
     /**
      * Wrap this invocation using a methodInterceptor returning the wrapped call.
-     * <p>
-     * This invocation is effectively nested inside the returned invocation.
+     *
+     * <p>This invocation is effectively nested inside the returned invocation.
      *
      * @param methodInterceptor The method interceptor to use to wrap this call with
      * @return The wrapped call
@@ -143,17 +133,13 @@ public interface Invocation {
     }
   }
 
-  /**
-   * Runnable based Invocation.
-   */
+  /** Runnable based Invocation. */
   final class Run extends Base<Void> {
 
     private final CheckedRunnable delegate;
     private Consumer<Throwable> fallback;
 
-    /**
-     * Create with a given closure to run.
-     */
+    /** Create with a given closure to run. */
     public Run(CheckedRunnable delegate) {
       this.delegate = delegate;
     }
@@ -165,8 +151,8 @@ public interface Invocation {
     }
 
     /**
-     * Register a fallback method which can be used to recover from an exception
-     * while intercepting an invocation
+     * Register a fallback method which can be used to recover from an exception while intercepting
+     * an invocation
      */
     public Run fallback(Consumer<Throwable> fallback) {
       this.fallback = fallback;
@@ -197,17 +183,13 @@ public interface Invocation {
     }
   }
 
-  /**
-   * Callable based Invocation with checked exceptions.
-   */
+  /** Callable based Invocation with checked exceptions. */
   final class Call<T> extends Base<T> {
 
     private final CheckedSupplier<T> delegate;
     private Function<Throwable, T> fallback;
 
-    /**
-     * Create with a given supplier.
-     */
+    /** Create with a given supplier. */
     public Call(CheckedSupplier<T> delegate) {
       this.delegate = delegate;
     }
@@ -240,11 +222,13 @@ public interface Invocation {
 
     @Override
     public Base<T> wrap(MethodInterceptor methodInterceptor) {
-      return new Invocation.Call<>(() -> {
-        final Call<T> delegate = this;
-        methodInterceptor.invoke(delegate);
-        return delegate.finalResult();
-      }).with(instance, method, args);
+      return new Invocation.Call<>(
+              () -> {
+                final Call<T> delegate = this;
+                methodInterceptor.invoke(delegate);
+                return delegate.finalResult();
+              })
+          .with(instance, method, args);
     }
 
     @Override
@@ -261,15 +245,11 @@ public interface Invocation {
     }
   }
 
-  /**
-   * Runnable with checked exceptions.
-   */
+  /** Runnable with checked exceptions. */
   @FunctionalInterface
   interface CheckedRunnable {
 
-    /**
-     * Invoke the method.
-     */
+    /** Invoke the method. */
     void invoke() throws Throwable;
   }
 
@@ -281,9 +261,7 @@ public interface Invocation {
   @FunctionalInterface
   interface CheckedSupplier<T> {
 
-    /**
-     * Invoke the method returning the result.
-     */
+    /** Invoke the method returning the result. */
     T invoke() throws Throwable;
   }
 }

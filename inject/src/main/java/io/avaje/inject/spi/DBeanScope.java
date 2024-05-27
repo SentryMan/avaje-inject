@@ -108,9 +108,7 @@ final class DBeanScope implements BeanScope {
     return parent.get(type, name);
   }
 
-  /**
-   * Get with a strict match on name for the single entry case.
-   */
+  /** Get with a strict match on name for the single entry case. */
   @Nullable
   Object getStrict(String name, Type[] types) {
     for (Type type : types) {
@@ -194,7 +192,8 @@ final class DBeanScope implements BeanScope {
     return list.size() > 1 ? sortByPriority(list, priorityAnnotation) : list;
   }
 
-  private <T> List<T> sortByPriority(List<T> list, final Class<? extends Annotation> priorityAnnotation) {
+  private <T> List<T> sortByPriority(
+      List<T> list, final Class<? extends Annotation> priorityAnnotation) {
     boolean priorityUsed = false;
     List<SortBean<T>> tempList = new ArrayList<>(list.size());
     for (T bean : list) {
@@ -219,10 +218,11 @@ final class DBeanScope implements BeanScope {
 
   @Override
   public List<Object> listByAnnotation(Class<? extends Annotation> annotation) {
-    final List<Object> values = all().stream()
-    	      .filter(entry -> entry.type().isAnnotationPresent(annotation))
-    	      .map(BeanEntry::bean)
-    	      .collect(Collectors.toList());
+    final List<Object> values =
+        all().stream()
+            .filter(entry -> entry.type().isAnnotationPresent(annotation))
+            .map(BeanEntry::bean)
+            .collect(Collectors.toList());
     if (parent == null) {
       return values;
     }
@@ -316,7 +316,8 @@ final class DBeanScope implements BeanScope {
           return priority;
         }
       } catch (Exception e) {
-        // If this happens, something has gone very wrong since a non-confirming @Priority was found...
+        // If this happens, something has gone very wrong since a non-confirming @Priority was
+        // found...
         throw new UnsupportedOperationException("Problem instantiating @Priority", e);
       }
       // Default priority as per javax.ws.rs.Priorities.USER

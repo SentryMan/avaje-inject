@@ -24,10 +24,8 @@ class CustomScopeTest {
 
       LocalExt ext = new LocalExt();
 
-      try (BeanScope beanScope = BeanScope.builder()
-        .parent(parentScope)
-        .modules(new MyCustomModule(ext))
-        .build()) {
+      try (BeanScope beanScope =
+          BeanScope.builder().parent(parentScope).modules(new MyCustomModule(ext)).build()) {
 
         final CoffeeMaker coffeeMaker = beanScope.get(CoffeeMaker.class);
         assertThat(coffeeMaker).isNotNull();
@@ -49,10 +47,11 @@ class CustomScopeTest {
     LocalExt ext = new LocalExt();
     CoffeeMaker suppliedCoffeeMaker = Mockito.mock(CoffeeMaker.class);
 
-    try (BeanScope beanScope = BeanScope.builder()
-      .modules(new MyCustomModule(ext))
-      .bean(CoffeeMaker.class, suppliedCoffeeMaker)
-      .build()) {
+    try (BeanScope beanScope =
+        BeanScope.builder()
+            .modules(new MyCustomModule(ext))
+            .bean(CoffeeMaker.class, suppliedCoffeeMaker)
+            .build()) {
 
       final CustomBean bean = beanScope.get(CustomBean.class);
       final OtherCBean cBean = beanScope.get(OtherCBean.class);
@@ -73,10 +72,11 @@ class CustomScopeTest {
     LocalExt ext = new LocalExt();
     CoffeeMaker suppliedCoffeeMaker = Mockito.mock(CoffeeMaker.class);
 
-    try (BeanScope beanScope = BeanScope.builder()
-      .modules(new MyCustomModule(ext))
-      .bean(CoffeeMaker.class, suppliedCoffeeMaker)
-      .build()) {
+    try (BeanScope beanScope =
+        BeanScope.builder()
+            .modules(new MyCustomModule(ext))
+            .bean(CoffeeMaker.class, suppliedCoffeeMaker)
+            .build()) {
 
       // includes the 2 supplied beans
       final List<BeanEntry> all = beanScope.all();
@@ -84,9 +84,8 @@ class CustomScopeTest {
 
       final CustomBean customBean = beanScope.get(CustomBean.class);
 
-      final Optional<BeanEntry> customBeanEntry = all.stream()
-        .filter(beanEntry -> beanEntry.hasKey(CustomBean.class))
-        .findFirst();
+      final Optional<BeanEntry> customBeanEntry =
+          all.stream().filter(beanEntry -> beanEntry.hasKey(CustomBean.class)).findFirst();
 
       assertThat(customBeanEntry).isPresent();
       assertThat(customBeanEntry.get().bean()).isSameAs(customBean);
@@ -94,18 +93,17 @@ class CustomScopeTest {
       assertThat(customBeanEntry.get().priority()).isEqualTo(0);
       assertThat(customBeanEntry.get().keys()).containsExactly(CustomBean.class.getCanonicalName());
 
-
-      final Optional<BeanEntry> fooCustomEntry = all.stream()
-        .filter(beanEntry -> beanEntry.hasKey(FooCustom.class))
-        .findFirst();
+      final Optional<BeanEntry> fooCustomEntry =
+          all.stream().filter(beanEntry -> beanEntry.hasKey(FooCustom.class)).findFirst();
 
       assertThat(fooCustomEntry).isPresent();
       assertThat(fooCustomEntry.get().qualifierName()).isNull();
 
       // only the beans with MyCustomScope annotation
-      final List<BeanEntry> myCustomScopeBeans = all.stream()
-        .filter(beanEntry -> beanEntry.type().isAnnotationPresent(MyCustomScope.class))
-        .collect(toList());
+      final List<BeanEntry> myCustomScopeBeans =
+          all.stream()
+              .filter(beanEntry -> beanEntry.type().isAnnotationPresent(MyCustomScope.class))
+              .collect(toList());
       assertThat(myCustomScopeBeans).hasSize(3);
 
       final OtherCBean cBean = beanScope.get(OtherCBean.class);
@@ -120,7 +118,5 @@ class CustomScopeTest {
     }
   }
 
-  static class LocalExt implements LocalExternal {
-
-  }
+  static class LocalExt implements LocalExternal {}
 }

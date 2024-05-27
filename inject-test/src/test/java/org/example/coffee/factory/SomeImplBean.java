@@ -15,7 +15,5 @@ public class SomeImplBean implements Something {
   }
 
   @Override
-  public void otherThing() {
-
-  }
+  public void otherThing() {}
 }

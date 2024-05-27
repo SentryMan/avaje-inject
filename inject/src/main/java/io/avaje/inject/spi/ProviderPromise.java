@@ -5,9 +5,7 @@ import jakarta.inject.Provider;
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 
-/**
- * Provides late binding of Provider (like field/setter injection).
- */
+/** Provides late binding of Provider (like field/setter injection). */
 final class ProviderPromise<T> implements Provider<T>, Consumer<Builder> {
 
   private final Type type;
@@ -29,10 +27,10 @@ final class ProviderPromise<T> implements Provider<T>, Consumer<Builder> {
   @Override
   public T get() {
     if (provider == null) {
-      throw new IllegalStateException("Illegal to call Provider.get() method during DI wiring. " +
-        "Use a @PostConstruct method and call Provider.get() in there or perhaps use java.util.function.Supplier");
+      throw new IllegalStateException(
+          "Illegal to call Provider.get() method during DI wiring. Use a @PostConstruct method and"
+              + " call Provider.get() in there or perhaps use java.util.function.Supplier");
     }
     return provider.get();
   }
-
 }

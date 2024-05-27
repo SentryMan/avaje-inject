@@ -6,12 +6,9 @@ public class Silly {
 
   @Component
   public static class Builder {
-    public Builder() {
-    }
+    public Builder() {}
   }
 
   @Component
-  public static class Generated {
-
-  }
+  public static class Generated {}
 }

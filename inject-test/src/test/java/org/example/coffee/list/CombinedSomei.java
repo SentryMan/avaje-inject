@@ -16,8 +16,6 @@ public class CombinedSomei {
   }
 
   public List<String> lotsOfSomes() {
-    return somes.stream()
-      .map(Somei::some)
-      .collect(Collectors.toList());
+    return somes.stream().map(Somei::some).collect(Collectors.toList());
   }
 }

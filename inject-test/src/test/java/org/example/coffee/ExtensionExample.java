@@ -21,5 +21,4 @@ class ExtensionExample {
     spies.forEach(bootContext::spy);
     return bootContext.build();
   }
-
 }

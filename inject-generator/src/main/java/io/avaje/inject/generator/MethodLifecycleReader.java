@@ -4,16 +4,13 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
-/**
- * Looks for lifecycle annotations on methods.
- */
+/** Looks for lifecycle annotations on methods. */
 final class MethodLifecycleReader {
 
   private final String initMethod;
   private final String destroyMethod;
   private Element postConstructMethod;
   private Element preDestroyMethod;
-
 
   MethodLifecycleReader(TypeElement type, String initMethod, String destroyMethod) {
     this.initMethod = initMethod;

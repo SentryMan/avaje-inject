@@ -4,9 +4,7 @@ import io.avaje.inject.BeanScope;
 import io.avaje.inject.Component;
 import org.example.optional.Que;
 
-/**
- * Depends on the BeanScope.
- */
+/** Depends on the BeanScope. */
 @Component
 class INeedBeanScope {
 

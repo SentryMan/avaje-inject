@@ -1,4 +1,3 @@
 package org.example.coffee.factory;
 
-public class CFact {
-}
+public class CFact {}

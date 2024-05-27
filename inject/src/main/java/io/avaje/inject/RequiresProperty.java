@@ -11,30 +11,29 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Expresses a requirement for a bean to be wired/registered into the {@link BeanScope}.
  *
  * <pre>{@code
+ * @Factory
+ * public class MyAutoConfiguration {
  *
- *   @Factory
- *   public class MyAutoConfiguration {
- *
- *     @Bean
- *     @RequiresProperty("use.service")
- *     public MyService myService() {
- *         ...
- *     }
- *
+ *   @Bean
+ *   @RequiresProperty("use.service")
+ *   public MyService myService() {
+ *       ...
  *   }
+ *
+ * }
  *
  * }</pre>
  *
- * <p>
- * In the sample above the MyService bean will get wired only if <code>use.service</code>
- * is set in Java system properties / Avaje Config.
- * <p>
- * {@link io.avaje.inject.spi.PropertyRequiresPlugin} is used to test the property conditions and is loaded via {@link java.util.ServiceLoader}.
- * <p>
- * Avaje Config provides an implementation and if it is included in the classpath then
- * Avaje Config will be used to test the property conditions.
- * <p>
- * If no PropertyRequiresPlugin is found then the default implementation is used which uses
+ * <p>In the sample above the MyService bean will get wired only if <code>use.service</code> is set
+ * in Java system properties / Avaje Config.
+ *
+ * <p>{@link io.avaje.inject.spi.PropertyRequiresPlugin} is used to test the property conditions and
+ * is loaded via {@link java.util.ServiceLoader}.
+ *
+ * <p>Avaje Config provides an implementation and if it is included in the classpath then Avaje
+ * Config will be used to test the property conditions.
+ *
+ * <p>If no PropertyRequiresPlugin is found then the default implementation is used which uses
  * {@link System#getProperty(String)} and {@link System#getenv(String)}.
  */
 @Retention(RUNTIME)
@@ -75,9 +74,7 @@ public @interface RequiresProperty {
   @Target({TYPE, METHOD, ANNOTATION_TYPE})
   @interface Container {
 
-    /**
-     * The required dependencies.
-     */
+    /** The required dependencies. */
     RequiresProperty[] value();
   }
 }

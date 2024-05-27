@@ -2,9 +2,7 @@ package org.example.missing;
 
 import jakarta.inject.Singleton;
 
-/**
- * Has only 1 public constructor so that is chosen for injection.
- */
+/** Has only 1 public constructor so that is chosen for injection. */
 @Singleton
 public class MFooUser2 {
 
@@ -16,9 +14,7 @@ public class MFooUser2 {
     this.usePublicConstructor = true;
   }
 
-  /**
-   * Extra protected constructor usually for unit testing purposes only.
-   */
+  /** Extra protected constructor usually for unit testing purposes only. */
   MFooUser2(MFoo mf, boolean dummy) {
     this.mf = mf;
     this.usePublicConstructor = true;

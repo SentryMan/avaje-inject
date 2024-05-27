@@ -14,14 +14,10 @@ public class MyBasicFactory {
   static class OutImpl implements OutIFace {
 
     @Override
-    public void doIt() {
-
-    }
+    public void doIt() {}
 
     @Override
-    public void close() {
-
-    }
+    public void close() {}
 
     @Override
     public String source() {
@@ -29,6 +25,3 @@ public class MyBasicFactory {
     }
   }
 }
-
-
-

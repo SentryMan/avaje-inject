@@ -5,35 +5,37 @@ import io.avaje.inject.BeanEntry;
 import jakarta.inject.Provider;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Holds either the bean itself or a provider of the bean.
- */
+/** Holds either the bean itself or a provider of the bean. */
 class DContextEntryBean {
 
-  /**
-   * Create taking into account if it is a Provider or the bean itself.
-   */
-  static DContextEntryBean of(Object source, String name, int flag, Class<? extends AvajeModule> currentModule) {
+  /** Create taking into account if it is a Provider or the bean itself. */
+  static DContextEntryBean of(
+      Object source, String name, int flag, Class<? extends AvajeModule> currentModule) {
     if (source instanceof Provider) {
-      return new ProtoProvider((Provider<?>)source, name, flag, currentModule);
+      return new ProtoProvider((Provider<?>) source, name, flag, currentModule);
     } else {
       return new DContextEntryBean(source, name, flag, currentModule);
     }
   }
 
-  /**
-   * Create an entry with supplied Providers using a 'Once' / 'one instance' provider.
-   */
+  /** Create an entry with supplied Providers using a 'Once' / 'one instance' provider. */
   static DContextEntryBean supplied(Object source, String name, int flag) {
     if (source instanceof Provider) {
-      return new OnceProvider((Provider<?>)source, name, flag, null);
+      return new OnceProvider((Provider<?>) source, name, flag, null);
     } else {
       return new DContextEntryBean(source, name, flag, null);
     }
   }
 
-  static DContextEntryBean provider(boolean prototype, Provider<?> provider, String name, int flag, Class<? extends AvajeModule> currentModule) {
-    return prototype ? new ProtoProvider(provider, name, flag, currentModule) : new OnceProvider(provider, name, flag, currentModule);
+  static DContextEntryBean provider(
+      boolean prototype,
+      Provider<?> provider,
+      String name,
+      int flag,
+      Class<? extends AvajeModule> currentModule) {
+    return prototype
+        ? new ProtoProvider(provider, name, flag, currentModule)
+        : new OnceProvider(provider, name, flag, currentModule);
   }
 
   protected final Object source;
@@ -41,7 +43,8 @@ class DContextEntryBean {
   protected final Class<? extends AvajeModule> sourceModule;
   private final int flag;
 
-  private DContextEntryBean(Object source, String name, int flag, Class<? extends AvajeModule> currentModule) {
+  private DContextEntryBean(
+      Object source, String name, int flag, Class<? extends AvajeModule> currentModule) {
     this.source = source;
     this.name = name;
     this.flag = flag;
@@ -50,28 +53,29 @@ class DContextEntryBean {
 
   @Override
   public final String toString() {
-    return "Bean{" +
-      "source=" + source +
-      ", name='" + name + '\'' +
-      ", flag=" + flag +
-      ", sourceModule=" + sourceModule +
-      '}';
+    return "Bean{"
+        + "source="
+        + source
+        + ", name='"
+        + name
+        + '\''
+        + ", flag="
+        + flag
+        + ", sourceModule="
+        + sourceModule
+        + '}';
   }
 
   final DEntry entry() {
     return new DEntry(name, flag, bean());
   }
 
-  /**
-   * Return true if qualifierName is null or matched.
-   */
+  /** Return true if qualifierName is null or matched. */
   final boolean isNameMatch(String qualifierName) {
     return qualifierName == null || qualifierName.equalsIgnoreCase(name);
   }
 
-  /**
-   * Return true if qualifierName is matched including null.
-   */
+  /** Return true if qualifierName is matched including null. */
   final boolean isNameEqual(String qualifierName) {
     return qualifierName == null ? name == null : qualifierName.equalsIgnoreCase(name);
   }
@@ -80,9 +84,7 @@ class DContextEntryBean {
     return sourceModule;
   }
 
-  /**
-   * Return the bean if name matches and otherwise null.
-   */
+  /** Return the bean if name matches and otherwise null. */
   Object beanIfNameMatch(String name) {
     return isNameMatch(name) ? bean() : null;
   }
@@ -115,14 +117,13 @@ class DContextEntryBean {
     return flag == BeanEntry.SUPPLIED && (qualifierName == null || qualifierName.equals(name));
   }
 
-  /**
-   * Prototype scope Provider based entry.
-   */
+  /** Prototype scope Provider based entry. */
   static final class ProtoProvider extends DContextEntryBean {
 
     private final Provider<?> provider;
 
-    private ProtoProvider(Provider<?> provider, String name, int flag, Class<? extends AvajeModule> currentModule) {
+    private ProtoProvider(
+        Provider<?> provider, String name, int flag, Class<? extends AvajeModule> currentModule) {
       super(provider, name, flag, currentModule);
       this.provider = provider;
     }
@@ -138,16 +139,15 @@ class DContextEntryBean {
     }
   }
 
-  /**
-   * Single instance scoped Provider based entry.
-   */
+  /** Single instance scoped Provider based entry. */
   static final class OnceProvider extends DContextEntryBean {
 
     private final ReentrantLock lock = new ReentrantLock();
     private final Provider<?> provider;
     private Object bean;
 
-    private OnceProvider(Provider<?> provider, String name, int flag, Class<? extends AvajeModule> currentModule) {
+    private OnceProvider(
+        Provider<?> provider, String name, int flag, Class<? extends AvajeModule> currentModule) {
       super(provider, name, flag, currentModule);
       this.provider = provider;
     }

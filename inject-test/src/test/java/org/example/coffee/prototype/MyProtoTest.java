@@ -9,8 +9,7 @@ class MyProtoTest {
 
   @Test
   void test_prototype_differentInstance() {
-    try (BeanScope scope = BeanScope.builder()
-      .build()) {
+    try (BeanScope scope = BeanScope.builder().build()) {
 
       MyProto one = scope.get(MyProto.class);
       MyProto two = scope.get(MyProto.class);
@@ -25,5 +24,4 @@ class MyProtoTest {
       assertThat(otherOne.myProto).isNotSameAs(otherTwo.myProto);
     }
   }
-
 }

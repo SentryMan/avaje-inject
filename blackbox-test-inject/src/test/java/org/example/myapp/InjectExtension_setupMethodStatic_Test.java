@@ -35,5 +35,4 @@ class InjectExtension_setupMethodStatic_Test {
     when(myTestDouble.helloData()).thenReturn("LocalMock_2");
     assertEquals("hello+LocalMock_2", helloService.hello());
   }
-
 }

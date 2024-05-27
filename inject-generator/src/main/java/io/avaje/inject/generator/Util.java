@@ -125,8 +125,8 @@ final class Util {
       for (final String part : fullType.split("\\.")) {
         char firstChar = part.charAt(0);
         if (foundClass
-          || Character.isUpperCase(firstChar)
-          || (!Character.isAlphabetic(firstChar) && Character.isJavaIdentifierStart(firstChar))) {
+            || Character.isUpperCase(firstChar)
+            || (!Character.isAlphabetic(firstChar) && Character.isJavaIdentifierStart(firstChar))) {
           foundClass = true;
           result += (result.isEmpty() ? "" : ".") + part;
         }
@@ -212,9 +212,7 @@ final class Util {
     return UtilType.of(rawType.toString(), rawType);
   }
 
-  /**
-   * Trim off generic wildcard from the raw type if present.
-   */
+  /** Trim off generic wildcard from the raw type if present. */
   static String trimWildcard(String rawType) {
     if (rawType.endsWith("<?>")) {
       return rawType.substring(0, rawType.length() - 3);
@@ -223,9 +221,7 @@ final class Util {
     }
   }
 
-  /**
-   * Trim off generic type parameters.
-   */
+  /** Trim off generic type parameters. */
   static String trimGenericParams(String rawType) {
     int start = rawType.indexOf('<');
     // no package for any generic parameter types
@@ -255,9 +251,7 @@ final class Util {
     return Constants.ASPECT_PROVIDER + "<" + aspect + ">";
   }
 
-  /**
-   * Return the common parent package.
-   */
+  /** Return the common parent package. */
   static String commonParent(String currentTop, String aPackage) {
     if (aPackage == null) return currentTop;
     if (currentTop == null) return aPackage;
@@ -278,9 +272,7 @@ final class Util {
     return currentTop;
   }
 
-  /**
-   * Return the name via <code>@Named</code> or a Qualifier annotation.
-   */
+  /** Return the name via <code>@Named</code> or a Qualifier annotation. */
   static String getNamed(Element p) {
     final NamedPrism named = NamedPrism.getInstanceOn(p);
     if (named != null) {
@@ -293,16 +285,14 @@ final class Util {
         var shortName = Util.shortName(annotationType.toString());
 
         return AnnotationCopier.toSimpleAnnotationString(annotationMirror)
-          .replaceFirst(annotationType.toString(), shortName)
-          .replace("\"", "\\\"");
+            .replaceFirst(annotationType.toString(), shortName)
+            .replace("\"", "\\\"");
       }
     }
     return null;
   }
 
-  /**
-   * Return true if the element has a Nullable annotation.
-   */
+  /** Return true if the element has a Nullable annotation. */
   static boolean isNullable(Element p) {
     for (final AnnotationMirror mirror : p.getAnnotationMirrors()) {
       if (NULLABLE.equals(shortName(mirror.getAnnotationType().toString()))) {

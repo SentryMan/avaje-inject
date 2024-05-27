@@ -16,17 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(InjectExtension.class)
 public class WithExtnPrivateFieldsTest {
 
-  @Mock
-  private Pump pump;
+  @Mock private Pump pump;
 
-  @Mock
-  private Grinder grinder;
+  @Mock private Grinder grinder;
 
-  @Spy
-  private CoffeeMaker coffeeMaker;
+  @Spy private CoffeeMaker coffeeMaker;
 
-  @Inject
-  private MFoo foo;
+  @Inject private MFoo foo;
 
   @Test
   void when_privateField_expect_fieldsSet() {
@@ -35,5 +31,4 @@ public class WithExtnPrivateFieldsTest {
     assertThat(coffeeMaker).isNotNull();
     assertThat(foo).isNotNull();
   }
-
 }

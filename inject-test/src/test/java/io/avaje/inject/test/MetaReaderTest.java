@@ -16,11 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MetaReaderTest {
 
-  @Mock
-  Pump pump;
+  @Mock Pump pump;
 
-  @Mock
-  Grinder grinder;
+  @Mock Grinder grinder;
 
   static @Mock AMusher musher;
 
@@ -50,10 +48,8 @@ class MetaReaderTest {
 
   static class HelloBean {
 
-    @Inject
-    HttpClient client;
+    @Inject HttpClient client;
   }
-
 
   static class MyPlugin implements Plugin {
 
@@ -82,5 +78,4 @@ class MetaReaderTest {
       }
     }
   }
-
 }

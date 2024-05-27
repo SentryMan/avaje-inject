@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Extended builder that supports supplied beans (mocks) and enriching beans (spy).
- */
+/** Extended builder that supports supplied beans (mocks) and enriching beans (spy). */
 final class DBuilderExtn extends DBuilder {
 
   @SuppressWarnings("rawtypes")
@@ -20,7 +18,13 @@ final class DBuilderExtn extends DBuilder {
   private final boolean hasSuppliedBeans;
 
   @SuppressWarnings("rawtypes")
-  DBuilderExtn(Set<String> profiles, PropertyRequiresPlugin plugin, BeanScope parent, boolean parentOverride, List<SuppliedBean> suppliedBeans, List<EnrichBean> enrichBeans) {
+  DBuilderExtn(
+      Set<String> profiles,
+      PropertyRequiresPlugin plugin,
+      BeanScope parent,
+      boolean parentOverride,
+      List<SuppliedBean> suppliedBeans,
+      List<EnrichBean> enrichBeans) {
     super(profiles, plugin, parent, parentOverride);
     this.hasSuppliedBeans = (suppliedBeans != null && !suppliedBeans.isEmpty());
     if (hasSuppliedBeans) {
@@ -46,8 +50,8 @@ final class DBuilderExtn extends DBuilder {
   }
 
   /**
-   * If we have a parentMatch (e.g. test scope bean) but we want to enrich it (Mockito Spy),
-   * then enrich the parentMatch bean and register that into this scope.
+   * If we have a parentMatch (e.g. test scope bean) but we want to enrich it (Mockito Spy), then
+   * enrich the parentMatch bean and register that into this scope.
    */
   private void enrichParentMatch() {
     if (parentMatch != null && !enrichMap.isEmpty()) {
@@ -59,9 +63,7 @@ final class DBuilderExtn extends DBuilder {
     }
   }
 
-  /**
-   * Potentially enrich the bean prior to registering with context.
-   */
+  /** Potentially enrich the bean prior to registering with context. */
   @Override
   protected <T> T enrich(T bean, DBeanMap.NextBean next) {
     EnrichBean<T> enrich = enrichLookup(bean.getClass(), next.name);
@@ -86,5 +88,4 @@ final class DBuilderExtn extends DBuilder {
     }
     return enrich;
   }
-
 }

@@ -16,6 +16,7 @@ public class MyAutoNameFactory {
   MyGeneric<?> wiredWild() {
     return wiredWild;
   }
+
   MyGeneric<?> wiredWild2() {
     return wiredWild2;
   }
@@ -76,9 +77,11 @@ public class MyAutoNameFactory {
 
   static class DAutoB2 implements AutoB2 {
     private final String name;
+
     DAutoB2(String name) {
       this.name = name;
     }
+
     @Override
     public String who() {
       return name;
@@ -88,6 +91,7 @@ public class MyAutoNameFactory {
   static class DAutoIface implements AutoIface {
 
     private final String name;
+
     DAutoIface(String name) {
       this.name = name;
     }

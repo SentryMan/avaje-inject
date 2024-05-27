@@ -11,9 +11,9 @@ import java.util.*;
 final class MetaDataOrdering {
 
   private static final String CIRC_ERR_MSG =
-    "To handle circular dependencies consider using field injection " +
-      "rather than constructor injection on one of the dependencies. " +
-      "\n See https://avaje.io/inject/#circular";
+      "To handle circular dependencies consider using field injection "
+          + "rather than constructor injection on one of the dependencies. "
+          + "\n See https://avaje.io/inject/#circular";
 
   private final ScopeInfo scopeInfo;
   private final List<MetaData> orderedList = new ArrayList<>();
@@ -46,9 +46,7 @@ final class MetaDataOrdering {
     externallyRequiredDependencies();
   }
 
-  /**
-   * These, if defined are expected to be required at wiring time probably via another module.
-   */
+  /** These, if defined are expected to be required at wiring time probably via another module. */
   private void externallyRequiredDependencies() {
     for (String requireType : scopeInfo.requires()) {
       providerAdd(requireType);
@@ -82,8 +80,8 @@ final class MetaDataOrdering {
   }
 
   /**
-   * Try to detect circular dependency given the remaining beans
-   * in the queue with unsatisfied dependencies.
+   * Try to detect circular dependency given the remaining beans in the queue with unsatisfied
+   * dependencies.
    */
   private void detectCircularDependency(List<MetaData> remainder) {
     final List<DependencyLink> dependencyLinks = new ArrayList<>();
@@ -117,19 +115,18 @@ final class MetaDataOrdering {
     return null;
   }
 
-  /**
-   * Log a reasonable compile error for detected circular dependencies.
-   */
+  /** Log a reasonable compile error for detected circular dependencies. */
   private void errorOnCircularDependencies() {
-    logError("Circular dependencies detected with beans %s  %s", circularDependencies, CIRC_ERR_MSG);
+    logError(
+        "Circular dependencies detected with beans %s  %s", circularDependencies, CIRC_ERR_MSG);
     for (DependencyLink link : circularDependencies) {
-      logError("Circular dependency - %s dependsOn %s for %s", link.metaData, link.provider, link.dependency);
+      logError(
+          "Circular dependency - %s dependsOn %s for %s",
+          link.metaData, link.provider, link.dependency);
     }
   }
 
-  /**
-   * Build list of specific dependencies that are missing.
-   */
+  /** Build list of specific dependencies that are missing. */
   void missingDependencies() {
     for (MetaData metaData : queue) {
       checkMissingDependencies(metaData);
@@ -142,7 +139,8 @@ final class MetaDataOrdering {
 
   private void checkMissingDependencies(MetaData metaData) {
     for (Dependency dependency : metaData.dependsOn()) {
-      if (providers.get(dependency.name()) == null && !scopeInfo.providedByOtherScope(dependency.name())) {
+      if (providers.get(dependency.name()) == null
+          && !scopeInfo.providedByOtherScope(dependency.name())) {
         TypeElement element = elementMaybe(metaData.type());
         logError(element, "No dependency provided for " + dependency + " on " + metaData.type());
         missingDependencyTypes.add(dependency.name());
@@ -155,10 +153,16 @@ final class MetaDataOrdering {
    */
   private void warnOnDependencies() {
     if (!missingDependencyTypes.isEmpty()) {
-      logError("Dependencies %s are not provided - missing @Singleton, @Component, @Factory/@Bean or specify external dependency via @InjectModule requires attribute", missingDependencyTypes);
+      logError(
+          "Dependencies %s are not provided - missing @Singleton, @Component, @Factory/@Bean or"
+              + " specify external dependency via @InjectModule requires attribute",
+          missingDependencyTypes);
     } else {
       if (!queue.isEmpty()) {
-        logWarn("There are " + queue.size() + " beans with unsatisfied dependencies (assuming external dependencies)");
+        logWarn(
+            "There are "
+                + queue.size()
+                + " beans with unsatisfied dependencies (assuming external dependencies)");
         for (MetaData m : queue) {
           logWarn("Unsatisfied dependencies on %s dependsOn %s", m, m.dependsOn());
         }
@@ -237,10 +241,7 @@ final class MetaDataOrdering {
     return importTypes;
   }
 
-  /**
-   * Return true if the beans with unsatisfied dependencies seem
-   * to form a circular dependency.
-   */
+  /** Return true if the beans with unsatisfied dependencies seem to form a circular dependency. */
   private boolean hasCircularDependencies() {
     return !circularDependencies.isEmpty();
   }

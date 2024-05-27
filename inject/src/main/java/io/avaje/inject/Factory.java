@@ -7,19 +7,16 @@ import java.lang.annotation.Target;
 
 /**
  * A singleton bean that has methods marked with the <code>@Bean</code> annotation.
- * <p>
- * Factory beans allow us to build beans using logic in methods. These methods for example
- * often use environment variables and system properties into account when building the bean.
- * </p>
- * <p>
- * Relative to <code>jakarta.inject.Provider</code> Factory and Bean provide a more flexible
+ *
+ * <p>Factory beans allow us to build beans using logic in methods. These methods for example often
+ * use environment variables and system properties into account when building the bean.
+ *
+ * <p>Relative to <code>jakarta.inject.Provider</code> Factory and Bean provide a more flexible
  * approach that allows dependencies on the method (as method parameters) as well as multiple
  * methods on the single factory bean. The expectation is that we tend to use Factory and Bean
  * rather than Provider.
- * </p>
  *
  * <pre>{@code
- *
  * @Factory
  * class Configuration {
  *
@@ -46,5 +43,4 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Factory {
-}
+public @interface Factory {}

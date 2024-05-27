@@ -11,8 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(InjectExtension.class)
 class InjectExtension_injectFromTestModule_Test {
 
-  @Inject
-  HelloService helloService;
+  @Inject HelloService helloService;
 
   @Test
   void hello_1() {

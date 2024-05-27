@@ -46,16 +46,17 @@ public class HelloService {
     return "foo+" + param;
   }
 
-  @MyAround(name="what")
+  @MyAround(name = "what")
   public String bazz(String param0, int param1) throws IOException {
     System.out.println("execute bazz ...");
     return "bazz " + param0 + " " + param1;
   }
 
   @MyAround
-  public void justRun(String param0, int param1, int param2) throws IOException, ClassNotFoundException, UncheckedIOException {
+  public void justRun(String param0, int param1, int param2)
+      throws IOException, ClassNotFoundException, UncheckedIOException {
     System.out.println("justRun ...");
-    justRunResult = param0+" "+param1+" "+param2;
+    justRunResult = param0 + " " + param1 + " " + param2;
   }
 
   @MyThrowing
@@ -69,27 +70,20 @@ public class HelloService {
     throw new IllegalArgumentException("appCodeUnchecked");
   }
 
-  /**
-   * Declared exception is NOT wrapped in InvocationException
-   */
+  /** Declared exception is NOT wrapped in InvocationException */
   @MyAround
   public void appCodeThrowsDeclared() throws IllegalArgumentException {
     throw new IllegalArgumentException("appCodeDeclared");
   }
 
-  public void multiAspectsHere() {
-
-  }
-
+  public void multiAspectsHere() {}
 
   public String justRunResult() {
     return justRunResult;
   }
 
   @PostConstruct
-  void postCon(BeanScope scope) {
-
-  }
+  void postCon(BeanScope scope) {}
 
   @PreDestroy(priority = 100)
   void preDest() {

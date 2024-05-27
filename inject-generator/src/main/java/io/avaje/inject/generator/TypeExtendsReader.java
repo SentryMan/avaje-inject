@@ -16,9 +16,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
-/**
- * Read the inheritance types for a given bean type.
- */
+/** Read the inheritance types for a given bean type. */
 final class TypeExtendsReader {
 
   private static final String JAVA_LANG_OBJECT = "java.lang.Object";
@@ -35,13 +33,18 @@ final class TypeExtendsReader {
   private final boolean autoProvide;
   private final boolean proxyBean;
   private boolean closeable;
-  /**
-   * The implied qualifier name based on naming convention.
-   */
+
+  /** The implied qualifier name based on naming convention. */
   private String qualifierName;
+
   private String providesAspect = "";
 
-  TypeExtendsReader(UType baseUType, TypeElement baseType, boolean factory, ImportTypeMap importTypes, boolean proxyBean) {
+  TypeExtendsReader(
+      UType baseUType,
+      TypeElement baseType,
+      boolean factory,
+      ImportTypeMap importTypes,
+      boolean proxyBean) {
     this.baseUType = baseUType;
     this.baseType = baseType;
     this.extendsInjection = new TypeExtendsInjection(baseType, factory, importTypes);
@@ -55,16 +58,17 @@ final class TypeExtendsReader {
 
   private boolean autoProvide() {
     return publicAccess
-      && !FactoryPrism.isPresent(baseType)
-      && !ProxyPrism.isPresent(baseType)
-      && !GeneratedPrism.isPresent(baseType)
-      && !isController();
+        && !FactoryPrism.isPresent(baseType)
+        && !ProxyPrism.isPresent(baseType)
+        && !GeneratedPrism.isPresent(baseType)
+        && !isController();
   }
 
   @SuppressWarnings("unchecked")
   private boolean isController() {
     try {
-      return baseType.getAnnotation((Class<Annotation>) Class.forName(Constants.CONTROLLER)) != null;
+      return baseType.getAnnotation((Class<Annotation>) Class.forName(Constants.CONTROLLER))
+          != null;
     } catch (final ClassNotFoundException e) {
       return false;
     }
@@ -184,11 +188,13 @@ final class TypeExtendsReader {
       final String type = Util.unwrapProvider(fullName);
 
       if (proxyBean || isPublic(element)) {
-        final var genericType = !Objects.equals(fullName, type) ? UType.parse(mirror).param0() : UType.parse(mirror);
+        final var genericType =
+            !Objects.equals(fullName, type) ? UType.parse(mirror).param0() : UType.parse(mirror);
         // check if any unknown generic types are in the parameters (T,T2, etc.)
-        final var knownType = genericType.componentTypes().stream()
-          .flatMap(g -> Stream.concat(Stream.of(g), g.componentTypes().stream()))
-          .noneMatch(g -> g.kind() == TypeKind.TYPEVAR);
+        final var knownType =
+            genericType.componentTypes().stream()
+                .flatMap(g -> Stream.concat(Stream.of(g), g.componentTypes().stream()))
+                .noneMatch(g -> g.kind() == TypeKind.TYPEVAR);
 
         extendsTypes.add(knownType ? Util.unwrapProvider(mirror) : genericType);
         extendsInjection.read(element);
@@ -211,9 +217,9 @@ final class TypeExtendsReader {
   }
 
   private void readInterfacesOf(TypeMirror anInterface) {
-	  final String rawType = Util.unwrapProvider(anInterface.toString());
-	  final UType rawUType = Util.unwrapProvider(anInterface);
-	    if (JAVA_LANG_OBJECT.equals(rawType)) {
+    final String rawType = Util.unwrapProvider(anInterface.toString());
+    final UType rawUType = Util.unwrapProvider(anInterface);
+    if (JAVA_LANG_OBJECT.equals(rawType)) {
       // we can stop
       return;
     }
@@ -227,7 +233,8 @@ final class TypeExtendsReader {
         final String iShortName = Util.shortName(mainType);
         if (beanSimpleName.endsWith(iShortName)) {
           // derived qualifier name based on prefix to interface short name
-          qualifierName = beanSimpleName.substring(0, beanSimpleName.length() - iShortName.length());
+          qualifierName =
+              beanSimpleName.substring(0, beanSimpleName.length() - iShortName.length());
         }
       }
       interfaceTypes.add(rawUType);

@@ -6,9 +6,7 @@ import io.helidon.webserver.http.ServerResponse;
 import org.example.generic.MyObj;
 import org.example.generic.ReadService;
 
-/**
- * Controller with request scoped dependencies and generic parameter.
- */
+/** Controller with request scoped dependencies and generic parameter. */
 @Controller
 public class CController {
 
@@ -16,7 +14,8 @@ public class CController {
   final ServerRequest request;
   final ServerResponse response;
 
-  CController(ReadService<MyObj, Integer> readService, ServerRequest request, ServerResponse response) {
+  CController(
+      ReadService<MyObj, Integer> readService, ServerRequest request, ServerResponse response) {
     this.readService = readService;
     this.request = request;
     this.response = response;

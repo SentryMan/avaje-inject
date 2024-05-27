@@ -23,6 +23,5 @@ class HasExternalDependenciesTest {
       assertThat(hasExternalDependencies.fromPlugin).isSameAs(jsonb);
       assertThat(hasExternalDependencies.fromExternal).isSameAs(other);
     }
-
   }
 }

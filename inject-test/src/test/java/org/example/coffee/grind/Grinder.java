@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-
 @Data
 @EqualsAndHashCode
 @ToString
@@ -25,11 +24,8 @@ public class Grinder {
 
   final AMusher aMusher;
 
-  /**
-   * Can use field injection (but can't be private)
-   */
-  @Inject
-  BMusher bMusher;
+  /** Can use field injection (but can't be private) */
+  @Inject BMusher bMusher;
 
   public Grinder(AMusher aMusher) {
     this.aMusher = aMusher;
@@ -44,6 +40,4 @@ public class Grinder {
   public String grindBeans() {
     return "mush mush beans";
   }
-
-
 }

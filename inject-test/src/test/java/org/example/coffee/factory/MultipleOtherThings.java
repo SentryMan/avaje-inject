@@ -11,7 +11,11 @@ public class MultipleOtherThings {
   private final Otherthing green;
   private final Otherthing yellow;
 
-  MultipleOtherThings(@Named("blue") Otherthing blue, @Named("red") Otherthing red, @Named("green") Otherthing green, @Named("yellow") Otherthing yellow) {
+  MultipleOtherThings(
+      @Named("blue") Otherthing blue,
+      @Named("red") Otherthing red,
+      @Named("green") Otherthing green,
+      @Named("yellow") Otherthing yellow) {
     this.blue = blue;
     this.red = red;
     this.green = green;

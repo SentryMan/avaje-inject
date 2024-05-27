@@ -15,8 +15,8 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Map of types (class types, interfaces and annotations) to a DContextEntry where the
- * entry holds a list of bean instances for that type.
+ * Map of types (class types, interfaces and annotations) to a DContextEntry where the entry holds a
+ * list of bean instances for that type.
  */
 final class DBeanMap {
   private static final Optional<Object> EMPTY = Optional.empty();
@@ -26,8 +26,7 @@ final class DBeanMap {
   private NextBean nextBean;
   private Class<? extends AvajeModule> currentModule;
 
-  DBeanMap() {
-  }
+  DBeanMap() {}
 
   void currentModule(Class<? extends AvajeModule> currentModule) {
     this.currentModule = currentModule;
@@ -38,20 +37,17 @@ final class DBeanMap {
     return "BeanMap{" + beans + '}';
   }
 
-  /**
-   * Add to the map of entries.
-   */
+  /** Add to the map of entries. */
   void addAll(Map<DContextEntryBean, DEntry> map) {
     for (Map.Entry<String, DContextEntry> entry : beans.entrySet()) {
       for (DContextEntryBean contentEntry : entry.getValue().entries()) {
-        map.computeIfAbsent(contentEntry, dContextEntryBean -> contentEntry.entry()).addKey(entry.getKey());
+        map.computeIfAbsent(contentEntry, dContextEntryBean -> contentEntry.entry())
+            .addKey(entry.getKey());
       }
     }
   }
 
-  /**
-   * Add test double supplied beans.
-   */
+  /** Add test double supplied beans. */
   void add(List<SuppliedBean> suppliedBeans) {
     for (SuppliedBean suppliedBean : suppliedBeans) {
       addSuppliedBean(suppliedBean);
@@ -61,7 +57,8 @@ final class DBeanMap {
   private void addSuppliedBean(SuppliedBean supplied) {
     Type suppliedType = supplied.type();
     qualifiers.add(supplied.name());
-    DContextEntryBean entryBean = DContextEntryBean.supplied(supplied.source(), supplied.name(), supplied.priority());
+    DContextEntryBean entryBean =
+        DContextEntryBean.supplied(supplied.source(), supplied.name(), supplied.priority());
     beans.computeIfAbsent(suppliedType.getTypeName(), s -> new DContextEntry()).add(entryBean);
     for (Class<?> anInterface : supplied.interfaces()) {
       beans.computeIfAbsent(anInterface.getTypeName(), s -> new DContextEntry()).add(entryBean);
@@ -82,15 +79,15 @@ final class DBeanMap {
 
   void register(Provider<?> provider) {
     qualifiers.add(nextBean.name);
-    var entryBean = DContextEntryBean.provider(nextBean.prototype, provider, nextBean.name, nextBean.priority, currentModule);
+    var entryBean =
+        DContextEntryBean.provider(
+            nextBean.prototype, provider, nextBean.name, nextBean.priority, currentModule);
     for (Type type : nextBean.types) {
       beans.computeIfAbsent(type.getTypeName(), s -> new DContextEntry()).add(entryBean);
     }
   }
 
-  /**
-   * Get with a strict match on name for the single entry case.
-   */
+  /** Get with a strict match on name for the single entry case. */
   Object getStrict(Type type, String name) {
     DContextEntry entry = beans.get(type.getTypeName());
     if (entry == null) {
@@ -129,17 +126,13 @@ final class DBeanMap {
     return (Provider<T>) entry.provider(name, currentModule);
   }
 
-  /**
-   * Return all bean instances matching the given type.
-   */
+  /** Return all bean instances matching the given type. */
   List<Object> all(Type type) {
     DContextEntry entry = beans.get(type.getTypeName());
     return entry != null ? entry.all() : Collections.emptyList();
   }
 
-  /**
-   * Return a map of bean instances keyed by qualifier name.
-   */
+  /** Return a map of bean instances keyed by qualifier name. */
   Map<String, Object> map(Type type, BeanScope parent) {
     if (parent == null) {
       return map(type);
@@ -161,9 +154,7 @@ final class DBeanMap {
     return entry != null ? entry.map() : Collections.emptyMap();
   }
 
-  /**
-   * Return true if there is a supplied bean for the name and types.
-   */
+  /** Return true if there is a supplied bean for the name and types. */
   boolean isSupplied(String qualifierName, Type... types) {
     if (types != null) {
       for (Type type : types) {
@@ -183,8 +174,8 @@ final class DBeanMap {
   }
 
   /**
-   * Register the suppliedBean entry with parameterized types IF those types
-   * don't already have a registered entry.
+   * Register the suppliedBean entry with parameterized types IF those types don't already have a
+   * registered entry.
    */
   private void addSuppliedFor(Type matchType, Type[] types, DContextEntryBean suppliedBean) {
     for (Type type : types) {
@@ -194,30 +185,22 @@ final class DBeanMap {
     }
   }
 
-  /**
-   * Store the qualifier name and type for the next bean to register.
-   */
+  /** Store the qualifier name and type for the next bean to register. */
   void nextBean(String name, Type[] types) {
     nextBean = new NextBean(name, types);
   }
 
-  /**
-   * Set the priority for the next bean to register.
-   */
+  /** Set the priority for the next bean to register. */
   void nextPriority(int priority) {
     nextBean.priority = priority;
   }
 
-  /**
-   * Set the next bean to register as having Prototype scope.
-   */
+  /** Set the next bean to register as having Prototype scope. */
   void nextPrototype() {
     nextBean.prototype = true;
   }
 
-  /**
-   * Return the types of the bean being processed/registered.
-   */
+  /** Return the types of the bean being processed/registered. */
   NextBean next() {
     return nextBean;
   }

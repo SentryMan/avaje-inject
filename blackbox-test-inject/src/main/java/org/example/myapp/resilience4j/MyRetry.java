@@ -12,5 +12,4 @@ public @interface MyRetry {
   int maxAttempts() default -1;
 
   String waitDuration() default "";
-
 }

@@ -41,7 +41,8 @@ class LegacyBeanScopeBuilderTest {
     assertThatThrownBy(factoryOrder::orderModules)
         .isInstanceOf(IllegalStateException.class)
         .hasMessageContaining(
-            "Module [io.avaje.inject.LegacyBeanScopeBuilderTest$TDModule] has unsatisfied requires [io.avaje.inject.LegacyBeanScopeBuilderTest$MyFeature]");
+            "Module [io.avaje.inject.LegacyBeanScopeBuilderTest$TDModule] has unsatisfied requires"
+                + " [io.avaje.inject.LegacyBeanScopeBuilderTest$MyFeature]");
   }
 
   @Test

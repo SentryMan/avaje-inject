@@ -1,4 +1,3 @@
 package org.example.coffee.factory;
 
-public interface IDFact {
-}
+public interface IDFact {}

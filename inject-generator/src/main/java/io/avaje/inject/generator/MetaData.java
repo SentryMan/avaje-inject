@@ -5,10 +5,7 @@ import static io.avaje.inject.generator.APContext.typeElement;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-/**
- * Holds the data as per <code>@DependencyMeta</code>
- */
+/** Holds the data as per <code>@DependencyMeta</code> */
 final class MetaData {
 
   private static final String NEWLINE = "\n";
@@ -20,19 +17,13 @@ final class MetaData {
   private boolean wired;
   private String providesAspect;
 
-  /**
-   * The interfaces and class annotations the bean has (to register into lists).
-   */
+  /** The interfaces and class annotations the bean has (to register into lists). */
   private List<String> provides;
 
-  /**
-   * The list of dependencies with optional and named.
-   */
+  /** The list of dependencies with optional and named. */
   private List<Dependency> dependsOn;
 
-  /**
-   * Type deemed to be candidate for providing to another external module.
-   */
+  /** Type deemed to be candidate for providing to another external module. */
   private List<String> autoProvides;
 
   private boolean generateProxy;
@@ -70,8 +61,8 @@ final class MetaData {
   }
 
   /**
-   * Return true if this is a component with Aspects applied to it.
-   * This means this type doesn't have a $DI but instead we have the $Proxy$DI.
+   * Return true if this is a component with Aspects applied to it. This means this type doesn't
+   * have a $DI but instead we have the $Proxy$DI.
    */
   boolean isGenerateProxy() {
     return generateProxy;
@@ -149,9 +140,7 @@ final class MetaData {
     return providesAspect;
   }
 
-  /**
-   * Return the top level package for the bean and the interfaces it implements.
-   */
+  /** Return the top level package for the bean and the interfaces it implements. */
   String topPackage() {
     if (method == null || method.isEmpty()) {
       return ProcessorUtils.packageOf(type);
@@ -214,12 +203,20 @@ final class MetaData {
       append.append(",").eol().append("      method = \"").append(method).append("\"");
     }
     if (hasProvidesAspect) {
-      append.append(",").eol().append("      providesAspect = \"").append(providesAspect).append("\"");
+      append
+          .append(",")
+          .eol()
+          .append("      providesAspect = \"")
+          .append(providesAspect)
+          .append("\"");
     } else if (hasProvides) {
       appendProvides(append, "provides", provides);
     }
     if (hasDependsOn) {
-      appendProvides(append, "dependsOn", dependsOn.stream().map(Dependency::dependsOn).collect(Collectors.toList()));
+      appendProvides(
+          append,
+          "dependsOn",
+          dependsOn.stream().map(Dependency::dependsOn).collect(Collectors.toList()));
     }
     if (hasAutoProvides) {
       appendProvides(append, "autoProvides", autoProvides);
@@ -284,9 +281,7 @@ final class MetaData {
     this.providesAspect = providesAspect;
   }
 
-  /**
-   * This depends on a dependency that comes from another module in the classpath.
-   */
+  /** This depends on a dependency that comes from another module in the classpath. */
   void markWithExternalDependency(String name) {
     usesExternalDependency = true;
     externalDependencies.add(name);

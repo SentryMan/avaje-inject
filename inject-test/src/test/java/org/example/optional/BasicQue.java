@@ -1,6 +1,5 @@
 package org.example.optional;
 
-
 class BasicQue implements Que {
 
   private final String name;
@@ -11,7 +10,7 @@ class BasicQue implements Que {
 
   @Override
   public String push(String msg) {
-    return msg+"|"+name;
+    return msg + "|" + name;
   }
 
   @Override

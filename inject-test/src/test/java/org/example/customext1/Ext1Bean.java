@@ -13,7 +13,12 @@ public class Ext1Bean {
   final Ext1iface ext1iface;
   final Ext1conc ext1conc;
 
-  public Ext1Bean(Ext0iface ext0iface, Ext0conc ext0conc, Ext0Other ext0Other, Ext1iface ext1iface, Ext1conc ext1conc) {
+  public Ext1Bean(
+      Ext0iface ext0iface,
+      Ext0conc ext0conc,
+      Ext0Other ext0Other,
+      Ext1iface ext1iface,
+      Ext1conc ext1conc) {
     this.ext0iface = ext0iface;
     this.ext0conc = ext0conc;
     this.ext0Other = ext0Other;

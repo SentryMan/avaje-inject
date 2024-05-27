@@ -1,7 +1,6 @@
 package org.example.myapp;
 
 import io.avaje.inject.Component;
-import io.avaje.inject.InjectModule;
 
 import org.example.external.aspect.MyExternalAspect;
 
@@ -12,7 +11,13 @@ import org.example.myapp.other.SimulateExternal2;
 import org.example.myapp.other.SimulateExternalPub;
 import org.example.myapp.other.SimulateExternalPub2;
 
-@Component.Import(value = {SimulateExternal.class, SimulateExternal2.class, SimulateExternalPub.class, SimulateExternalPub2.class}) //, packagePrivate = true)
+@Component.Import(
+    value = {
+      SimulateExternal.class,
+      SimulateExternal2.class,
+      SimulateExternalPub.class,
+      SimulateExternalPub2.class
+    }) // , packagePrivate = true)
 @Import(MyExternalAspect.class)
 public class Main {
 

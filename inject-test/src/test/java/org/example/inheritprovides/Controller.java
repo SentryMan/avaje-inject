@@ -5,8 +5,7 @@ import java.util.Map;
 
 public class Controller {
 
-    Map<String, String> getContext() {
-        return new HashMap<>();
-    }
-
+  Map<String, String> getContext() {
+    return new HashMap<>();
+  }
 }

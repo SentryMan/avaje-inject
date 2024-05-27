@@ -36,5 +36,4 @@ public class IncludeAnnotationsTest {
     assertFalse(include(Constants.SECONDARY));
     assertFalse(include(Constants.PATH));
   }
-
 }

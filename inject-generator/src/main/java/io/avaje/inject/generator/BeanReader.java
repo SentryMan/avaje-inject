@@ -12,7 +12,6 @@ import io.avaje.inject.generator.MethodReader.MethodParam;
 import java.util.*;
 import java.util.stream.Stream;
 
-
 final class BeanReader {
 
   private final TypeElement beanType;
@@ -54,7 +53,8 @@ final class BeanReader {
     this.primary = PrimaryPrism.isPresent(beanType);
     this.secondary = !primary && SecondaryPrism.isPresent(beanType);
     this.lazy = !FactoryPrism.isPresent(beanType) && LazyPrism.isPresent(beanType);
-    this.typeReader = new TypeReader(UType.parse(beanType.asType()), beanType, importTypes, factory);
+    this.typeReader =
+        new TypeReader(UType.parse(beanType.asType()), beanType, importTypes, factory);
 
     typeReader.process();
 
@@ -81,25 +81,24 @@ final class BeanReader {
     this.delayed = shouldDelay();
   }
 
-  /**
-   * delay until next round if types cannot be resolved
-   */
+  /** delay until next round if types cannot be resolved */
   private boolean shouldDelay() {
-    var construct = Optional.ofNullable(constructor)
-      .map(MethodReader::params).stream()
-      .flatMap(List::stream)
-      .map(MethodParam::element);
+    var construct =
+        Optional.ofNullable(constructor).map(MethodReader::params).stream()
+            .flatMap(List::stream)
+            .map(MethodParam::element);
 
     var fields = injectFields.stream().map(FieldReader::element);
     var constructFields = Stream.concat(construct, fields);
-    var methods = injectMethods.stream()
-      .map(MethodReader::params)
-      .flatMap(List::stream)
-      .map(MethodParam::element);
+    var methods =
+        injectMethods.stream()
+            .map(MethodReader::params)
+            .flatMap(List::stream)
+            .map(MethodParam::element);
 
     return Stream.concat(constructFields, methods)
-      .map(Element::asType)
-      .anyMatch(t -> t.getKind() == TypeKind.ERROR);
+        .map(Element::asType)
+        .anyMatch(t -> t.getKind() == TypeKind.ERROR);
   }
 
   @Override
@@ -164,22 +163,23 @@ final class BeanReader {
     }
 
     observerMethods.stream()
-      .flatMap(m -> m.params().stream().skip(1))
-      .forEach(param -> {
-        Dependency dependsOn = param.dependsOn();
-        // BeanScope is always injectable with no impact on injection ordering
-        if (!Constants.BEANSCOPE.equals(dependsOn.dependsOn())) {
-          list.add(dependsOn);
-        }
-      });
+        .flatMap(m -> m.params().stream().skip(1))
+        .forEach(
+            param -> {
+              Dependency dependsOn = param.dependsOn();
+              // BeanScope is always injectable with no impact on injection ordering
+              if (!Constants.BEANSCOPE.equals(dependsOn.dependsOn())) {
+                list.add(dependsOn);
+              }
+            });
 
     conditions.requireTypes.stream()
-      .map(t -> new Dependency(Constants.CONDITIONAL_DEPENDENCY + t))
-      .forEach(list::add);
+        .map(t -> new Dependency(Constants.CONDITIONAL_DEPENDENCY + t))
+        .forEach(list::add);
     conditions.missingTypes.stream()
-      .filter(t -> !t.equals(type))
-      .map(t -> new Dependency(Constants.CONDITIONAL_DEPENDENCY + t))
-      .forEach(list::add);
+        .filter(t -> !t.equals(type))
+        .map(t -> new Dependency(Constants.CONDITIONAL_DEPENDENCY + t))
+        .forEach(list::add);
     return list;
   }
 
@@ -227,16 +227,12 @@ final class BeanReader {
     return allUTypes;
   }
 
-  /**
-   * Return the short name of the element.
-   */
+  /** Return the short name of the element. */
   private String shortName(Element element) {
     return element.getSimpleName().toString();
   }
 
-  /**
-   * Return the key for meta data (type and name)
-   */
+  /** Return the key for meta data (type and name) */
   String metaKey() {
     if (name != null) {
       return type + ":" + name;
@@ -244,9 +240,7 @@ final class BeanReader {
     return type;
   }
 
-  /**
-   * Return true if lifecycle via annotated methods is required.
-   */
+  /** Return true if lifecycle via annotated methods is required. */
   boolean hasLifecycleMethods() {
     return (postConstructMethod != null || preDestroyMethod != null || typeReader.isClosable());
   }
@@ -311,12 +305,20 @@ final class BeanReader {
   void addLifecycleCallbacks(Append writer, String indent) {
 
     if (postConstructMethod != null && !registerProvider()) {
-      writer.indent(indent).append(" builder.addPostConstruct($bean::%s);", postConstructMethod.getSimpleName()).eol();
+      writer
+          .indent(indent)
+          .append(" builder.addPostConstruct($bean::%s);", postConstructMethod.getSimpleName())
+          .eol();
     }
     if (preDestroyMethod != null) {
       lifeCycleNotSupported("@PreDestroy");
-      var priority = preDestroyPriority == null || preDestroyPriority == 1000 ? "" : ", " + preDestroyPriority;
-      writer.indent(indent).append(" builder.addPreDestroy($bean::%s%s);", preDestroyMethod.getSimpleName(), priority).eol();
+      var priority =
+          preDestroyPriority == null || preDestroyPriority == 1000 ? "" : ", " + preDestroyPriority;
+      writer
+          .indent(indent)
+          .append(
+              " builder.addPreDestroy($bean::%s%s);", preDestroyMethod.getSimpleName(), priority)
+          .eol();
     } else if (typeReader.isClosable() && !prototype) {
       writer.indent(indent).append(" builder.addPreDestroy($bean);").eol();
     }
@@ -338,10 +340,10 @@ final class BeanReader {
   private void lifeCycleNotSupported(String lifecycle) {
     if (registerProvider()) {
       logError(
-        beanType,
-        "%s scoped bean does not support the %s lifecycle method",
-        prototype ? "@Prototype" : "@Lazy",
-        lifecycle);
+          beanType,
+          "%s scoped bean does not support the %s lifecycle method",
+          prototype ? "@Prototype" : "@Lazy",
+          lifecycle);
     }
   }
 
@@ -362,7 +364,7 @@ final class BeanReader {
       }
     }
     checkImports();
-    if (!suppressGeneratedImport){
+    if (!suppressGeneratedImport) {
       importTypes.add(Constants.GENERATED);
     }
     if (!suppressBuilderImport) {
@@ -410,10 +412,10 @@ final class BeanReader {
   }
 
   /**
-   * Return true if the bean has a dependency which is a request scoped type.
-   * Like Javalin Context, Helidon request and response types.
-   * <p>
-   * If request scoped then generate a BeanFactory instead.
+   * Return true if the bean has a dependency which is a request scoped type. Like Javalin Context,
+   * Helidon request and response types.
+   *
+   * <p>If request scoped then generate a BeanFactory instead.
    */
   boolean isRequestScopedController() {
     return requestParams.isRequestScopedController();
@@ -423,16 +425,12 @@ final class BeanReader {
     return isRequestScopedController() ? Constants.DOLLAR_FACTORY : Constants.DI;
   }
 
-  /**
-   * Add interface for this as a BeanFactory (request scoped).
-   */
+  /** Add interface for this as a BeanFactory (request scoped). */
   void factoryInterface(Append writer) {
     requestParams.factoryInterface(writer);
   }
 
-  /**
-   * Generate the BeanFactory dependencies and create method implementation.
-   */
+  /** Generate the BeanFactory dependencies and create method implementation. */
   void writeRequestCreate(Append writer) {
     if (constructor != null) {
       constructor.writeRequestDependency(writer);

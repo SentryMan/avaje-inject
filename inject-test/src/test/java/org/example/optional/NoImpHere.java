@@ -1,5 +1,3 @@
 package org.example.optional;
 
-public interface NoImpHere {
-
-}
+public interface NoImpHere {}

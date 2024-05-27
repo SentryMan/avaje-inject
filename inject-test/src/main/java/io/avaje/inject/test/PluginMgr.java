@@ -3,7 +3,6 @@ package io.avaje.inject.test;
 import io.avaje.inject.BeanScope;
 import io.avaje.lang.Nullable;
 
-import java.lang.reflect.Type;
 import java.util.ServiceLoader;
 
 final class PluginMgr {
@@ -19,10 +18,8 @@ final class PluginMgr {
     return plugin;
   }
 
-  /**
-   * Return a new plugin scope (if there is a plugin).
-   */
-   @Nullable
+  /** Return a new plugin scope (if there is a plugin). */
+  @Nullable
   static Plugin.Scope scope(BeanScope beanScope) {
     return plugin == null ? null : plugin.createScope(beanScope);
   }

@@ -15,18 +15,15 @@ class ExtensionExampleTest {
   @Test
   void checkForCompilerWarningsOnly_notATestThatRuns() {
 
-    ExtensionExample extensionExample = new ExtensionExample(asList(Widget.class, SEmailer.class), asList(SomeStore.class));
+    ExtensionExample extensionExample =
+        new ExtensionExample(asList(Widget.class, SEmailer.class), asList(SomeStore.class));
     BeanScope context = extensionExample.build();
 
     Class cls0 = Widget.class;
     Class<?> cls1 = SEmailer.class;
 
-    BeanScopeBuilder bootContext = BeanScope.builder()
-      .forTesting()
-      .spy(cls0)
-      .spy(cls1)
-      .mock(cls0)
-      .mock(cls1);
+    BeanScopeBuilder bootContext =
+        BeanScope.builder().forTesting().spy(cls0).spy(cls1).mock(cls0).mock(cls1);
 
     assertNotNull(context);
     assertNotNull(bootContext);

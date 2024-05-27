@@ -14,14 +14,10 @@ import io.avaje.lang.NonNullApi;
 @NonNullApi
 public interface PropertyRequiresPlugin {
 
-  /**
-   * Return a configuration value that might not exist.
-   */
+  /** Return a configuration value that might not exist. */
   Optional<String> get(String property);
 
-  /**
-   * Return true if the property is defined.
-   */
+  /** Return true if the property is defined. */
   boolean contains(String property);
 
   /** Return true if the property is not defined. */
@@ -36,5 +32,4 @@ public interface PropertyRequiresPlugin {
   default boolean notEqualTo(String property, String value) {
     return !equalTo(property, value);
   }
-
 }

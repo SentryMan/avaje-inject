@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,36 +16,34 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 
-/**
- * Write the source code for the factory.
- */
+/** Write the source code for the factory. */
 final class SimpleModuleWriter {
 
   private static final String CODE_COMMENT_FACTORY =
-    "/**\n" +
-      " * Avaje Inject module for %s.\n" +
-      " * \n" +
-      " * When using the Java module system, this generated class should be explicitly\n" +
-      " * registered in module-info via a <code>provides</code> clause like:\n" +
-      " * \n" +
-      " * <pre>{@code\n" +
-      " * \n" +
-      " *   module example {\n" +
-      " *     requires io.avaje.inject;\n" +
-      " *     \n" +
-      " *     provides io.avaje.inject.spi.Module with %s.%s;\n" +
-      " *     \n" +
-      " *   }\n" +
-      " * \n" +
-      " * }</pre>\n" +
-      " */";
+      "/**\n"
+          + " * Avaje Inject module for %s.\n"
+          + " * \n"
+          + " * When using the Java module system, this generated class should be explicitly\n"
+          + " * registered in module-info via a <code>provides</code> clause like:\n"
+          + " * \n"
+          + " * <pre>{@code\n"
+          + " * \n"
+          + " *   module example {\n"
+          + " *     requires io.avaje.inject;\n"
+          + " *     \n"
+          + " *     provides io.avaje.inject.spi.Module with %s.%s;\n"
+          + " *     \n"
+          + " *   }\n"
+          + " * \n"
+          + " * }</pre>\n"
+          + " */";
 
   private static final String CODE_COMMENT_CREATE_CONTEXT =
-    "  /**\n" +
-      "   * Creates all the beans in order based on constructor dependencies.\n" +
-      "   * The beans are registered into the builder along with callbacks for\n" +
-      "   * field/method injection, and lifecycle support.\n" +
-      "   */";
+      "  /**\n"
+          + "   * Creates all the beans in order based on constructor dependencies.\n"
+          + "   * The beans are registered into the builder along with callbacks for\n"
+          + "   * field/method injection, and lifecycle support.\n"
+          + "   */";
 
   private final String modulePackage;
   private final String shortName;
@@ -270,5 +267,4 @@ final class SimpleModuleWriter {
   private Writer createFileWriter() throws IOException {
     return scopeInfo.moduleFile().openWriter();
   }
-
 }

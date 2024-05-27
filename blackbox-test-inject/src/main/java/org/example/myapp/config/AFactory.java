@@ -34,14 +34,9 @@ class AFactory {
     return new AFoo();
   }
 
-  static class I0 implements A0.Builder {
+  static class I0 implements A0.Builder {}
 
-  }
-  static class I1 implements A1.Builder {
+  static class I1 implements A1.Builder {}
 
-  }
-
-  static class AFoo {
-
-  }
+  static class AFoo {}
 }

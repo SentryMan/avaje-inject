@@ -6,8 +6,8 @@ import io.javalin.http.Context;
 import jakarta.inject.Singleton;
 
 /**
- * Simulate approx a Javalin web route with request scoped context.
- * Aka using BeanFactory that takes the context to create the controller.
+ * Simulate approx a Javalin web route with request scoped context. Aka using BeanFactory that takes
+ * the context to create the controller.
  */
 @Singleton
 class AWebRoute {

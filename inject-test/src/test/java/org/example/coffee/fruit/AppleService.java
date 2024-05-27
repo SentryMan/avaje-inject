@@ -8,8 +8,7 @@ import java.io.IOException;
 @Singleton
 public class AppleService {
 
-  @Inject
-  BananaService bananaService;
+  @Inject BananaService bananaService;
 
   PeachService peachService;
 

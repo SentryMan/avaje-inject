@@ -7,12 +7,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Test for Aspect that sets result and never invokes underlying method.
- */
+/** Test for Aspect that sets result and never invokes underlying method. */
 @Aspect
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MySkip {
-
-}
+public @interface MySkip {}

@@ -25,5 +25,4 @@ public class MyMultiInvokeAspect implements AspectProvider<MyMultiInvoke>, Metho
       results.add(invocation.invoke());
     }
   }
-
 }

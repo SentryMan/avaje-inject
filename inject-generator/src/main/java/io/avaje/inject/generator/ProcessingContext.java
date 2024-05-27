@@ -92,9 +92,9 @@ final class ProcessingContext {
 
   static FileObject createMetaInfWriter(ScopeInfo.Type scopeType) throws IOException {
     final var serviceName =
-      scopeType == ScopeInfo.Type.DEFAULT
-        ? Constants.META_INF_MODULE
-        : Constants.META_INF_TESTMODULE;
+        scopeType == ScopeInfo.Type.DEFAULT
+            ? Constants.META_INF_MODULE
+            : Constants.META_INF_TESTMODULE;
     return createMetaInfWriterFor(serviceName);
   }
 
@@ -161,18 +161,19 @@ final class ProcessingContext {
         var orderFQN = CTX.get().orderFqn;
         var providers = new ModuleInfoReader(module, reader).provides();
         var noProvides =
-          injectFQN != null
-            && providers.stream().noneMatch(s -> s.implementations().contains(injectFQN));
+            injectFQN != null
+                && providers.stream().noneMatch(s -> s.implementations().contains(injectFQN));
         var noProvidesOrder =
-          orderFQN != null
-            && providers.stream().noneMatch(s -> s.implementations().contains(orderFQN));
+            orderFQN != null
+                && providers.stream().noneMatch(s -> s.implementations().contains(orderFQN));
 
         if (noProvides) {
           logError(module, "Missing \"provides io.avaje.inject.spi.Module with %s;\"", injectFQN);
         }
 
         if (noProvidesOrder) {
-          logError(module, "Missing \"provides io.avaje.inject.spi.ModuleOrdering with %s;\"", orderFQN);
+          logError(
+              module, "Missing \"provides io.avaje.inject.spi.ModuleOrdering with %s;\"", orderFQN);
         }
 
       } catch (Exception e) {
@@ -187,10 +188,10 @@ final class ProcessingContext {
 
   static Set<TypeElement> delayedElements() {
     var set =
-      CTX.get().delayQueue.stream()
-        .map(t -> t.getQualifiedName().toString())
-        .map(APContext::typeElement)
-        .collect(toSet());
+        CTX.get().delayQueue.stream()
+            .map(t -> t.getQualifiedName().toString())
+            .map(APContext::typeElement)
+            .collect(toSet());
     CTX.get().delayQueue.clear();
     return set;
   }

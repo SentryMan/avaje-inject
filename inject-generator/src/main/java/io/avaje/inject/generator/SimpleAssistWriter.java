@@ -12,9 +12,7 @@ import java.util.stream.Collectors;
 import static io.avaje.inject.generator.APContext.createSourceFile;
 import static java.util.function.Predicate.not;
 
-/**
- * Write the source code for the bean.
- */
+/** Write the source code for the bean. */
 final class SimpleAssistWriter {
 
   private static final String CODE_COMMENT = "/**\n * Generated source - Factory for %s.\n */";
@@ -36,10 +34,10 @@ final class SimpleAssistWriter {
     this.assistedElements = beanReader.assistElements();
     this.originName = packageName + "." + shortName;
     this.hasNoConstructorParams =
-      beanReader.constructor().params().stream()
-        .filter(not(MethodParam::assisted))
-        .findAny()
-        .isEmpty();
+        beanReader.constructor().params().stream()
+            .filter(not(MethodParam::assisted))
+            .findAny()
+            .isEmpty();
   }
 
   private Writer createFileWriter() throws IOException {
@@ -100,8 +98,8 @@ final class SimpleAssistWriter {
   private void writeImplementsOrExtends() {
     TypeElement targetInterface = beanReader.targetInterface();
     writer
-      .append(targetInterface.getKind() == ElementKind.INTERFACE ? " implements " : " extends ")
-      .append(Util.shortName(targetInterface.getQualifiedName().toString()));
+        .append(targetInterface.getKind() == ElementKind.INTERFACE ? " implements " : " extends ")
+        .append(Util.shortName(targetInterface.getQualifiedName().toString()));
   }
 
   private void writeInjectFields() {
@@ -127,21 +125,27 @@ final class SimpleAssistWriter {
       return;
     }
     beanReader.injectMethods().stream()
-      .flatMap(m -> m.params().stream())
-      .filter(not(MethodParam::assisted))
-      .forEach(p -> {
-        var element = p.element();
-        writer.append("  private %s %s$method;", UType.parse(element.asType()).shortType(), p.simpleName()).eol();
-      });
+        .flatMap(m -> m.params().stream())
+        .filter(not(MethodParam::assisted))
+        .forEach(
+            p -> {
+              var element = p.element();
+              writer
+                  .append(
+                      "  private %s %s$method;",
+                      UType.parse(element.asType()).shortType(), p.simpleName())
+                  .eol();
+            });
     if (hasNoConstructorParams) {
       writer.eol();
     }
   }
 
   private void writeConstructor() {
-    List<MethodParam> injectParams = beanReader.constructor().params().stream()
-      .filter(not(MethodParam::assisted))
-      .collect(Collectors.toList());
+    List<MethodParam> injectParams =
+        beanReader.constructor().params().stream()
+            .filter(not(MethodParam::assisted))
+            .collect(Collectors.toList());
 
     if (injectParams.isEmpty()) {
       return;
@@ -237,12 +241,13 @@ final class SimpleAssistWriter {
     }
 
     assistedElements.stream()
-      .filter(e -> e.getKind() == ElementKind.FIELD)
-      .forEach(field ->
-        writer
-          .indent("    ")
-          .append("bean.%s = %s;", field.getSimpleName(), field.getSimpleName())
-          .eol());
+        .filter(e -> e.getKind() == ElementKind.FIELD)
+        .forEach(
+            field ->
+                writer
+                    .indent("    ")
+                    .append("bean.%s = %s;", field.getSimpleName(), field.getSimpleName())
+                    .eol());
   }
 
   private void injectMethods() {

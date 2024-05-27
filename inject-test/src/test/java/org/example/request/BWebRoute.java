@@ -6,9 +6,7 @@ import io.helidon.webserver.http.ServerResponse;
 
 import jakarta.inject.Singleton;
 
-/**
- * Simulate web route generation for Helidon.
- */
+/** Simulate web route generation for Helidon. */
 @Singleton
 class BWebRoute {
 

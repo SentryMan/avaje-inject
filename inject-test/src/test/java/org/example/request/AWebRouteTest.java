@@ -1,6 +1,5 @@
 package org.example.request;
 
-
 import io.avaje.inject.xtra.ApplicationScope;
 import io.javalin.http.Context;
 import org.junit.jupiter.api.Test;

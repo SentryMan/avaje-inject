@@ -14,10 +14,10 @@ public class MySkipAspect implements AspectProvider<MySkip>, MethodInterceptor {
   public MethodInterceptor interceptor(Method method, MySkip aspectAnnotation) {
     return this;
   }
+
   @Override
   public void invoke(Invocation invocation) throws Throwable {
     // just over-write the result, never invoke underlying method
     invocation.result("my-skip-result");
   }
-
 }

@@ -53,11 +53,7 @@ class GenericTypeTest {
     assertThat(pType.getActualTypeArguments()[0]).isEqualTo(String.class);
   }
 
-  private static class TypeArgs extends GenericType<String> {
+  private static class TypeArgs extends GenericType<String> {}
 
-  }
-
-  private static class NoTypeArgs<T> extends GenericType<T> {
-
-  }
+  private static class NoTypeArgs<T> extends GenericType<T> {}
 }

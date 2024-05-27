@@ -40,9 +40,7 @@ final class UtilType {
     }
   }
 
-  /**
-   * Only use implied qualifier name with getOptional() and get().
-   */
+  /** Only use implied qualifier name with getOptional() and get(). */
   boolean allowsNamedQualifier() {
     return type == Type.OPTIONAL || type == Type.OTHER;
   }
@@ -95,5 +93,4 @@ final class UtilType {
     }
     return nullable ? "getNullable(" : "get(";
   }
-
 }

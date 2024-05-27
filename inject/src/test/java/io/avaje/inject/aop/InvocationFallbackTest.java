@@ -64,11 +64,12 @@ class InvocationFallbackTest {
   void invokeWithNoFallback() throws Throwable {
     throwOnDoStuff = false;
 
-    Invocation.Base<String> call = new Invocation.Call<>(() -> doStuff(myArg))
-      .with(this, doStuffMethod, myArg)
-      .fallback(this::fallbackDoStuff);
+    Invocation.Base<String> call =
+        new Invocation.Call<>(() -> doStuff(myArg))
+            .with(this, doStuffMethod, myArg)
+            .fallback(this::fallbackDoStuff);
 
-     MyInterceptor myInterceptor = new MyInterceptor();
+    MyInterceptor myInterceptor = new MyInterceptor();
 
     // invoke the original method
     myInterceptor.invoke(call);
@@ -90,5 +91,4 @@ class InvocationFallbackTest {
       }
     }
   }
-
 }

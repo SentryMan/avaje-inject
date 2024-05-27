@@ -17,12 +17,13 @@ public class BeanScopeBuilderAddTest {
   @Test
   void withModules_excludingThisOne() {
     TDPump testDoublePump = new TDPump();
-    try (BeanScope context = BeanScope.builder()
-      .beans(testDoublePump)
-      // our module is "org.example.coffee"
-      // so this effectively includes no modules
-      .modules(new SillyModule())
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .beans(testDoublePump)
+            // our module is "org.example.coffee"
+            // so this effectively includes no modules
+            .modules(new SillyModule())
+            .build()) {
 
       assertThrows(NoSuchElementException.class, () -> context.get(CoffeeMaker.class));
     }
@@ -61,10 +62,11 @@ public class BeanScopeBuilderAddTest {
 
     TDPump testDoublePump = new TDPump();
 
-    try (BeanScope context = BeanScope.builder()
-      .beans(testDoublePump)
-      .modules(new org.example.ExampleModule())
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .beans(testDoublePump)
+            .modules(new org.example.ExampleModule())
+            .build()) {
 
       String makeIt = context.get(CoffeeMaker.class).makeIt();
       assertThat(makeIt).isEqualTo("done");
@@ -79,9 +81,7 @@ public class BeanScopeBuilderAddTest {
 
     TDPump testDoublePump = new TDPump();
 
-    try (BeanScope context = BeanScope.builder()
-      .beans(testDoublePump)
-      .build()) {
+    try (BeanScope context = BeanScope.builder().beans(testDoublePump).build()) {
 
       String makeIt = context.get(CoffeeMaker.class).makeIt();
       assertThat(makeIt).isEqualTo("done");
@@ -96,9 +96,7 @@ public class BeanScopeBuilderAddTest {
 
     Pump mock = Mockito.mock(Pump.class);
 
-    try (BeanScope context = BeanScope.builder()
-      .bean(Pump.class, mock)
-      .build()) {
+    try (BeanScope context = BeanScope.builder().bean(Pump.class, mock).build()) {
 
       Pump pump = context.get(Pump.class);
       assertThat(pump).isSameAs(mock);
@@ -112,9 +110,7 @@ public class BeanScopeBuilderAddTest {
     }
   }
 
-  /**
-   * Our test double that we want to wire.
-   */
+  /** Our test double that we want to wire. */
   static class TDPump implements Pump {
 
     int water;

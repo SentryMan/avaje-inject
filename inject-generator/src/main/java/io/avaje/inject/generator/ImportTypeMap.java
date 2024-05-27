@@ -5,23 +5,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * Registers types that we want to import - must have unique short names.
- */
+/** Registers types that we want to import - must have unique short names. */
 final class ImportTypeMap {
 
   private final Map<String, String> mapByShortName = new HashMap<>();
 
-  /**
-   * Return the full types that will be imported.
-   */
+  /** Return the full types that will be imported. */
   Set<String> forImport() {
     return new TreeSet<>(mapByShortName.values());
   }
 
-  /**
-   * Return true if there is a full type matching the given suffix.
-   */
+  /** Return true if there is a full type matching the given suffix. */
   boolean containsShortName(String suffix) {
     return mapByShortName.containsKey(suffix);
   }
@@ -54,5 +48,4 @@ final class ImportTypeMap {
       return fullType;
     }
   }
-
 }

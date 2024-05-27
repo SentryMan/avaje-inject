@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 
-/**
- * Helper that wraps a writer with some useful methods to append content.
- */
+/** Helper that wraps a writer with some useful methods to append content. */
 final class Append {
 
   private final Writer writer;
@@ -62,9 +60,7 @@ final class Append {
     }
   }
 
-  /**
-   * Append content with formatted arguments.
-   */
+  /** Append content with formatted arguments. */
   Append append(String format, Object... args) {
     return append(String.format(format, args));
   }

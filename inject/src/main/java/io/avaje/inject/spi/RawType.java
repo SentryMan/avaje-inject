@@ -17,17 +17,12 @@ package io.avaje.inject.spi;
 
 import java.lang.reflect.*;
 
-/**
- * Factory methods for types.
- */
+/** Factory methods for types. */
 final class RawType {
 
-  private RawType() {
-  }
+  private RawType() {}
 
-  /**
-   * Return the raw type for the given potentially generic type.
-   */
+  /** Return the raw type for the given potentially generic type. */
   static Class<?> of(Type type) {
     if (type instanceof Class<?>) {
       // type is a normal class.
@@ -51,10 +46,10 @@ final class RawType {
     } else {
       String className = type == null ? "null" : type.getClass().getName();
       throw new IllegalArgumentException(
-        "Expected a Class, ParameterizedType, or  GenericArrayType, but <"
-          + type
-          + "> is of type "
-          + className);
+          "Expected a Class, ParameterizedType, or  GenericArrayType, but <"
+              + type
+              + "> is of type "
+              + className);
     }
   }
 }

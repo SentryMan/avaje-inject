@@ -19,5 +19,4 @@ class InjectExtension_testDoubleViaInject_Test {
     assertEquals("hello+ImActuallyATestDouble", helloService.hello());
     assertEquals("ImActuallyATestDouble", myTestDouble.helloData());
   }
-
 }

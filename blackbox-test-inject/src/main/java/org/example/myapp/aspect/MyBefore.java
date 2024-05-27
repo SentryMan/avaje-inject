@@ -10,7 +10,4 @@ import java.lang.annotation.Target;
 @Aspect
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MyBefore {
-
-
-}
+public @interface MyBefore {}

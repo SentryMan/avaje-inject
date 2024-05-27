@@ -11,7 +11,7 @@ import io.avaje.inject.event.ObserverManager;
 
 final class DObserverManager implements ObserverManager {
 
- private final Map<Type, List<Observer<?>>> observeMap = new HashMap<>();
+  private final Map<Type, List<Observer<?>>> observeMap = new HashMap<>();
 
   @Override
   public <T> void registerObserver(Type type, Observer<T> observer) {

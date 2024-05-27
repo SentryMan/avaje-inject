@@ -18,8 +18,5 @@ public class MyAutoB2OneImplied {
   }
 
   @PostConstruct
-  public void postInit() {
-
-  }
-
+  public void postInit() {}
 }

@@ -17,28 +17,38 @@ class DBuilder implements Builder {
 
   private final PropertyRequiresPlugin propertyRequires;
   private final Set<String> profiles;
+
   /** List of Lifecycle methods. */
   private final List<Runnable> postConstruct = new ArrayList<>();
 
   private final List<Consumer<BeanScope>> postConstructConsumers = new ArrayList<>();
   private final List<ClosePair> preDestroy = new ArrayList<>();
+
   /** List of field injection closures. */
   private final List<Consumer<Builder>> injectors = new ArrayList<>();
+
   /** The beans created and added to the scope during building. */
   protected final DBeanMap beanMap = new DBeanMap();
 
   protected final BeanScope parent;
   protected final boolean parentOverride;
+
   /** Bean provided by the parent scope that we are not overriding. */
   protected Object parentMatch;
+
   /** Debug of the current bean being wired - used in injection errors. */
   private Type injectTarget;
+
   /** Flag set when we are running post construct injection. */
   private boolean runningPostConstruct;
 
   private DBeanScopeProxy beanScopeProxy;
 
-  DBuilder(Set<String> profiles, PropertyRequiresPlugin propertyRequires, BeanScope parent, boolean parentOverride) {
+  DBuilder(
+      Set<String> profiles,
+      PropertyRequiresPlugin propertyRequires,
+      BeanScope parent,
+      boolean parentOverride) {
     this.propertyRequires = propertyRequires;
     this.parent = parent;
     this.parentOverride = parentOverride;
@@ -190,7 +200,8 @@ class DBuilder implements Builder {
   }
 
   @Override
-  public <T> void registerObserver(Type type, int priority, boolean async, Consumer<T> observer, String qualifier) {
+  public <T> void registerObserver(
+      Type type, int priority, boolean async, Consumer<T> observer, String qualifier) {
     get(ObserverManager.class)
         .registerObserver(type, new Observer<>(priority, async, observer, qualifier));
   }
@@ -437,20 +448,18 @@ class DBuilder implements Builder {
   @Override
   public final BeanScope build(boolean withShutdownHook, long start) {
     runInjectors();
-    final var scope = new DBeanScope(withShutdownHook, preDestroy(), postConstruct, postConstructConsumers, beanMap, parent);
+    final var scope =
+        new DBeanScope(
+            withShutdownHook, preDestroy(), postConstruct, postConstructConsumers, beanMap, parent);
     if (beanScopeProxy != null) {
       beanScopeProxy.inject(scope);
     }
     return scope.start(start);
   }
 
-  /**
-   * Return the PreDestroy methods in priority order.
-   */
+  /** Return the PreDestroy methods in priority order. */
   private List<AutoCloseable> preDestroy() {
     Collections.sort(preDestroy);
-    return preDestroy.stream()
-      .map(ClosePair::closeable)
-      .collect(Collectors.toList());
+    return preDestroy.stream().map(ClosePair::closeable).collect(Collectors.toList());
   }
 }

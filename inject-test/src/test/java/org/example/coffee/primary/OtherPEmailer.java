@@ -2,7 +2,7 @@ package org.example.coffee.primary;
 
 import jakarta.inject.Singleton;
 
-//@Secondary
+// @Secondary
 @Singleton
 public class OtherPEmailer implements PEmailer {
 

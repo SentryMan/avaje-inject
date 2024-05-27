@@ -1,4 +1,3 @@
 package org.example.generic;
 
-public class MyObj {
-}
+public class MyObj {}

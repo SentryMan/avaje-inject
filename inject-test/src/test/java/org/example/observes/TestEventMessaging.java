@@ -19,16 +19,20 @@ class TestEventMessaging {
   @Inject MyStrQualifiedObserver strQualifiedObserver;
   @Inject Event<CustomEvent> event;
   @Inject EventSender2 sender2;
-  // @Inject @StrQualifier(value = "foo") Event<CustomEvent> strEvent; Bug: This is not supported yet.
-  @Inject @Named("StrQualifier(value=\"foo\")") Event<CustomEvent> strEvent;
+
+  // @Inject @StrQualifier(value = "foo") Event<CustomEvent> strEvent; Bug: This is not supported
+  // yet.
+  @Inject
+  @Named("StrQualifier(value=\"foo\")")
+  Event<CustomEvent> strEvent;
 
   @BeforeEach
   void before() {
     observer.invoked = false;
     observer.event = null;
-    qualifiedObserver.invoked= false;
+    qualifiedObserver.invoked = false;
     qualifiedObserver.event = null;
-    observerInjected.invoked= false;
+    observerInjected.invoked = false;
     observerInjected.event = null;
   }
 

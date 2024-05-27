@@ -5,12 +5,17 @@ import java.util.Set;
 
 final class IncludeAnnotations {
 
-  private static final String[] EXCLUDED_PREFIX = {"javax.annotation.", "javax.inject.", "jakarta.annotation.", "jakarta.inject.", "io.avaje.inject.", "lombok."};
+  private static final String[] EXCLUDED_PREFIX = {
+    "javax.annotation.",
+    "javax.inject.",
+    "jakarta.annotation.",
+    "jakarta.inject.",
+    "io.avaje.inject.",
+    "lombok."
+  };
   private static final String[] EXCLUDED_SUFFIX = {".PostConstruct", ".PreDestroy", ".Generated"};
 
-  /**
-   * Annotations that we don't bother registering lists for.
-   */
+  /** Annotations that we don't bother registering lists for. */
   private static final Set<String> EXCLUDED_ANNOTATIONS = new HashSet<>();
 
   static {
@@ -18,9 +23,7 @@ final class IncludeAnnotations {
     EXCLUDED_ANNOTATIONS.add(Constants.PATH);
   }
 
-  /**
-   * Return true if the annotation should be included.
-   */
+  /** Return true if the annotation should be included. */
   static boolean include(String annotationType) {
     for (String prefix : EXCLUDED_PREFIX) {
       if (annotationType.startsWith(prefix)) {

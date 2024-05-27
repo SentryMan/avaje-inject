@@ -27,12 +27,18 @@ final class TypeReader {
     this(genericType, false, returnElement, importTypes, false);
   }
 
-  private TypeReader(UType genericType, boolean forBean, TypeElement beanType, ImportTypeMap importTypes, boolean factory) {
+  private TypeReader(
+      UType genericType,
+      boolean forBean,
+      TypeElement beanType,
+      ImportTypeMap importTypes,
+      boolean factory) {
     this.forBean = forBean;
     this.beanType = beanType;
     this.importTypes = importTypes;
     final boolean proxyBean = forBean && ProxyPrism.isPresent(beanType);
-    this.extendsReader = new TypeExtendsReader(genericType, beanType, factory, importTypes, proxyBean);
+    this.extendsReader =
+        new TypeExtendsReader(genericType, beanType, factory, importTypes, proxyBean);
     this.annotationReader = new TypeAnnotationReader(beanType);
   }
 

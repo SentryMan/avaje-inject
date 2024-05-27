@@ -9,8 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @InjectTest
 class QualifiedMemberTest {
 
-  @Inject
-  Meters meters;
+  @Inject Meters meters;
 
   @Test
   void test() {

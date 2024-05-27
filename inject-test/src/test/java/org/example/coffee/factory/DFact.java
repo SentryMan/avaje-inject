@@ -1,4 +1,3 @@
 package org.example.coffee.factory;
 
-public class DFact implements IDFact {
-}
+public class DFact implements IDFact {}

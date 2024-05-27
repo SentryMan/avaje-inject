@@ -16,18 +16,18 @@ class TestModule_serviceLoad_Test {
     Optional<TestModule> testMod = ServiceLoader.load(TestModule.class).findFirst();
     assertThat(testMod).isPresent();
 
-//    if (testMod.isPresent()) {
-//      // build what is our "global test BeanScope" which we use as a parent for all tests
-//      BeanScope parent = BeanScope.builder()
-//        .modules(testMod.get())
-//        .build();
-//
-//      // a test creates a BeanScope with the parent of our "global test BeanScope"
-//      BeanScope child = BeanScope.builder().parent(parent, false).build();
-//
-//      HelloService helloService = child.get(HelloService.class);
-//      assertEquals("hello+TestHelloData", helloService.hello());
-//    }
+    //    if (testMod.isPresent()) {
+    //      // build what is our "global test BeanScope" which we use as a parent for all tests
+    //      BeanScope parent = BeanScope.builder()
+    //        .modules(testMod.get())
+    //        .build();
+    //
+    //      // a test creates a BeanScope with the parent of our "global test BeanScope"
+    //      BeanScope child = BeanScope.builder().parent(parent, false).build();
+    //
+    //      HelloService helloService = child.get(HelloService.class);
+    //      assertEquals("hello+TestHelloData", helloService.hello());
+    //    }
 
   }
 }

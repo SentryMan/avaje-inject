@@ -140,7 +140,8 @@ final class MetaReader {
     }
   }
 
-  private void add(FieldTarget target, List<FieldTarget> instanceList, List<FieldTarget> staticList) {
+  private void add(
+      FieldTarget target, List<FieldTarget> instanceList, List<FieldTarget> staticList) {
     if (target.isStatic()) {
       classInjection = true;
       staticList.add(target);
@@ -164,8 +165,9 @@ final class MetaReader {
       for (Annotation metaAnnotation : annotationType.getAnnotations()) {
         if (metaAnnotation.annotationType().equals(Qualifier.class)) {
           return AnnotationReader.simplifyAnnotation(annotation.toString())
-            .replaceFirst(annotationType.getCanonicalName(), annotationType.getSimpleName())
-            .replace("()", "").substring(1);
+              .replaceFirst(annotationType.getCanonicalName(), annotationType.getSimpleName())
+              .replace("()", "")
+              .substring(1);
         }
       }
     }
@@ -236,7 +238,10 @@ final class MetaReader {
   private Object captorFor(Field field) {
     Class<?> type = field.getType();
     if (!ArgumentCaptor.class.isAssignableFrom(type)) {
-      throw new IllegalStateException("@Captor field must be of the type ArgumentCaptor.\n Field: '" + field.getName() + "' has wrong type");
+      throw new IllegalStateException(
+          "@Captor field must be of the type ArgumentCaptor.\n Field: '"
+              + field.getName()
+              + "' has wrong type");
     }
     Class<?> cls = new GenericMaster().getGenericType(field);
     return ArgumentCaptor.forClass(cls);
@@ -282,7 +287,8 @@ final class MetaReader {
     methodFinder.invokeStatics(builder);
   }
 
-  private static void registerMock(Object testInstance, BeanScopeBuilder builder, FieldTarget target) {
+  private static void registerMock(
+      Object testInstance, BeanScopeBuilder builder, FieldTarget target) {
     Object existingValue = target.get(testInstance);
     if (existingValue != null) {
       registerAsTestDouble(builder, target, existingValue);
@@ -291,7 +297,8 @@ final class MetaReader {
     }
   }
 
-  private static void registerSpy(Object testInstance, BeanScopeBuilder builder, FieldTarget target) {
+  private static void registerSpy(
+      Object testInstance, BeanScopeBuilder builder, FieldTarget target) {
     Object existingValue = target.get(testInstance);
     if (existingValue != null) {
       registerAsTestDouble(builder, target, existingValue);
@@ -300,7 +307,8 @@ final class MetaReader {
     }
   }
 
-  private static void registerAsTestDouble(BeanScopeBuilder builder, FieldTarget target, Object value) {
+  private static void registerAsTestDouble(
+      BeanScopeBuilder builder, FieldTarget target, Object value) {
     target.markAsProvided();
     builder.bean(target.name(), target.type(), value);
   }
@@ -366,5 +374,4 @@ final class MetaReader {
       valueAlreadyProvided = true;
     }
   }
-
 }

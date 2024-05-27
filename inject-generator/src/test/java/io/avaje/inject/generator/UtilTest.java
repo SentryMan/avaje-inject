@@ -61,18 +61,21 @@ class UtilTest {
   @Test
   void extractAspectType() {
     assertEquals(Util.extractAspectType("io.avaje.inject.aop.AspectProvider<org.Foo>"), "org.Foo");
-    assertEquals(Util.extractAspectType("io.avaje.inject.aop.AspectProvider<org.one.Bar>"), "org.one.Bar");
+    assertEquals(
+        Util.extractAspectType("io.avaje.inject.aop.AspectProvider<org.one.Bar>"), "org.one.Bar");
   }
 
   @Test
   void unwrapProvider() {
-    assertEquals(Util.unwrapProvider("jakarta.inject.Provider<org.Foo<com.Bazz>>"), "org.Foo<com.Bazz>");
+    assertEquals(
+        Util.unwrapProvider("jakarta.inject.Provider<org.Foo<com.Bazz>>"), "org.Foo<com.Bazz>");
   }
 
   @Test
   void extractMap() {
     assertEquals("Foo", Util.extractMap("java.util.Map<java.lang.String,? extends Foo>"));
-    assertEquals("org.foo.Bar", Util.extractMap("java.util.Map<java.lang.String,? extends org.foo.Bar>"));
+    assertEquals(
+        "org.foo.Bar", Util.extractMap("java.util.Map<java.lang.String,? extends org.foo.Bar>"));
     assertEquals("org.foo.Bar", Util.extractMap("java.util.Map<java.lang.String,org.foo.Bar>"));
   }
 
@@ -81,7 +84,6 @@ class UtilTest {
     assertEquals("Foo", Util.extractList("java.util.List<? extends Foo>"));
     assertEquals("org.foo.Bar", Util.extractList("java.util.List<? extends org.foo.Bar>"));
     assertEquals("org.foo.Bar", Util.extractList("java.util.List<org.foo.Bar>"));
-
   }
 
   @Test
@@ -125,7 +127,8 @@ class UtilTest {
 
   @Test
   void trimGenerics() {
-    assertThat(Util.trimGenerics("foo.bar.ProcessMe<java.lang.String>")).isEqualTo("foo.bar.ProcessMe");
+    assertThat(Util.trimGenerics("foo.bar.ProcessMe<java.lang.String>"))
+        .isEqualTo("foo.bar.ProcessMe");
     assertThat(Util.trimGenerics("foo.bar.ProcessMe")).isEqualTo("foo.bar.ProcessMe");
   }
 

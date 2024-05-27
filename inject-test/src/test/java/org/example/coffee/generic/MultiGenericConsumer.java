@@ -4,9 +4,7 @@ import org.example.coffee.grind.AMusher;
 
 import jakarta.inject.Singleton;
 
-/**
- * Has multiple dependencies that are generic interface.
- */
+/** Has multiple dependencies that are generic interface. */
 @Singleton
 class MultiGenericConsumer {
 
@@ -16,7 +14,8 @@ class MultiGenericConsumer {
 
   private final AMusher aMusher;
 
-  MultiGenericConsumer(Repository<Haz, Long> hazRepo, AMusher aMusher, SomeGeneric<String> stringProcessor) {
+  MultiGenericConsumer(
+      Repository<Haz, Long> hazRepo, AMusher aMusher, SomeGeneric<String> stringProcessor) {
     this.hazRepo = hazRepo;
     this.aMusher = aMusher;
     this.stringProcessor = stringProcessor;

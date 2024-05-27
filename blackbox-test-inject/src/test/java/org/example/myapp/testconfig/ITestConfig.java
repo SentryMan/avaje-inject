@@ -7,11 +7,11 @@ import org.example.myapp.HelloData;
 
 /**
  * Factory that builds dependencies for our "global test scope".
- * <p>
- * Typically these are relatively expensive dependencies like databases and such
- * where we desire to use docker containers, mocks, stubs etc.
- * <p>
- * For example, for AWS DynamoDB setup to use localstack docker container.
+ *
+ * <p>Typically these are relatively expensive dependencies like databases and such where we desire
+ * to use docker containers, mocks, stubs etc.
+ *
+ * <p>For example, for AWS DynamoDB setup to use localstack docker container.
  */
 @TestScope
 @Factory

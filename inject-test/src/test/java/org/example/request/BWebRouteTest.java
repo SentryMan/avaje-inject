@@ -1,6 +1,5 @@
 package org.example.request;
 
-
 import io.avaje.inject.xtra.ApplicationScope;
 import io.helidon.webserver.http.ServerRequest;
 import io.helidon.webserver.http.ServerResponse;

@@ -7,9 +7,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -17,8 +15,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(InjectExtension.class)
 class InjectExtension_setupMethod_Test {
 
-  @Inject
-  HelloService helloService;
+  @Inject HelloService helloService;
 
   HelloData myTestDouble;
 
@@ -39,5 +36,4 @@ class InjectExtension_setupMethod_Test {
     when(myTestDouble.helloData()).thenReturn("LocalMock_2");
     assertEquals("hello+LocalMock_2", helloService.hello());
   }
-
 }

@@ -9,8 +9,7 @@ class ExtraProtoTest {
 
   @Test
   void fieldMethodInjection() {
-    try (BeanScope scope = BeanScope.builder()
-      .build()) {
+    try (BeanScope scope = BeanScope.builder().build()) {
 
       ExtraProto extra = scope.get(ExtraProto.class);
 

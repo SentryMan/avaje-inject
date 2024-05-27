@@ -22,11 +22,13 @@ final class DEntry implements BeanEntry {
 
   @Override
   public String toString() {
-    return "{bean=" + bean
-      + (qualifierName == null ? "" : ", name='" + qualifierName + '\'')
-      + (keys.isEmpty() ? "" : ", keys=" + keys)
-      + ", priority=" + priority
-      + '}';
+    return "{bean="
+        + bean
+        + (qualifierName == null ? "" : ", name='" + qualifierName + '\'')
+        + (keys.isEmpty() ? "" : ", keys=" + keys)
+        + ", priority="
+        + priority
+        + '}';
   }
 
   void addKey(String key) {

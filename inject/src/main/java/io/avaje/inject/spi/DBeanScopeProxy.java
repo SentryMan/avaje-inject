@@ -15,9 +15,7 @@ final class DBeanScopeProxy implements BeanScope {
   private Builder builder;
   private BeanScope delegate;
 
-  /**
-   * Will use the builder as a delegate until the scope is fully built;
-   */
+  /** Will use the builder as a delegate until the scope is fully built; */
   public DBeanScopeProxy(Builder builder) {
     this.builder = builder;
   }
@@ -172,5 +170,4 @@ final class DBeanScopeProxy implements BeanScope {
           "Proxy BeanScope can't use close() while scope is being built");
     }
   }
-
 }

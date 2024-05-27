@@ -15,5 +15,4 @@ public class MultiGenericConsumerTest {
     assertThat(bean.findAndDo(34L)).isEqualTo("found 34 stuff");
     assertThat(bean.mushString()).isNotNull();
   }
-
 }

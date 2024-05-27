@@ -12,9 +12,7 @@ public class CupholderTest {
 
   @Test
   void mockOne() {
-    try (BeanScope beanScope = BeanScope.builder().forTesting()
-      .mock(Cupholder.class)
-      .build()) {
+    try (BeanScope beanScope = BeanScope.builder().forTesting().mock(Cupholder.class).build()) {
 
       Cupholder cupholder = beanScope.get(Cupholder.class);
       assertThat(cupholder.hello()).isNull();

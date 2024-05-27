@@ -16,5 +16,4 @@ public class PathBuildTask implements BuildTaskWith<Path> {
   public void build() {
     // do nothing
   }
-
 }

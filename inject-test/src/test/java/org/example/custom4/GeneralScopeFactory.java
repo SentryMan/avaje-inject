@@ -11,18 +11,13 @@ public class GeneralScopeFactory {
     return new A();
   }
 
-  //@BuildScope
+  // @BuildScope
   @Bean
   B buildScope() {
     return new B();
   }
 
+  public static class A {}
 
-  public static class A {
-
-  }
-
-  public static class B {
-
-  }
+  public static class B {}
 }

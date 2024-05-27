@@ -23,6 +23,11 @@ class OtherServiceProxyTest {
     otherService.multi();
 
     List<String> trace = TraceAspect.obtain();
-    assertThat(trace).containsExactly("MyTimedAspect-begin", "MyAroundAspect-begin", "MyAroundAspect-end", "MyTimedAspect-end");
+    assertThat(trace)
+        .containsExactly(
+            "MyTimedAspect-begin",
+            "MyAroundAspect-begin",
+            "MyAroundAspect-end",
+            "MyTimedAspect-end");
   }
 }

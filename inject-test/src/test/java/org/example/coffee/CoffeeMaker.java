@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import jakarta.inject.Singleton;
 
-//@InjectModule(name = "coffee-maker", requires = Object.class)
+// @InjectModule(name = "coffee-maker", requires = Object.class)
 @Singleton
 public class CoffeeMaker {
 

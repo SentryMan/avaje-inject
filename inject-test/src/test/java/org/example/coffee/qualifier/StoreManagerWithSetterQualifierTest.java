@@ -18,10 +18,11 @@ class StoreManagerWithSetterQualifierTest {
 
   @Test
   void namedTestDouble() {
-    try (BeanScope context = BeanScope.builder()
-      .bean("Blue", SomeStore.class, () -> "TD Blue")
-      .bean("Green", SomeStore.class, () -> "TD Green")
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .bean("Blue", SomeStore.class, () -> "TD Blue")
+            .bean("Green", SomeStore.class, () -> "TD Green")
+            .build()) {
 
       StoreManagerWithSetterQualifier manager = context.get(StoreManagerWithSetterQualifier.class);
       assertThat(manager.blueStore()).isEqualTo("TD Blue");
@@ -31,15 +32,15 @@ class StoreManagerWithSetterQualifierTest {
 
   @Test
   void namedTestDouble_expect_otherNamedStillWired() {
-    try (BeanScope context = BeanScope.builder()
-      .bean("Blue", SomeStore.class, () -> "TD Blue Only")
-      // with GreenStore still wired
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder()
+            .bean("Blue", SomeStore.class, () -> "TD Blue Only")
+            // with GreenStore still wired
+            .build()) {
 
       StoreManagerWithSetterQualifier manager = context.get(StoreManagerWithSetterQualifier.class);
       assertThat(manager.blueStore()).isEqualTo("TD Blue Only");
       assertThat(manager.greenStore()).isEqualTo("green");
     }
   }
-
 }

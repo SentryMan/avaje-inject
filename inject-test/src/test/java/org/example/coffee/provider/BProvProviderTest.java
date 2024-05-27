@@ -19,5 +19,4 @@ class BProvProviderTest {
       assertThat(bProv2.get()).isEqualTo("Hello BProv2");
     }
   }
-
 }

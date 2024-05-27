@@ -10,9 +10,8 @@ class ClassLoaderTest {
 
   @Test
   void testUsingClassLoader() {
-    try (BeanScope context = BeanScope.builder()
-      .classLoader(Thread.currentThread().getContextClassLoader())
-      .build()) {
+    try (BeanScope context =
+        BeanScope.builder().classLoader(Thread.currentThread().getContextClassLoader()).build()) {
       ProvOther bean = context.get(ProvOther.class);
       String other = bean.other();
       assertThat(other).isEqualTo("mush mush beans");

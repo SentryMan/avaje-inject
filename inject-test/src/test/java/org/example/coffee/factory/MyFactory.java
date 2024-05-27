@@ -57,7 +57,7 @@ public class MyFactory {
   @Named("BuildDesi1")
   DesEngi buildEngi() {
     methods += "|buildEngi1";
-    return new DesEngi(){
+    return new DesEngi() {
       @Override
       public String ignite() {
         return "buildEngi1";
