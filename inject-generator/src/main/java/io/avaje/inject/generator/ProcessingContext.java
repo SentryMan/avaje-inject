@@ -235,6 +235,12 @@ final class ProcessingContext {
       // no services to register
       return;
     }
+
+    if (APContext.moduleInfoReader().isPresent()) {
+
+      CTX.get().externalSpi.removeIf(ProcessingContext::isNotOnModulePath);
+    }
+
     try {
       FileObject jfo = createMetaInfWriterFor(Constants.META_INF_SPI);
       if (jfo != null) {
@@ -248,6 +254,15 @@ final class ProcessingContext {
     } catch (IOException e) {
       logError("Failed to write services file %s", e.getMessage());
     }
+  }
+
+  private static boolean isNotOnModulePath(String spi) {
+    var typeElement = APContext.typeElement(spi);
+    if (typeElement == null) {
+      return false;
+    }
+
+    return APContext.elements().getModuleOf(typeElement).isUnnamed();
   }
 
   private static void readExistingMetaInfServices() {
