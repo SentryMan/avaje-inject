@@ -4,8 +4,8 @@ import io.avaje.inject.BeanEntry;
 import io.avaje.inject.BeanScope;
 import org.example.coffee.core.DuperPump;
 import org.example.coffee.generic.HazRepo;
-import org.example.coffee.generic.HazRepo$DI;
 import org.example.coffee.generic.Repository;
+import org.example.coffee.generic.HazRepo_DI;
 import org.example.coffee.list.BSomei;
 import org.example.coffee.list.Somei;
 import org.example.coffee.provider.AProv;
@@ -116,7 +116,7 @@ class CoffeeMakerTest {
         .findFirst().orElse(null);
 
       assertThat(hazRepo.keys())
-        .containsExactly(name(HazRepo.class), name(HazRepo$DI.TYPE_RepositoryHazLong), name(Repository.class));
+        .containsExactly(name(HazRepo.class), name(HazRepo_DI.TYPE_RepositoryHazLong), name(Repository.class));
     }
   }
 
