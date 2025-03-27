@@ -108,8 +108,7 @@ final class MetaData implements Comparable<MetaData> {
     if (Util.isVoid(type)) {
       return "void_" + Util.trimMethod(method);
     } else {
-      final String trimType = Util.trimMethod(Util.unwrapProvider(type));
-
+      final String trimType = Util.trimMethod(Util.unwrapProvider(type)).replace("$", "_");
       if (name != null) {
         return trimType + "_" + name.replaceAll("[^a-zA-Z0-9_$]+", "_");
       } else if (buildNameIncludeMethod() || hasMethod() && FACTORY_FREQUENCY.get(type) > 0) {
@@ -197,9 +196,9 @@ final class MetaData implements Comparable<MetaData> {
         } else {
           packageName = ProcessorUtils.packageOf(type);
         }
-        importTypes.add(packageName + ".di." + shortType + Constants.DI);
+        importTypes.add(packageName + ".di." + shortType.replace("$", "_") + Constants.DI);
       } else {
-        importTypes.add(type + Constants.DI);
+        importTypes.add(type.replace("$", "_") + Constants.DI);
       }
     }
   }
@@ -243,7 +242,7 @@ final class MetaData implements Comparable<MetaData> {
     if (hasMethod()) {
       append.append("    ").append(Util.shortMethod(method)).append("(builder");
     } else {
-      append.append("    ").append(fullyQualify ? type : shortType).append(Constants.DI).append(".build(builder");
+      append.append("    ").append(shortType.replace("$", "_")).append(Constants.DI).append(".build(builder");
     }
     append.append(");").append(NEWLINE);
     append.append("  }").append(NEWLINE);
