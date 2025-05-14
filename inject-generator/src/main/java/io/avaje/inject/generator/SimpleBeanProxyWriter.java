@@ -5,6 +5,7 @@ import static io.avaje.inject.generator.APContext.createSourceFile;
 import java.io.IOException;
 import java.io.Writer;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
@@ -16,17 +17,18 @@ final class SimpleBeanProxyWriter {
   private final String shortName;
   private final String packageName;
   private final BeanAspects aspects;
+  private final String visibility;
   private Append writer;
 
   SimpleBeanProxyWriter(BeanReader beanReader) {
     this.beanReader = beanReader;
-
     TypeElement origin = beanReader.beanType();
     this.originName = origin.getQualifiedName().toString();
     this.shortName = origin.getSimpleName().toString();
     this.packageName = ProcessorUtils.packageOf(originName);
     this.suffix = "$Proxy";
     this.aspects = beanReader.aspects();
+    this.visibility = origin.getModifiers().contains(Modifier.PUBLIC) ? "public " : "";
   }
 
   void write() throws IOException {
@@ -55,7 +57,7 @@ final class SimpleBeanProxyWriter {
   }
 
   private void writeConstructor() {
-    writer.append("  public %s%s(", shortName, suffix);
+    writer.append("  %s%s%s(", visibility, shortName, suffix);
     int count = 0;
     for (final String aspectName : aspects.aspectNames()) {
       if (count++ > 0) {
@@ -105,7 +107,7 @@ final class SimpleBeanProxyWriter {
   private void writeClassStart() {
     writer.append(Constants.AT_PROXY).eol();
     writer.append(Constants.AT_GENERATED).eol();
-    writer.append("public final class %s%s extends %s {", shortName, suffix, shortName).eol().eol();
+    writer.append("%sfinal class %s%s extends %s {", visibility, shortName, suffix, shortName).eol().eol();
   }
 
   private Writer createFileWriter() throws IOException {

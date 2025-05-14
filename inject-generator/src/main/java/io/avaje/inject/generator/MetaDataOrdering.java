@@ -66,7 +66,7 @@ final class MetaDataOrdering {
     return providers.computeIfAbsent(requireType.replace(", ", ","), s -> new ProviderList());
   }
 
-  int processQueue() {
+  void processQueue() {
     int count;
     do {
       // first run without external dependencies from other modules
@@ -82,7 +82,9 @@ final class MetaDataOrdering {
       missingDependencies();
       orderedList.addAll(queue);
     }
-    return remaining;
+    if (remaining > 0) {
+      logWarnings();
+    }
   }
 
   /**

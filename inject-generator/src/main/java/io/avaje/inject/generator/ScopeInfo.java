@@ -267,11 +267,7 @@ final class ScopeInfo {
       return;
     }
     final MetaDataOrdering ordering = new MetaDataOrdering(meta, this);
-    final int remaining = ordering.processQueue();
-
-    if (remaining > 0) {
-      ordering.logWarnings();
-    }
+    ordering.processQueue();
     try {
       SimpleModuleWriter factoryWriter = new SimpleModuleWriter(ordering, this);
       factoryWriter.write();

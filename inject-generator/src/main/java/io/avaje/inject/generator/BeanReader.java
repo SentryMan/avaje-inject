@@ -82,7 +82,7 @@ final class BeanReader {
     this.preDestroyPriority = typeReader.preDestroyPriority();
     this.constructor = typeReader.constructor();
     this.observerMethods = typeReader.observerMethods();
-    this.importedComponent = importedComponent && (constructor != null && constructor.isPublic());
+    this.importedComponent = importedComponent && constructor != null && constructor.isPublic();
 
     if (ProxyPrism.isPresent(beanType)) {
       this.proxy = true;
@@ -92,6 +92,7 @@ final class BeanReader {
       this.proxy = false;
     }
     this.delayed = shouldDelay();
+    ProcessingContext.addPkgPrivateType(beanType);
   }
 
   /**
@@ -284,7 +285,7 @@ final class BeanReader {
    * Return true if lifecycle via annotated methods is required.
    */
   boolean hasLifecycleMethods() {
-    return (postConstructMethod.isPresent() || preDestroyMethod != null || typeReader.isClosable());
+    return postConstructMethod.isPresent() || preDestroyMethod != null || typeReader.isClosable();
   }
 
   List<MetaData> createFactoryMethodMeta() {

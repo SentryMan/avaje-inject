@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.tools.JavaFileObject;
 
@@ -26,12 +27,12 @@ final class EventPublisherWriter {
           + "@Component\n"
           + "{2}"
           + "@Generated(\"avaje-inject-generator\")\n"
-          + "public class {3} extends Event<{4}> '{'\n"
+          + "{3}final class {4} extends Event<{5}> '{'\n"
           + "\n"
-          + "  private static final Type TYPE = {5};\n"
+          + "  private static final Type TYPE = {6};\n"
           + "\n"
-          + "  public {3}(ObserverManager manager) '{'\n"
-          + "    super(manager, TYPE, \"{6}\");\n"
+          + "  {3}{4}(ObserverManager manager) '{'\n"
+          + "    super(manager, TYPE, \"{7}\");\n"
           + "  '}'\n"
           + "'}'\n";
   private final String originName;
@@ -39,6 +40,7 @@ final class EventPublisherWriter {
   private final UType utype;
   private final String packageName;
   private final String qualifier;
+  private String visibility;
 
   static void write(Element element) {
     new EventPublisherWriter(element);
@@ -47,21 +49,26 @@ final class EventPublisherWriter {
   private EventPublisherWriter(Element element) {
     final var asType = element.asType();
     this.utype = UType.parse(asType).param0();
-    this.packageName = Optional.ofNullable(APContext.typeElement(utype.mainType()))
-      .map(APContext.elements()::getPackageOf)
-      .map(PackageElement::getQualifiedName)
-      .map(Object::toString)
-      .orElse("error.notype")
-      .replaceFirst("java.", "")
-      + ".events";
+    var typeElementOp = Optional.ofNullable(APContext.typeElement(utype.mainType()));
+    var pkgPrivate =
+        typeElementOp.filter(t -> t.getModifiers().contains(Modifier.PUBLIC)).isEmpty();
+    this.packageName =
+        typeElementOp
+                .map(APContext.elements()::getPackageOf)
+                .map(PackageElement::getQualifiedName)
+                .map(Object::toString)
+                .orElse("error.notype")
+                .replaceFirst("java.", "")
+            + (pkgPrivate ? "" : ".events");
 
+    this.visibility = pkgPrivate ? "" : "public ";
     this.qualifier = Optional.ofNullable(Util.named(element)).orElse("");
     var className =
-      packageName
-        + "."
-        + (qualifier.isEmpty() ? "" : "Qualified")
-        + Util.shortName(utype).replace(".", "_")
-        + "$Publisher";
+        packageName
+            + "."
+            + (qualifier.isEmpty() ? "" : "Qualified")
+            + Util.shortName(utype).replace(".", "_")
+            + "$Publisher";
 
     this.originName = getUniqueClassName(className, 0);
     if (GENERATED_PUBLISHERS.containsKey(originName)) {
@@ -104,7 +111,17 @@ final class EventPublisherWriter {
 
       var name = qualifier.isBlank() ? "" : "@Named(\"" + qualifier + "\")\n";
       var className = originName.replace(packageName + ".", "");
-      writer.append(MessageFormat.format(TEMPLATE, packageName, imports(), name, className, shortType, typeString, qualifier));
+      writer.append(
+          MessageFormat.format(
+              TEMPLATE,
+              packageName,
+              imports(),
+              visibility,
+              name,
+              className,
+              shortType,
+              typeString,
+              qualifier));
       writer.close();
     } catch (Exception e) {
       logError("Failed to write EventPublisher class %s", e);

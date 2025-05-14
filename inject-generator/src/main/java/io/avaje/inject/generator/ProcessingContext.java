@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.annotation.processing.FilerException;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
@@ -50,6 +51,7 @@ final class ProcessingContext {
     private final List<TypeElement> delayQueue = new ArrayList<>();
     private final Set<String> spiServices = new TreeSet<>();
     private final Set<String> externalSpi = new TreeSet<>();
+    private final Set<String> pkgPrivate = new HashSet<>();
     private final AllScopes scopes = new AllScopes();
     private boolean strictWiring;
     private final boolean mergeServices = APContext.getOption("mergeServices").map(Boolean::valueOf).orElse(true);
@@ -295,5 +297,15 @@ final class ProcessingContext {
   static void registerExternalProvidedTypes(ScopeInfo scopeInfo) {
     ExternalProvider.scanAllInjectPlugins(scopeInfo);
     ExternalProvider.scanAllAvajeModules(CTX.get().providedTypes);
+  }
+
+  static void addPkgPrivateType(TypeElement beanType) {
+    if (!beanType.getModifiers().contains(Modifier.PUBLIC)) {
+      CTX.get().pkgPrivate.add(beanType.getQualifiedName().toString());
+    }
+  }
+
+  static boolean isPkgPrivate(String type) {
+    return CTX.get().pkgPrivate.contains(type);
   }
 }

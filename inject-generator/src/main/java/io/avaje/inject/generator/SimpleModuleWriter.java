@@ -196,6 +196,7 @@ final class SimpleModuleWriter {
         autoProvides.addAll(forExternal);
       }
     }
+    autoProvides.removeIf(ProcessingContext::isPkgPrivate);
     if (!autoProvides.isEmpty()) {
       scopeInfo.buildAutoProvides(writer, autoProvides);
     }

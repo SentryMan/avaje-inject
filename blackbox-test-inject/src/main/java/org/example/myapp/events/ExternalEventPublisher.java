@@ -7,7 +7,7 @@ import io.avaje.inject.Component;
 import io.avaje.inject.events.Event;
 
 @Component
-public class ExternalEventPublisher {
+class ExternalEventPublisher {
   Event<SomeOptionalDep> event;
 
   public ExternalEventPublisher(Event<SomeOptionalDep> event) {
