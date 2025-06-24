@@ -1,0 +1,35 @@
+name: Commit Changes to javax branch
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  run_script_and_commit:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        ref: master
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Run your script
+      run: |
+        ./jakarta-to-javax.sh
+
+    - name: Configure Git for commit
+      run: |
+        git config user.name "GitHub Action"
+        git config user.email "github-action@users.noreply.github.com"
+
+    - name: Check for changes and commit
+      id: commit_changes
+      run: |
+        git add .
+        git diff-index --quiet HEAD || git commit -m "Automated commit by GitHub Action - Triggered by commit_sha: ${{ github.sha }}"
+    - name: Push changes to javax.main branch
+      run: |
+        git push origin HEAD:javax.main
