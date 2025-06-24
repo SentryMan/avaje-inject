@@ -1,6 +1,6 @@
 package org.example.myapp.duplicate;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class SameType {

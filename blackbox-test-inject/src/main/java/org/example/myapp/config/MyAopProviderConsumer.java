@@ -1,7 +1,7 @@
 package org.example.myapp.config;
 
 import io.avaje.inject.Component;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 import org.example.myapp.aspect.MyTimed;
 
 @Component

@@ -18,9 +18,9 @@ import org.mockito.Spy;
 
 import io.avaje.inject.BeanScope;
 import io.avaje.inject.BeanScopeBuilder;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Qualifier;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Qualifier;
 
 final class MetaReader {
 

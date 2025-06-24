@@ -1,7 +1,7 @@
 package io.avaje.inject.generator.models.valid.qualifier;
 
 import io.avaje.inject.generator.models.valid.qualifier.TempQualifier.Scale;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 @TempQualifier(value = Scale.FAHRENHEIT, someOtherString = "far")

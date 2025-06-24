@@ -2,7 +2,7 @@ package org.example.coffee.grind;
 
 import io.avaje.inject.PostConstruct;
 import io.avaje.inject.PreDestroy;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class AMusher {

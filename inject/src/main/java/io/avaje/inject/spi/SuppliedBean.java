@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import org.mockito.Mockito;
 
 import io.avaje.inject.BeanEntry;
-import jakarta.inject.Named;
+import javax.inject.Named;
 
 /**
  * Holds beans supplied to the dependency injection.

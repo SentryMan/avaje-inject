@@ -2,7 +2,7 @@ package org.example.coffee.qualifier.members;
 
 import org.example.coffee.qualifier.members.TempQualifier.Scale;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class Meters {

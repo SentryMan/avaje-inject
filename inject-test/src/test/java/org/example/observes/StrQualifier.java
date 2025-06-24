@@ -1,6 +1,6 @@
 package org.example.observes;
 
-import jakarta.inject.Qualifier;
+import javax.inject.Qualifier;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

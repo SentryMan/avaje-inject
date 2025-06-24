@@ -3,7 +3,7 @@ package org.example.myapp.assist.generic;
 import org.example.myapp.assist.generic.NightLord.Caligo;
 import org.example.myapp.assist.generic.NightLord.Libra;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class NightReign {

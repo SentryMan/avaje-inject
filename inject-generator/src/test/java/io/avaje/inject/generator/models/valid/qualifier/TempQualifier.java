@@ -3,8 +3,8 @@ package io.avaje.inject.generator.models.valid.qualifier;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Qualifier;
+import javax.inject.Inject;
+import javax.inject.Qualifier;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)

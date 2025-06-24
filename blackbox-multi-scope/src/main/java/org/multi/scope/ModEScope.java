@@ -1,7 +1,7 @@
 package org.multi.scope;
 
 import io.avaje.inject.InjectModule;
-import jakarta.inject.Scope;
+import javax.inject.Scope;
 
 @Scope
 @InjectModule

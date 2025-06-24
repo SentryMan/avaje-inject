@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import io.avaje.inject.BeanScope;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 
 /**
  * Mutable builder object used when building a bean scope.

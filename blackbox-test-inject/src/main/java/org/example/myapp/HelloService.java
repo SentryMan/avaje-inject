@@ -3,7 +3,7 @@ package org.example.myapp;
 import io.avaje.inject.BeanScope;
 import io.avaje.inject.PostConstruct;
 import io.avaje.inject.PreDestroy;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import org.example.myapp.aspect.*;
 
 import java.io.IOException;

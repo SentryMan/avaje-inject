@@ -1,7 +1,7 @@
 package org.example.myapp.other;
 
 import io.avaje.inject.PostConstruct;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import org.example.external.aspect.PluginProvidedClass;
 import org.other.one.OtherComponent;
 

@@ -12,11 +12,11 @@ final class Constants {
   static final String KOTLIN_METADATA = "kotlin.Metadata";
   static final String TYPE = "java.lang.reflect.Type";
 
-  static final String SINGLETON = "jakarta.inject.Singleton";
-  static final String INJECT = "jakarta.inject.Inject";
-  static final String SCOPE = "jakarta.inject.Scope";
-  static final String QUALIFIER = "jakarta.inject.Qualifier";
-  static final String NAMED = "jakarta.inject.Named";
+  static final String SINGLETON = "javax.inject.Singleton";
+  static final String INJECT = "javax.inject.Inject";
+  static final String SCOPE = "javax.inject.Scope";
+  static final String QUALIFIER = "javax.inject.Qualifier";
+  static final String NAMED = "javax.inject.Named";
 
   static final String AT_SINGLETON = "@Singleton";
   static final String AT_PROXY = "@Proxy";

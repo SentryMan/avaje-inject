@@ -1,6 +1,6 @@
 package org.example.coffee.grind;
 
-import jakarta.inject.Named;
+import javax.inject.Named;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 
 @Data

@@ -2,7 +2,7 @@ package org.example.myapp.config;
 
 import io.avaje.inject.BeanScope;
 import io.avaje.inject.PostConstruct;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class LifeTwo {

@@ -6,8 +6,8 @@ import org.jspecify.annotations.Nullable;
 
 import io.avaje.inject.AssistFactory;
 import io.avaje.inject.Assisted;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @Named("tomato")
 @AssistFactory(ACarFactory.class)

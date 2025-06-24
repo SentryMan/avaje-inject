@@ -1,6 +1,6 @@
 package org.example.autonamed;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 import javax.annotation.PostConstruct;
 

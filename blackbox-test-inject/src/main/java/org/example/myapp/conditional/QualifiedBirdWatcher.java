@@ -1,7 +1,7 @@
 package org.example.myapp.conditional;
 
 import io.avaje.inject.RequiresBean;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 @RequiresBean(qualifiers = "finch")

@@ -1,7 +1,7 @@
 package org.example.inherit;
 
 import io.avaje.inject.test.InjectJunitExtension;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.example.inherit.notpublic.PubExposed;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -7,9 +7,9 @@ import org.jspecify.annotations.Nullable;
 import io.avaje.inject.BeanScope;
 import io.avaje.inject.Lazy;
 import io.avaje.inject.PostConstruct;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 @Lazy
 @Singleton

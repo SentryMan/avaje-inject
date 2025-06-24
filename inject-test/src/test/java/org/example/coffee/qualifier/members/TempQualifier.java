@@ -3,8 +3,8 @@ package org.example.coffee.qualifier.members;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Qualifier;
+import javax.inject.Inject;
+import javax.inject.Qualifier;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)

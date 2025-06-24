@@ -2,7 +2,7 @@ package org.example.myapp;
 
 import java.util.List;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class ListService {

@@ -1,7 +1,7 @@
 package org.example.coffee.core;
 
 import io.avaje.inject.Component;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @Component
 public class WithMultiCtor {

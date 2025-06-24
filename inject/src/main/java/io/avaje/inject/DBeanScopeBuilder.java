@@ -20,7 +20,7 @@ import io.avaje.inject.spi.ConfigPropertyPlugin;
 import io.avaje.inject.spi.EnrichBean;
 import io.avaje.inject.spi.ModuleOrdering;
 import io.avaje.inject.spi.SuppliedBean;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 
 /** Build a bean scope with options for shutdown hook and supplying test doubles. */
 final class DBeanScopeBuilder implements BeanScopeBuilder.ForTesting {

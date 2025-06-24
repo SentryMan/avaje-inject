@@ -3,8 +3,8 @@ package org.example.myapp.config;
 import io.avaje.inject.*;
 import io.ebean.Database;
 import io.ebean.MyDatabase;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.example.myapp.HelloData;
 import org.example.myapp.MyDestroyOrder;
 
@@ -178,10 +178,10 @@ public class AppConfig {
   @Component
   public static class BuilderUser {
 
-    final jakarta.inject.Provider<Builder> builderProvider;
+    final javax.inject.Provider<Builder> builderProvider;
 
     @Inject
-    public BuilderUser(jakarta.inject.Provider<Builder> builderProvider) {
+    public BuilderUser(javax.inject.Provider<Builder> builderProvider) {
       this.builderProvider = builderProvider;
     }
 

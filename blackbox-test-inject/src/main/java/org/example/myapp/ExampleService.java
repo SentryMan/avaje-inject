@@ -1,7 +1,7 @@
 package org.example.myapp;
 
 import io.avaje.inject.PreDestroy;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import org.example.myapp.aspect.MyTimed;
 
 import java.util.List;

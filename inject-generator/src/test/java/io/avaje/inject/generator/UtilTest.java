@@ -60,7 +60,7 @@ class UtilTest {
 
   @Test
   void unwrapProvider() {
-    assertEquals(Util.unwrapProvider("jakarta.inject.Provider<org.Foo<com.Bazz>>"), "org.Foo<com.Bazz>");
+    assertEquals(Util.unwrapProvider("javax.inject.Provider<org.Foo<com.Bazz>>"), "org.Foo<com.Bazz>");
   }
 
   @Test

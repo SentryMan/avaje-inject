@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.example.coffee.grind.AMusher;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 /**
  * Has multiple dependencies that are generic interface.

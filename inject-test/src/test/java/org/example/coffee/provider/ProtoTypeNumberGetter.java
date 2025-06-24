@@ -1,7 +1,7 @@
 package org.example.coffee.provider;
 
-import jakarta.inject.Provider;
-import jakarta.inject.Singleton;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 
 @Singleton
 class ProtoTypeNumberGetter {

@@ -2,8 +2,8 @@ package io.avaje.inject.generator.models.valid.provider;
 
 import java.util.function.Supplier;
 
-import jakarta.inject.Provider;
-import jakarta.inject.Singleton;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 
 @Singleton
 public class ProviderUser {

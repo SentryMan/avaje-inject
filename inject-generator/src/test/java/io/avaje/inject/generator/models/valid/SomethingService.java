@@ -3,7 +3,7 @@ package io.avaje.inject.generator.models.valid;
 import java.util.List;
 
 import io.avaje.inject.generator.models.valid.ListFactory.Something;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class SomethingService {

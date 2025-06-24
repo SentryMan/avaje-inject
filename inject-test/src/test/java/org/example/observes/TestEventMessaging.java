@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import io.avaje.inject.events.Event;
 import io.avaje.inject.test.InjectTest;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @InjectTest
 class TestEventMessaging {

@@ -3,7 +3,7 @@ package io.avaje.inject.spi;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 
 /** Single instance Lazy Provider. {@link #get()} will return the same instance every time */
 final class OnceProvider<T> implements Provider<T> {

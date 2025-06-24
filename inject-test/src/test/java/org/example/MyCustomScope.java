@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import org.example.custom.loc.LocalExternal;
 
 import io.avaje.inject.InjectModule;
-import jakarta.inject.Scope;
+import javax.inject.Scope;
 
 @Scope
 @Retention(RetentionPolicy.RUNTIME)

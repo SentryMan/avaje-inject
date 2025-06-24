@@ -1,6 +1,6 @@
 package org.example.myapp.generic;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 

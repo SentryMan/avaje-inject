@@ -1,7 +1,7 @@
 package org.example.myapp.assist.droid;
 
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 @Singleton
 @Named("red")

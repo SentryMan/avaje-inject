@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import io.avaje.inject.BeanScope;
 import io.avaje.inject.PostConstruct;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class Minos {

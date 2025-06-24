@@ -20,7 +20,7 @@ import javax.lang.model.util.ElementFilter;
 
 final class Util {
   static final String ASPECT_PROVIDER_PREFIX = "io.avaje.inject.aop.AspectProvider<";
-  static final String PROVIDER_PREFIX = "jakarta.inject.Provider";
+  static final String PROVIDER_PREFIX = "javax.inject.Provider";
   private static final String OPTIONAL_PREFIX = "java.util.Optional<";
   private static final String NULLABLE = "Nullable";
   private static final int PROVIDER_LENGTH = PROVIDER_PREFIX.length() + 1;

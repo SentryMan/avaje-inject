@@ -7,8 +7,8 @@ import io.avaje.inject.BeanTypes;
 import io.avaje.inject.Lazy;
 import io.avaje.inject.PostConstruct;
 import io.github.resilience4j.core.lang.Nullable;
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 @Lazy
 @Singleton
