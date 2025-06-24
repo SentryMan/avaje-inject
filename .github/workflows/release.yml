@@ -1,0 +1,88 @@
+name: Release Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: 'New version to set (e.g., 1.0-RC1, 1.0)'
+        default: 2.12-RC1
+        required: true
+        type: string
+      # Removed 'branch' input as requested
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: maven-central
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check version for javax.main branch
+      # Check against github.ref (the branch the workflow is currently running on)
+      if: github.ref == 'refs/heads/javax.main' && contains(github.event.inputs.new_version, 'javax') == false
+      run: |
+        echo "Error: The provided version name '${{ github.event.inputs.new_version }}' must contain 'javax' when deploying from the 'javax.main' branch."
+        exit 1
+
+    - name: Maven cache
+      uses: actions/cache@v4
+      env:
+        cache-name: maven-cache
+      with:
+        path: ~/.m2
+        key: build-${{ env.cache-name }}
+    - name: Set up Java and Maven
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'zulu'
+        server-id: central
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
+        # GPG Key setup for signing artifacts
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-passphrase: GPG_PASSPHRASE
+
+    - name: Bump version in pom.xml
+      run: mvn versions:set -DnewVersion=${{ github.event.inputs.new_version }} -DgenerateBackupPoms=false
+
+    # - name: Deploy JAR to Maven Central
+    #   run: mvn clean deploy -Pcentral
+    #   env:
+    #     MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+    #     MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+    #     MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Create Pull Request for Version Bump
+      id: create-pr
+      uses: peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.PAT }}
+        commit-message: "Version ${{ github.event.inputs.new_version }}"
+        branch: "release/${{ github.event.inputs.new_version }}"
+        title: "Release: Version ${{ github.event.inputs.new_version }}"
+        body: |
+          Release version `${{ github.event.inputs.new_version }}` to be deployed.
+        base: ${{ github.ref_name }}
+
+    - name: Configure Git
+      run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
+    - name: Approve Pull Request
+      if: steps.create-pr.outputs.pull-request-number
+      run: |
+        gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve --body "Auto-approving release PR"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Enable auto-merge for PR
+      if: steps.create-pr.outputs.pull-request-number
+      run: |
+        gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --merge --auto
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
