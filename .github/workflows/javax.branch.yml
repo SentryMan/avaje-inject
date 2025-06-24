@@ -28,6 +28,14 @@ jobs:
       run: |
         git add .
         git diff-index --quiet HEAD || git commit -m "Automated commit by GitHub Action - Triggered by commit_sha: ${{ github.sha }}"
-    - name: Push changes to javax.main branch
+    - name: Push changes to javax.main branch (force overwrite on conflict)
       run: |
-        git push origin HEAD:javax.main
+        # Fetch the remote branch to ensure it exists locally if created recently
+        git fetch origin javax.main || true
+
+        # This command pushes the current HEAD (which contains the changes from your script
+        # on top of the 'main' branch) to 'javax.main'.
+        # The '--force-with-lease' option is safer than '--force' as it prevents overwriting
+        # changes if someone else pushed to 'javax.main' after you fetched.
+        # If the branch 'javax.main' does not exist, it will be created.
+        git push origin HEAD:javax.main --force-with-lease
