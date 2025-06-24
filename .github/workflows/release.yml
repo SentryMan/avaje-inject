@@ -60,7 +60,7 @@ jobs:
       id: create-pr
       uses: peter-evans/create-pull-request@v6
       with:
-        token: ${{ secrets.PAT }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: "Version ${{ github.event.inputs.new_version }}"
         branch: "release/${{ github.event.inputs.new_version }}"
         title: "Release: Version ${{ github.event.inputs.new_version }}"
@@ -72,13 +72,6 @@ jobs:
       run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-
-    - name: Approve Pull Request
-      if: steps.create-pr.outputs.pull-request-number
-      run: |
-        gh pr review ${{ steps.create-pr.outputs.pull-request-number }} --approve --body "Auto-approving release PR"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Enable auto-merge for PR
       if: steps.create-pr.outputs.pull-request-number
