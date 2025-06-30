@@ -1,5 +1,6 @@
 package io.avaje.inject.generator;
 
+import static io.avaje.inject.generator.APContext.logWarn;
 import static io.avaje.inject.generator.Constants.CONDITIONAL_DEPENDENCY;
 import static io.avaje.inject.generator.ProcessingContext.asElement;
 
@@ -8,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
@@ -168,13 +170,15 @@ final class MethodReader {
   }
 
   MethodReader read() {
-    List<? extends VariableElement> ps = element.getParameters();
-    for (VariableElement p : ps) {
+    var ps = element.getParameters();
+    for (var p : ps) {
       params.add(new MethodParam(p));
     }
     observeParameter = params.stream().filter(MethodParam::observeEvent).findFirst().orElse(null);
     if (proxyLazy) {
       SimpleBeanLazyWriter.write(APContext.elements().getPackageOf(element), lazyProxyType);
+    } else if (lazy) {
+      logWarn(element, "Lazy return types should be abstract or have a no-arg constructor");
     }
     return this;
   }
@@ -203,7 +207,7 @@ final class MethodReader {
 
     for (final MethodParam param : params) {
       var dep = Util.addQualifierSuffix(param.named, Util.trimWildcard(param.paramType));
-      dependsOn.add(dep);
+      dependsOn.add(param.utilType.isCollection() ? Constants.SOFT_DEPENDENCY + dep : dep);
     }
     metaData.setDependsOn(dependsOn);
     metaData.setProvides(
@@ -418,6 +422,11 @@ final class MethodReader {
     // TYPE_ generic types are fully qualified
     if (optionalType) {
       importTypes.add(Constants.OPTIONAL);
+    }
+
+    if (observeParameter != null && params.size() > 1) {
+      importTypes.add(Supplier.class.getCanonicalName());
+      importTypes.add(Constants.BEANSCOPE);
     }
     conditions.addImports(importTypes);
   }
