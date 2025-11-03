@@ -1,13 +1,23 @@
 package io.avaje.inject.generator;
 
-import static io.avaje.inject.generator.APContext.*;
-import static io.avaje.inject.generator.ProcessingContext.*;
+import static io.avaje.inject.generator.APContext.logError;
+import static io.avaje.inject.generator.APContext.typeElement;
+import static io.avaje.inject.generator.ProcessingContext.allScopes;
+import static io.avaje.inject.generator.ProcessingContext.createMetaInfWriterFor;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -85,13 +95,41 @@ final class SimpleModuleWriter {
       writeServicesFile(scopeType);
     } else {
       writeRequiredModules();
+      writeSuppliedScope();
     }
+    writeBuildMethod();
     writeProvides();
     writeClassesMethod();
-    writeBuildMethod();
     writeBuildMethods();
     writeEndClass();
     writer.close();
+  }
+
+  private void writeSuppliedScope() {
+    final String annotationType;
+    try {
+      annotationType = scopeInfo.scopeAnnotationFQN();
+    } catch (Exception e) {
+      // If there's no annotation (which is nullable? = NullPointerException), don't write out the method
+      return;
+    }
+
+    writer.append("  public String[] definesScopes() {")
+      .eol()
+      .append("    return new String[] {").eol()
+      .append("     \"").append(annotationType).append("\",").eol();
+
+    scopeInfo.requires().stream()
+      .map(APContext::typeElement)
+      .filter(Objects::nonNull)
+      .filter(ScopePrism::isPresent)
+      .filter(e -> e.getKind() == ElementKind.ANNOTATION_TYPE)
+      .map(TypeElement::getQualifiedName)
+      .map(Object::toString)
+      .forEach(scope -> writer.append("     \"").append(scope).append("\",").eol());
+
+    writer.append("    };").eol()
+      .append("  }").eol().eol();
   }
 
   private void writeRequiredModules() {
@@ -178,45 +216,26 @@ final class SimpleModuleWriter {
   }
 
   private void writeProvides() {
-    final Set<String> autoProvidesAspects = new TreeSet<>();
-    final Set<String> autoProvides = new TreeSet<>();
+    final Set<String> scopeProvides = new TreeSet<>(scopeInfo.provides());
 
     if (scopeType == ScopeInfo.Type.CUSTOM) {
-      autoProvides.add(scopeInfo.scopeAnnotationFQN());
-      autoProvides.add(shortName);
+      scopeProvides.add(scopeInfo.scopeAnnotationFQN());
+      scopeProvides.add(shortName);
     }
+    Set<String> scopeRequires = new TreeSet<>(scopeInfo.requires());
+    scopeRequires.addAll(ordering.autoRequires());
 
     for (MetaData metaData : ordering.ordered()) {
-      final String aspect = metaData.providesAspect();
-      if (aspect != null && !aspect.isEmpty()) {
-        autoProvidesAspects.add(aspect);
-      }
-      final var forExternal = metaData.autoProvides();
+      final var forExternal = metaData.provides();
       if (forExternal != null && !forExternal.isEmpty()) {
-        autoProvides.addAll(forExternal);
+        scopeProvides.addAll(forExternal);
       }
-    }
-    if (!autoProvides.isEmpty()) {
-      scopeInfo.buildAutoProvides(writer, autoProvides);
-    }
-    if (!autoProvidesAspects.isEmpty()) {
-      scopeInfo.buildAutoProvidesAspects(writer, autoProvidesAspects);
-    }
-    Set<String> autoRequires = ordering.autoRequires();
-    if (!autoRequires.isEmpty()) {
-      scopeInfo.buildAutoRequires(writer, autoRequires);
-    }
-    Set<String> autoRequiresAspects = ordering.autoRequiresAspects();
-    if (!autoRequiresAspects.isEmpty()) {
-      scopeInfo.buildAutoRequiresAspects(writer, autoRequiresAspects);
     }
 
-    var requires = new ArrayList<>(scopeInfo.requires());
-    var provides = new ArrayList<>(scopeInfo.provides());
-    requires.addAll(autoRequires);
-    autoRequiresAspects.stream().map(Util::wrapAspect).forEach(requires::add);
-    provides.addAll(autoProvides);
-    autoProvidesAspects.stream().map(Util::wrapAspect).forEach(provides::add);
+    scopeInfo.buildProvides(writer, scopeProvides, scopeRequires);
+
+    var requires = new ArrayList<>(scopeRequires);
+    var provides = new ArrayList<>(scopeProvides);
 
     ProcessingContext.addModule(new ModuleData(fullName, provides, requires));
   }
@@ -310,7 +329,6 @@ final class SimpleModuleWriter {
     if (scopeInfo.addModuleConstructor()) {
       writeConstructor();
     }
-    scopeInfo.buildProvides(writer);
   }
 
   private void writeWithBeans() {

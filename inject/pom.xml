@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.avaje</groupId>
     <artifactId>avaje-inject-parent</artifactId>
-    <version>11.6-RC4</version>
+    <version>12.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>avaje-inject</artifactId>
@@ -33,13 +33,13 @@
     <dependency>
       <groupId>io.avaje</groupId>
       <artifactId>avaje-applog</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
     </dependency>
 
     <dependency>
       <groupId>io.avaje</groupId>
       <artifactId>avaje-config</artifactId>
-      <version>4.1</version>
+      <version>4.2</version>
       <optional>true</optional>
     </dependency>
 
@@ -53,7 +53,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.18.0</version>
+      <version>5.20.0</version>
       <optional>true</optional>
     </dependency>
 
@@ -75,7 +75,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.5.18</version>
+      <version>1.5.20</version>
       <scope>test</scope>
     </dependency>
 

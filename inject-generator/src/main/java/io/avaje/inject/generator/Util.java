@@ -19,12 +19,10 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 
 final class Util {
-  static final String ASPECT_PROVIDER_PREFIX = "io.avaje.inject.aop.AspectProvider<";
   static final String PROVIDER_PREFIX = "jakarta.inject.Provider";
   private static final String OPTIONAL_PREFIX = "java.util.Optional<";
   private static final String NULLABLE = "Nullable";
   private static final int PROVIDER_LENGTH = PROVIDER_PREFIX.length() + 1;
-  private static final int ASPECT_PROVIDER_LENGTH = ASPECT_PROVIDER_PREFIX.length();
 
   static boolean notJavaLang(String type) {
     return !type.startsWith("java.lang.") || Character.isLowerCase(type.charAt(10));
@@ -250,24 +248,12 @@ final class Util {
     return rawType;
   }
 
-  static boolean isAspectProvider(String rawType) {
-    return rawType.startsWith(ASPECT_PROVIDER_PREFIX);
-  }
-
   static boolean isProvider(String rawType) {
     return rawType.startsWith(PROVIDER_PREFIX);
   }
 
   private static String extractProviderType(String rawType) {
     return rawType.substring(PROVIDER_LENGTH, rawType.length() - 1);
-  }
-
-  static String extractAspectType(String rawType) {
-    return rawType.substring(ASPECT_PROVIDER_LENGTH, rawType.length() - 1);
-  }
-
-  static String wrapAspect(String aspect) {
-    return Constants.ASPECT_PROVIDER + "<" + aspect + ">";
   }
 
   /**
@@ -391,10 +377,17 @@ final class Util {
   }
 
   static void validateBeanTypes(Element origin, List<TypeMirror> beanType) {
-    TypeMirror targetType =
-      origin instanceof TypeElement
-        ? origin.asType()
-        : ((ExecutableElement) origin).getReturnType();
+    var uType =
+      UType.parse(
+        origin instanceof TypeElement
+          ? origin.asType()
+          : ((ExecutableElement) origin).getReturnType());
+
+    var targetType =
+      uType.isGeneric() && uType.mainType().startsWith("java.util")
+        ? uType.param0().mirror()
+        : uType.mirror();
+
     beanType.forEach(type -> {
       if (!APContext.types().isAssignable(targetType, type)) {
         APContext.logError(origin, "%s does not extend type %s", targetType, beanType);
@@ -407,9 +400,10 @@ final class Util {
       element instanceof TypeElement
         ? (TypeElement) element
         : APContext.asTypeElement(((ExecutableElement) element).getReturnType());
-
+    var notInterface = !type.getKind().isInterface();
     if (type.getModifiers().contains(Modifier.FINAL)
-        || !type.getKind().isInterface() && !Util.hasNoArgConstructor(type)) {
+        || notInterface && !Util.hasNoArgConstructor(type)
+        || notInterface && Util.hasFinalMethods(type)) {
 
       return BeanTypesPrism.getOptionalOn(element)
           .map(BeanTypesPrism::value)
@@ -424,12 +418,50 @@ final class Util {
     return type;
   }
 
+  private static boolean hasFinalMethods(TypeElement type) {
+    return ElementFilter.methodsIn(type.getEnclosedElements()).stream()
+        .filter(x -> !x.getModifiers().contains(Modifier.STATIC))
+        .filter(x -> !x.getModifiers().contains(Modifier.PRIVATE))
+        .filter(x -> !x.getModifiers().contains(Modifier.PROTECTED))
+        .anyMatch(m -> m.getModifiers().contains(Modifier.FINAL));
+  }
+
   static boolean hasNoArgConstructor(TypeElement beanType) {
+    var rte = APContext.typeElement("java.lang.RuntimeException").asType();
+
     return ElementFilter.constructorsIn(beanType.getEnclosedElements()).stream()
-      .anyMatch(e -> e.getParameters().isEmpty() && !e.getModifiers().contains(Modifier.PRIVATE));
+      .anyMatch(e ->
+        e.getParameters().isEmpty()
+          && !e.getModifiers().contains(Modifier.PRIVATE)
+          && e.getThrownTypes().stream()
+          .allMatch(t -> APContext.types().isSubtype(t, rte)));
   }
 
   public static String shortNameLazyProxy(TypeElement lazyProxyType) {
-    return shortName(lazyProxyType.getQualifiedName().toString())
-      .replace(".", "_");  }
+    return shortName(lazyProxyType.getQualifiedName().toString()).replace(".", "_");
+  }
+
+  static Integer priority(Element element) {
+    for (final var mirror : element.getAnnotationMirrors()) {
+      if (isPriorityAnnotation(mirror) && mirror.getElementValues().size() == 1) {
+        var value = mirror.getElementValues().values().iterator().next().getValue();
+        if (value instanceof Integer) {
+          var val = (Integer) value;
+          return val <= Integer.MIN_VALUE + 1 ? Integer.MIN_VALUE + 2 : val;
+        }
+      }
+    }
+    return null;
+  }
+
+  private static boolean isPriorityAnnotation(AnnotationMirror mirror) {
+    return mirror.getAnnotationType().asElement().getSimpleName().toString().contains("Priority");
+  }
+
+  static LazyPrism isLazy(Element element) {
+    if (element == null) {
+      return null;
+    }
+    return LazyPrism.getOptionalOn(element).orElseGet(() -> isLazy(element.getEnclosingElement()));
+  }
 }

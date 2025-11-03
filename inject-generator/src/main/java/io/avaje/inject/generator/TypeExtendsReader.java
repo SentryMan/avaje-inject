@@ -41,9 +41,15 @@ final class TypeExtendsReader {
    * The implied qualifier name based on naming convention.
    */
   private String qualifierName;
-  private String providesAspect = "";
+  private Element source;
 
-  TypeExtendsReader(UType baseUType, TypeElement baseType, boolean factory, ImportTypeMap importTypes, boolean proxyBean) {
+  TypeExtendsReader(
+      UType baseUType,
+      TypeElement baseType,
+      boolean factory,
+      ImportTypeMap importTypes,
+      boolean proxyBean,
+      Element source) {
     this.baseUType = baseUType;
     this.baseType = baseType;
     this.extendsInjection = new TypeExtendsInjection(baseType, factory, importTypes);
@@ -55,6 +61,7 @@ final class TypeExtendsReader {
     this.controller = ControllerPrism.isPresent(baseType);
     this.closeable = closeableClient(baseType);
     this.autoProvide = autoProvide();
+    this.source = source;
   }
 
   /**
@@ -121,10 +128,6 @@ final class TypeExtendsReader {
     return extendsInjection.constructor();
   }
 
-  String providesAspect() {
-    return providesAspect;
-  }
-
   List<UType> autoProvides() {
     if (controller || implementsBeanFactory()) {
       // http controller, or request scoped controller via BeanFactory
@@ -141,7 +144,7 @@ final class TypeExtendsReader {
     }
     var autoProvides = new ArrayList<>(interfaceTypes);
     autoProvides.addAll(extendsTypes);
-    if (!autoProvide || !providesAspect.isEmpty()) {
+    if (!autoProvide) {
       autoProvides.remove(baseUType);
     } else {
       autoProvides.add(Util.unwrapProvider(baseUType));
@@ -190,17 +193,6 @@ final class TypeExtendsReader {
     providesTypes.remove(baseUType);
     // we can't provide a type that is getting injected
     extendsInjection.removeFromProvides(providesTypes);
-    providesAspect = initProvidesAspect();
-  }
-
-  private String initProvidesAspect() {
-    for (final var type : providesTypes) {
-      var providesType = type.full();
-      if (Util.isAspectProvider(providesType)) {
-        return Util.extractAspectType(providesType);
-      }
-    }
-    return "";
   }
 
   private void addSuperType(TypeElement element, TypeMirror mirror, boolean proxyBean) {
@@ -271,7 +263,11 @@ final class TypeExtendsReader {
   }
 
   private boolean isPublic(Element element) {
-    return element != null && element.getModifiers().contains(Modifier.PUBLIC);
+    return element != null && element.getModifiers().contains(Modifier.PUBLIC)
+        || source != null
+            && APContext.elements()
+                .getPackageOf(element)
+                .equals(APContext.elements().getPackageOf(source));
   }
 
   void validate() {

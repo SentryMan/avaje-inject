@@ -1,15 +1,26 @@
 package io.avaje.inject.spi;
 
-import io.avaje.inject.BeanEntry;
-import io.avaje.inject.BeanScope;
-import jakarta.inject.Provider;
+import static io.avaje.inject.spi.DBeanScope.combine;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static io.avaje.inject.spi.DBeanScope.combine;
+import org.jspecify.annotations.Nullable;
+
+import io.avaje.inject.BeanEntry;
+import io.avaje.inject.BeanScope;
+import jakarta.inject.Provider;
 
 class DBuilder implements Builder {
 
@@ -19,13 +30,14 @@ class DBuilder implements Builder {
   private final List<Runnable> postConstruct = new ArrayList<>();
 
   private final List<Consumer<BeanScope>> postConstructConsumers = new ArrayList<>();
-  private final List<ClosePair> preDestroy = new ArrayList<>();
+  private final Deque<ClosePair> preDestroy = new ArrayDeque<>();
+
   /** List of field injection closures. */
   private final List<Consumer<Builder>> injectors = new ArrayList<>();
   /** The beans created and added to the scope during building. */
   protected final DBeanMap beanMap = new DBeanMap();
 
-  protected final BeanScope parent;
+  protected final @Nullable BeanScope parent;
   protected final boolean parentOverride;
   /** Bean provided by the parent scope that we are not overriding. */
   protected Object parentMatch;
@@ -44,19 +56,28 @@ class DBuilder implements Builder {
   }
 
   @Override
-  public void currentModule(Class<? extends AvajeModule> currentModule) {
+  public final void currentModule(Class<? extends AvajeModule> currentModule) {
     beanMap.currentModule(currentModule);
   }
 
   @Override
-  public boolean isBeanAbsent(String name, Type... types) {
+  public final void currentScopes(String[] scopes) {
+    if(scopes != null) {
+      beanMap.setCurrentScopes(Set.of(scopes));
+    } else {
+      beanMap.setCurrentScopes(Set.of());
+    }
+  }
+
+  @Override
+  public boolean isBeanAbsent(@Nullable String name, Type... types) {
     parentMatch = null;
     next(name, types);
     if (parentOverride || parent == null) {
       return true;
     }
     if (parent instanceof DBeanScope) {
-      // effectively looking for a match in the test scope
+      // effectively looking for a match in the parent scope
       final DBeanScope dParent = (DBeanScope) parent;
       parentMatch = dParent.getStrict(name, removeAnnotations(types));
       return parentMatch == null;
@@ -65,7 +86,7 @@ class DBuilder implements Builder {
   }
 
   /**
-   * Return the types without any annotation types.
+   * Return the types without any annotation types or raw generics.
    *
    * <p>For the purposes of supplied beans (typically test doubles) we are not interested in
    * annotation types.
@@ -81,10 +102,14 @@ class DBuilder implements Builder {
   }
 
   private boolean isAnnotationType(Type type) {
-    return type instanceof Class && ((Class<?>) type).isAnnotation();
+    if (type instanceof Class<?>) {
+      var clazz = (Class<?>) type;
+      return clazz.isAnnotation() || clazz.getTypeParameters().length != 0;
+    }
+    return false;
   }
 
-  protected final void next(String name, Type... types) {
+  private void next(String name, Type... types) {
     injectTarget = firstOf(types);
     beanMap.nextBean(name, types);
   }
@@ -171,6 +196,12 @@ class DBuilder implements Builder {
   }
 
   @Override
+  public Builder asPriority(int priority) {
+    beanMap.nextPriority(priority);
+    return this;
+  }
+
+  @Override
   public Builder asPrototype() {
     beanMap.nextPrototype();
     return this;
@@ -206,13 +237,13 @@ class DBuilder implements Builder {
 
   @Override
   public final void addPreDestroy(AutoCloseable invoke, int priority) {
-    preDestroy.add(new ClosePair(priority, invoke));
+    preDestroy.addFirst(new ClosePair(priority, invoke));
   }
 
   @Override
   public final void addAutoClosable(Object maybeAutoCloseable) {
     if (maybeAutoCloseable instanceof AutoCloseable) {
-      preDestroy.add(new ClosePair(1000, (AutoCloseable) maybeAutoCloseable));
+      preDestroy.addFirst(new ClosePair(1000, (AutoCloseable) maybeAutoCloseable));
     }
   }
 
@@ -313,12 +344,7 @@ class DBuilder implements Builder {
       if (bean != null) {
         return bean;
       }
-      final String msg =
-          "Unable to inject an instance for generic type "
-              + type
-              + " usually provided by "
-              + cls
-              + "?";
+      final String msg = "Unable to inject an instance for generic type " + type + " usually provided by " + cls + "?";
       throw new IllegalStateException(msg);
     };
   }
@@ -344,13 +370,12 @@ class DBuilder implements Builder {
   }
 
   @Override
-  public boolean containsProfiles(List<String> type) {
-
+  public final boolean containsProfiles(List<String> type) {
     return !Collections.disjoint(profiles, type);
   }
 
   @Override
-  public boolean containsAllProfiles(List<String> type) {
+  public final boolean containsAllProfiles(List<String> type) {
     for (final var string : type) {
       if (!profiles.contains(string)) return false;
     }
@@ -358,22 +383,22 @@ class DBuilder implements Builder {
   }
 
   @Override
-  public boolean contains(String type) {
-    return beanMap.contains(type);
+  public final boolean contains(String type) {
+    return beanMap.contains(type) || parent != null && parent.contains(type);
   }
 
   @Override
-  public boolean contains(Type type) {
-    return beanMap.contains(type);
+  public final boolean contains(Type type) {
+    return beanMap.contains(type) || parent != null && parent.contains(type);
   }
 
   @Override
-  public boolean containsQualifier(String name) {
+  public final boolean containsQualifier(String name) {
     return beanMap.containsQualifier(name);
   }
 
   @Override
-  public ConfigPropertyPlugin property() {
+  public final ConfigPropertyPlugin property() {
     return propertyPlugin;
   }
 
@@ -431,12 +456,10 @@ class DBuilder implements Builder {
     return scope.start(start);
   }
 
-  /**
-   * Return the PreDestroy methods in priority order.
-   */
+  /** Return the PreDestroy methods in priority order. */
   private List<AutoCloseable> preDestroy() {
-    Collections.sort(preDestroy);
     return preDestroy.stream()
+      .sorted()
       .map(ClosePair::closeable)
       .collect(Collectors.toList());
   }

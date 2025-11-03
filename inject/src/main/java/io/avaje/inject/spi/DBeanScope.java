@@ -6,13 +6,7 @@ import static java.lang.System.Logger.Level.TRACE;
 import java.lang.System.Logger.Level;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -23,7 +17,6 @@ import org.jspecify.annotations.Nullable;
 import io.avaje.applog.AppLog;
 import io.avaje.inject.BeanEntry;
 import io.avaje.inject.BeanScope;
-import io.avaje.inject.Priority;
 
 @NullMarked
 final class DBeanScope implements BeanScope {
@@ -35,8 +28,8 @@ final class DBeanScope implements BeanScope {
   private final List<Consumer<BeanScope>> postConstructConsumers;
   private final List<AutoCloseable> preDestroy;
   private final DBeanMap beans;
-  private final ShutdownHook shutdownHook;
-  private final BeanScope parent;
+  private final @Nullable ShutdownHook shutdownHook;
+  private final @Nullable BeanScope parent;
   private boolean shutdown;
   private boolean closed;
 
@@ -46,7 +39,7 @@ final class DBeanScope implements BeanScope {
       List<Runnable> postConstruct,
       List<Consumer<BeanScope>> postConstructConsumers,
       DBeanMap beans,
-      BeanScope parent) {
+      @Nullable BeanScope parent) {
     this.preDestroy = preDestroy;
     this.postConstruct = postConstruct;
     this.postConstructConsumers = postConstructConsumers;
@@ -62,6 +55,9 @@ final class DBeanScope implements BeanScope {
 
   @Override
   public String toString() {
+    if (parent != null) {
+      return "BeanScope{" + beans + ",parent={" + parent + "}}";
+    }
     return "BeanScope{" + beans + '}';
   }
 
@@ -81,12 +77,12 @@ final class DBeanScope implements BeanScope {
 
   @Override
   public boolean contains(String type) {
-    return beans.contains(type);
+    return beans.contains(type) || (parent != null && parent.contains(type));
   }
 
   @Override
   public boolean contains(Type type) {
-    return beans.contains(type);
+    return beans.contains(type) || (parent != null && parent.contains(type));
   }
 
   @Override
@@ -119,7 +115,7 @@ final class DBeanScope implements BeanScope {
    * Get with a strict match on name for the single entry case.
    */
   @Nullable
-  Object getStrict(String name, Type[] types) {
+  Object getStrict(@Nullable String name, Type[] types) {
     for (Type type : types) {
       Object match = beans.getStrict(type, name);
       if (match != null) {
@@ -191,37 +187,12 @@ final class DBeanScope implements BeanScope {
   }
 
   @Override
-  public <T> List<T> listByPriority(Class<T> type) {
-    return listByPriority(type, Priority.class);
-  }
-
-  @Override
-  public <T> List<T> listByPriority(Class<T> type, Class<? extends Annotation> priorityAnnotation) {
-    List<T> list = list(type);
-    return list.size() > 1 ? sortByPriority(list, priorityAnnotation) : list;
-  }
-
-  private <T> List<T> sortByPriority(List<T> list, final Class<? extends Annotation> priorityAnnotation) {
-    boolean priorityUsed = false;
-    List<SortBean<T>> tempList = new ArrayList<>(list.size());
-    for (T bean : list) {
-      SortBean<T> sortBean = new SortBean<>(bean, priorityAnnotation);
-      tempList.add(sortBean);
-      if (!priorityUsed && sortBean.priorityDefined) {
-        priorityUsed = true;
-      }
+  public <T> List<T> listByPriority(Type type) {
+    List<T> results = beans.listByPriority(type);
+    if (results.isEmpty() && (parent != null)) {
+      return parent.listByPriority(type);
     }
-    if (!priorityUsed) {
-      // nothing with Priority annotation so return original order
-      return list;
-    }
-    Collections.sort(tempList);
-    // unpack into new sorted list
-    List<T> sorted = new ArrayList<>(tempList.size());
-    for (SortBean<T> sortBean : tempList) {
-      sorted.add(sortBean.bean);
-    }
-    return sorted;
+    return results;
   }
 
   @Override
@@ -249,7 +220,7 @@ final class DBeanScope implements BeanScope {
     } finally {
       lock.unlock();
     }
-    log.log(INFO, "Wired beans in {0}ms", (System.currentTimeMillis() - start));
+    log.log(INFO, "Wired beans in {0}ms", System.currentTimeMillis() - start);
     return this;
   }
 
@@ -287,6 +258,17 @@ final class DBeanScope implements BeanScope {
     }
   }
 
+  @Override
+  public Set<String> customScopeAnnotations() {
+    if (parent != null) {
+      final Set<String> scopes = new HashSet<>();
+      scopes.addAll(beans.scopeAnnotations());
+      scopes.addAll(parent.customScopeAnnotations());
+      return scopes;
+    }
+    return beans.scopeAnnotations();
+  }
+
   private static class ShutdownHook extends Thread {
     private final DBeanScope scope;
 
@@ -297,43 +279,6 @@ final class DBeanScope implements BeanScope {
     @Override
     public void run() {
       scope.shutdown();
-    }
-  }
-
-  private static class SortBean<T> implements Comparable<SortBean<T>> {
-
-    private final T bean;
-
-    private boolean priorityDefined;
-
-    private final int priority;
-
-    SortBean(T bean, Class<? extends Annotation> priorityAnnotation) {
-      this.bean = bean;
-      this.priority = initPriority(priorityAnnotation);
-    }
-
-    int initPriority(Class<? extends Annotation> priorityAnnotation) {
-      // Avoid adding hard dependency on javax.annotation-api by using reflection
-      try {
-        final Annotation ann = bean.getClass().getDeclaredAnnotation(priorityAnnotation);
-        if (ann != null) {
-          final int newPriority = (Integer) priorityAnnotation.getMethod("value").invoke(ann);
-          priorityDefined = true;
-          return newPriority;
-        }
-      } catch (Exception e) {
-        // If this happens, something has gone very wrong since a non-confirming @Priority was found...
-        throw new UnsupportedOperationException("Problem instantiating @Priority", e);
-      }
-      // Default priority as per javax.ws.rs.Priorities.USER
-      // User-level filter/interceptor priority
-      return 5000;
-    }
-
-    @Override
-    public int compareTo(SortBean<T> o) {
-      return Integer.compare(priority, o.priority);
     }
   }
 }

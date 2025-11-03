@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 
@@ -198,21 +199,13 @@ public interface BeanScope extends AutoCloseable {
    */
   <T> List<T> list(Type type);
 
-  /**
-   * Return the list of beans that implement the interface sorting by priority.
-   */
-  <T> List<T> listByPriority(Class<T> type);
+  /** Return the list of beans that implement the class sorting by priority. */
+  default <T> List<T> listByPriority(Class<T> type) {
+    return listByPriority((Type) type);
+  }
 
-  /**
-   * Return the beans that implement the interface sorting by the priority annotation used.
-   * <p>
-   * The priority annotation will typically be either <code>javax.annotation.Priority</code>
-   * or <code>jakarta.annotation.Priority</code>.
-   *
-   * @param type     The interface type of the beans to return
-   * @param priority The priority annotation used to sort the beans
-   */
-  <T> List<T> listByPriority(Class<T> type, Class<? extends Annotation> priority);
+  /** Return the list of beans that implement the type sorting by priority. */
+  <T> List<T> listByPriority(Type type);
 
   /**
    * Return the beans for this type mapped by their qualifier name.
@@ -245,4 +238,11 @@ public interface BeanScope extends AutoCloseable {
    */
   @Override
   void close();
+
+  /**
+   * Return the custom scope annotations contained in this bean scope.
+   */
+  default Set<String> customScopeAnnotations() {
+    return Set.of();
+  }
 }

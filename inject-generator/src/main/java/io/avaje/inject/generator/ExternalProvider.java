@@ -6,10 +6,9 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -84,24 +83,13 @@ final class ExternalProvider {
     for (final var module : modules) {
       final var name = module.getClass().getTypeName();
       final var provides = new TreeSet<String>();
-      for (final var provide : module.provides()) {
-        provides.add(provide.getTypeName());
-      }
-      for (final var provide : module.autoProvides()) {
-        provides.add(provide.getTypeName());
-      }
-      for (final var provide : module.autoProvidesAspects()) {
-        final var aspectType = Util.wrapAspect(provide.getTypeName());
-        provides.add(aspectType);
-      }
+      Collections.addAll(provides, module.providesBeans());
       registerExternalMetaData(name);
       readMetaDataProvides(provides);
       providedTypes.addAll(provides);
-      final var requires = Arrays.stream(module.requires()).map(Type::getTypeName).collect(toList());
-
-      Arrays.stream(module.autoRequires()).map(Type::getTypeName).forEach(requires::add);
-      Arrays.stream(module.requiresPackages()).map(Type::getTypeName).forEach(requires::add);
-      Arrays.stream(module.autoRequiresAspects()).map(Type::getTypeName).map(Util::wrapAspect).forEach(requires::add);
+      final List<String> requires = new ArrayList<>();
+      Collections.addAll(requires, module.requiresBeans());
+      Collections.addAll(requires, module.requiresPackagesFromType());
 
       ProcessingContext.addModule(new ModuleData(name, List.copyOf(provides), requires));
     }
@@ -131,9 +119,13 @@ final class ExternalProvider {
         defaultScope.pluginProvided(provide.getTypeName());
       }
       for (final var provide : plugin.providesAspects()) {
-        defaultScope.pluginProvided(Util.wrapAspect(provide.getTypeName()));
+        defaultScope.pluginProvided(wrapAspect(provide.getTypeName()));
       }
     }
+  }
+
+  private static String wrapAspect(String aspect) {
+    return Constants.ASPECT_PROVIDER + "<" + aspect + ">";
   }
 
   private static boolean pluginExists(String relativeName) {
@@ -162,7 +154,6 @@ final class ExternalProvider {
       providedTypes.add(meta.key());
       providedTypes.add(meta.type());
       providedTypes.addAll(Util.addQualifierSuffix(meta.provides(), meta.name()));
-      providedTypes.addAll(Util.addQualifierSuffix(meta.autoProvides(), meta.name()));
     });
   }
 
@@ -223,7 +214,7 @@ final class ExternalProvider {
       provides.add(provide);
     }
     for (final var provide : prism.providesAspects()) {
-      final var wrapAspect = Util.wrapAspect(provide.toString());
+      final var wrapAspect = wrapAspect(provide.toString());
       defaultScope.pluginProvided(wrapAspect);
       provides.add(wrapAspect);
     }
@@ -278,7 +269,6 @@ final class ExternalProvider {
       .map(MetaData::new)
       .forEach(m -> {
         externalMeta.add(m);
-        provides.addAll(m.autoProvides());
         provides.addAll(m.provides());
         m.dependsOn().stream()
           .filter(d -> !d.isSoftDependency())
@@ -288,7 +278,6 @@ final class ExternalProvider {
         providedTypes.add(m.key());
         providedTypes.add(m.type());
         providedTypes.addAll(Util.addQualifierSuffix(m.provides(), m.name()));
-        providedTypes.addAll(Util.addQualifierSuffix(m.autoProvides(), m.name()));
       });
 
     final var name = otherModule.getQualifiedName().toString();

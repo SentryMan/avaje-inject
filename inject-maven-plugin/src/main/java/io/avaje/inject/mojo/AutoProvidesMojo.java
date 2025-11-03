@@ -5,15 +5,16 @@ import static java.util.stream.Collectors.toList;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
 
@@ -31,6 +32,7 @@ import org.apache.maven.project.MavenProject;
 import io.avaje.inject.spi.AvajeModule;
 import io.avaje.inject.spi.InjectExtension;
 import io.avaje.inject.spi.InjectPlugin;
+import io.avaje.inject.spi.PluginProvides;
 
 /**
  * Plugin that generates <code>target/avaje-module-provides.txt</code> and <code>
@@ -105,7 +107,7 @@ public class AutoProvidesMojo extends AbstractMojo {
     final Map<String, List<String>> pluginEntries = new HashMap<>();
     for (final var plugin : plugins) {
       final List<String> provides = new ArrayList<>();
-      final var typeName = plugin.getClass().getTypeName();
+      final var typeName = plugin.getClass();
       log.info("Loaded Plugin: " + typeName);
       for (final var provide : plugin.provides()) {
         provides.add(provide.getTypeName());
@@ -113,7 +115,18 @@ public class AutoProvidesMojo extends AbstractMojo {
       for (final var provide : plugin.providesAspects()) {
         provides.add(wrapAspect(provide.getCanonicalName()));
       }
-      pluginEntries.put(typeName, provides);
+      pluginEntries.put(typeName.getTypeName(), provides);
+      Optional.ofNullable(plugin.getClass().getAnnotation(PluginProvides.class))
+        .ifPresent(p -> {
+          for (final var provide : p.value()) {
+            provides.add(provide.getTypeName());
+          }
+          Collections.addAll(provides, p.providesStrings());
+          for (final var provide : p.providesAspects()) {
+            provides.add(wrapAspect(provide.getCanonicalName()));
+          }
+          p.providesStrings();
+        });
     }
 
     pluginWriter.write("External Plugin Type|Provides");
@@ -137,35 +150,19 @@ public class AutoProvidesMojo extends AbstractMojo {
 
     List<ModuleData> modules = new ArrayList<>();
     for (final var module : avajeModules) {
-      final var name = module.getClass().getTypeName();
+      final var name = module.getClass();
       log.info("Detected External Module: " + name);
 
       final var provides = new ArrayList<String>();
-      for (final var provide : module.provides()) {
-        var type = provide.getTypeName();
+      for (final var provide : module.providesBeans()) {
+        var type = provide;
         provides.add(type);
       }
 
-      for (final var provide : module.autoProvides()) {
-        var type = provide.getTypeName();
-        provides.add(type);
-      }
+      final var requires = Arrays.stream(module.requiresBeans()).collect(toList());
 
-      for (final var provide : module.autoProvidesAspects()) {
-        var type = wrapAspect(provide.getTypeName());
-        provides.add(type);
-      }
-
-      final var requires =
-          Arrays.<Type>stream(module.requires()).map(Type::getTypeName).collect(toList());
-
-      Arrays.<Type>stream(module.autoRequires()).map(Type::getTypeName).forEach(requires::add);
-      Arrays.<Type>stream(module.requiresPackages()).map(Type::getTypeName).forEach(requires::add);
-      Arrays.<Type>stream(module.autoRequiresAspects())
-        .map(Type::getTypeName)
-        .map(AutoProvidesMojo::wrapAspect)
-        .forEach(requires::add);
-      modules.add(new ModuleData(name, provides, requires));
+      Collections.addAll(requires, module.requiresPackagesFromType());
+      modules.add(new ModuleData(name.getTypeName(), provides, requires));
     }
 
     moduleWriter.write("External Module Type|Provides|Requires");

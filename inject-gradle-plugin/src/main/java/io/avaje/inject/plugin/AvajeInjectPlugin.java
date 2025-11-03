@@ -6,13 +6,13 @@ import io.avaje.inject.spi.AvajeModule;
 import io.avaje.inject.spi.InjectPlugin;
 import io.avaje.inject.spi.InjectExtension;
 
+import io.avaje.inject.spi.PluginProvides;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.GradleException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -49,8 +49,8 @@ public class AvajeInjectPlugin implements org.gradle.api.Plugin<Project> {
     try (var classLoader = classLoader(project);
         var pluginWriter = createFileWriter(outputDir.getPath(), "avaje-plugins.csv");
         var moduleCSV = createFileWriter(outputDir.getPath(), "avaje-module-dependencies.csv")) {
-        writeProvidedPlugins(classLoader, pluginWriter);
-        writeModuleCSV(classLoader, moduleCSV);
+      writeProvidedPlugins(classLoader, pluginWriter);
+      writeModuleCSV(classLoader, moduleCSV);
     } catch (IOException e) {
       throw new GradleException("Failed to write avaje-module-provides", e);
     }
@@ -80,6 +80,17 @@ public class AvajeInjectPlugin implements org.gradle.api.Plugin<Project> {
       for (final var provide : plugin.providesAspects()) {
         provides.add(wrapAspect(provide.getCanonicalName()));
       }
+      Optional.ofNullable(plugin.getClass().getAnnotation(PluginProvides.class))
+        .ifPresent(p -> {
+          for (final var provide : p.value()) {
+            provides.add(provide.getTypeName());
+          }
+          Collections.addAll(provides, p.providesStrings());
+          for (final var provide : p.providesAspects()) {
+            provides.add(wrapAspect(provide.getCanonicalName()));
+          }
+          p.providesStrings();
+        });
       pluginEntries.put(typeName, provides);
     }
 
@@ -104,7 +115,8 @@ public class AvajeInjectPlugin implements org.gradle.api.Plugin<Project> {
 
   private static URL[] createClassPath(Project project) {
     try {
-      Set<File> compileClasspath = project.getConfigurations().getByName("compileClasspath").resolve();
+      Set<File> compileClasspath =
+          project.getConfigurations().getByName("compileClasspath").resolve();
       final List<URL> urls = new ArrayList<>(compileClasspath.size());
       for (File file : compileClasspath) {
         urls.add(file.toURI().toURL());
@@ -129,27 +141,13 @@ public class AvajeInjectPlugin implements org.gradle.api.Plugin<Project> {
       System.out.println("Detected External Module: " + name);
 
       final var provides = new ArrayList<String>();
-      for (final var provide : module.provides()) {
-        var type = provide.getTypeName();
-        provides.add(type);
-      }
-      for (final var provide : module.autoProvides()) {
-        var type = provide.getTypeName();
-        provides.add(type);
-      }
-      for (final var provide : module.autoProvidesAspects()) {
-        var type = wrapAspect(provide.getTypeName());
+      for (final var provide : module.providesBeans()) {
+        var type = provide;
         provides.add(type);
       }
 
-      final var requires = Arrays.<Type>stream(module.requires()).map(Type::getTypeName).collect(toList());
-
-      Arrays.<Type>stream(module.autoRequires()).map(Type::getTypeName).forEach(requires::add);
-      Arrays.<Type>stream(module.requiresPackages()).map(Type::getTypeName).forEach(requires::add);
-      Arrays.<Type>stream(module.autoRequiresAspects())
-          .map(Type::getTypeName)
-          .map(AvajeInjectPlugin::wrapAspect)
-          .forEach(requires::add);
+      final var requires = Arrays.stream(module.requiresBeans()).collect(toList());
+      Collections.addAll(requires, module.requiresPackagesFromType());
       modules.add(new ModuleData(name, provides, requires));
     }
 

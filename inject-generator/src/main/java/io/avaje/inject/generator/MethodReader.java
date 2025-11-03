@@ -1,13 +1,16 @@
 package io.avaje.inject.generator;
 
+import static io.avaje.inject.generator.APContext.logError;
 import static io.avaje.inject.generator.APContext.logWarn;
 import static io.avaje.inject.generator.Constants.CONDITIONAL_DEPENDENCY;
 import static io.avaje.inject.generator.ProcessingContext.asElement;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -37,6 +40,7 @@ final class MethodReader {
   private final boolean prototype;
   private final boolean primary;
   private final boolean secondary;
+  private final Integer priority;
   private final boolean lazy;
   private final boolean proxyLazy;
   private final TypeElement lazyProxyType;
@@ -68,14 +72,28 @@ final class MethodReader {
       prototype = PrototypePrism.isPresent(element);
       primary = PrimaryPrism.isPresent(element);
       secondary = SecondaryPrism.isPresent(element);
-      lazy = LazyPrism.isPresent(element) || LazyPrism.isPresent(element.getEnclosingElement());
+      priority = Util.priority(element);
+      var lazyPrism = Util.isLazy(element);
+      lazy = lazyPrism != null;
       conditions.readAll(element);
-      this.lazyProxyType = lazy ? Util.lazyProxy(element) : null;
+
+      String lazyKind = Optional.ofNullable(lazyPrism).map(LazyPrism::value).orElse("");
+      boolean useProxy = !"PROVIDER".equals(lazyKind);
+      this.lazyProxyType = !lazy || !useProxy ? null : Util.lazyProxy(element);
       this.proxyLazy = lazy && lazyProxyType != null;
+
+      if (lazy && !proxyLazy && useProxy) {
+        if ("FORCE_PROXY".equals(lazyKind)) {
+          logError(element, "Lazy return type must be abstract or have a no-arg constructor");
+        } else {
+          logWarn(element, "Lazy return type should be abstract or have a no-arg constructor");
+        }
+      }
     } else {
       prototype = false;
       primary = false;
       secondary = false;
+      priority = null;
       lazy = false;
       this.proxyLazy = false;
       this.lazyProxyType = null;
@@ -124,7 +142,8 @@ final class MethodReader {
       var beanTypes = BeanTypesPrism.getOptionalOn(element).map(BeanTypesPrism::value);
       beanTypes.ifPresent(t -> Util.validateBeanTypes(element, t));
       this.typeReader =
-        new TypeReader(beanTypes.orElse(List.of()), genericType, returnElement, importTypes);
+          new TypeReader(
+              beanTypes.orElse(List.of()), genericType, returnElement, importTypes, element);
       typeReader.process();
       MethodLifecycleReader lifecycleReader = new MethodLifecycleReader(returnElement, initMethod, destroyMethod);
       this.initMethod = lifecycleReader.initMethod();
@@ -177,8 +196,6 @@ final class MethodReader {
     observeParameter = params.stream().filter(MethodParam::observeEvent).findFirst().orElse(null);
     if (proxyLazy) {
       SimpleBeanLazyWriter.write(APContext.elements().getPackageOf(element), lazyProxyType);
-    } else if (lazy) {
-      logWarn(element, "Lazy return types should be abstract or have a no-arg constructor");
     }
     return this;
   }
@@ -214,11 +231,6 @@ final class MethodReader {
       typeReader == null
         ? Collections.emptyList()
         : Util.addQualifierSuffix(typeReader.provides(), name));
-    metaData.setAutoProvides(
-      typeReader == null
-        ? List.of()
-        : Util.addQualifierSuffix(typeReader.autoProvides(), name));
-    metaData.setProvidesAspect(typeReader == null ? "" : typeReader.providesAspect());
     return metaData;
   }
 
@@ -273,6 +285,8 @@ final class MethodReader {
       writer.append(".asPrototype()");
     } else if (secondary) {
       writer.append(".asSecondary()");
+    } else if (priority != null) {
+      writer.append(".asPriority(%s)", priority);
     }
 
     if (proxyLazy) {
@@ -331,6 +345,8 @@ final class MethodReader {
         writer.append(".asPrimary()");
       } else if (secondary) {
         writer.append(".asSecondary()");
+      } else if (priority != null) {
+        writer.append(".asPriority(%s)", priority);
       } else if (prototype) {
         writer.append(".asPrototype()");
       }
@@ -525,8 +541,15 @@ final class MethodReader {
     return lazy;
   }
 
+  /**
+   * Use a Provider with Secondary or Priority annotation.
+   *
+   * <p> As a Provider, the bean won't be instantiated unless it is needed
+   * by being wired as the highest priority, or wired in a List/Set/Map, or
+   * by being accessed via {@link io.avaje.inject.BeanScope#list(Type)} etc.
+   */
   boolean isUseProviderForSecondary() {
-    return secondary && !optionalType && !Util.isProvider(returnTypeRaw);
+    return (secondary || priority != null) && !optionalType && !Util.isProvider(returnTypeRaw);
   }
 
   boolean isPublic() {

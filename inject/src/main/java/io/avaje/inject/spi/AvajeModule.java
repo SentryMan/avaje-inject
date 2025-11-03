@@ -1,76 +1,10 @@
 package io.avaje.inject.spi;
 
-import java.lang.reflect.Type;
-
-/**
- * A Module containing dependencies that will be included in BeanScope.
- */
+/** A Module containing dependencies that will be included in BeanScope. */
 public interface AvajeModule extends InjectExtension {
 
-  /**
-   * Empty array of classes.
-   */
-  Class<?>[] EMPTY_CLASSES = {};
-
-  /**
-   * Return the set of types this module explicitly provides to other modules.
-   */
-  default Type[] provides() {
-    return EMPTY_CLASSES;
-  }
-
-  /**
-   * Return the types this module needs to be provided externally or via other modules.
-   */
-  default Type[] requires() {
-    return EMPTY_CLASSES;
-  }
-
-  /**
-   * Return the packages this module needs to be provided via other modules.
-   */
-  default Type[] requiresPackages() {
-    return EMPTY_CLASSES;
-  }
-
-  /**
-   * Return the classes that this module provides that we allow other modules to auto depend on.
-   *
-   * <p>This is a convenience when using multiple modules that is otherwise controlled manually by
-   * explicitly using {@link AvajeModule#provides()}.
-   */
-  default Type[] autoProvides() {
-    return EMPTY_CLASSES;
-  }
-
-  /**
-   * Return the aspects that this module provides.
-   *
-   * <p>This is a convenience when using multiple modules that we otherwise manually specify via
-   * {@link AvajeModule#provides()}.
-   */
-  default Class<?>[] autoProvidesAspects() {
-    return EMPTY_CLASSES;
-  }
-
-  /**
-   * These are the classes that this module requires for wiring that are provided by other external
-   * modules (that are in the classpath at compile time).
-   *
-   * <p>This is a convenience when using multiple modules that is otherwise controlled manually by
-   * explicitly using {@link AvajeModule#requires()} or {@link AvajeModule#requiresPackages()}.
-   */
-  default Type[] autoRequires() {
-    return EMPTY_CLASSES;
-  }
-
-  /**
-   * These are the aspects that this module requires whose implementations are provided by other
-   * external modules (that are in the classpath at compile time).
-   */
-  default Class<?>[] autoRequiresAspects() {
-    return EMPTY_CLASSES;
-  }
+  /** Empty array of strings. */
+  String[] EMPTY_STRINGS = {};
 
   /**
    * Return public classes of the beans that would be registered by this module.
@@ -80,14 +14,34 @@ public interface AvajeModule extends InjectExtension {
    */
   Class<?>[] classes();
 
-  /**
-   * Build all the beans.
-   */
+  /** Build all the beans. */
   void build(Builder builder);
 
-  /**
-   * Marker for custom scoped modules.
-   */
-  interface Custom extends AvajeModule {
+  /** Return the type names of types this module explicitly provides to other modules. */
+  default String[] providesBeans() {
+    return EMPTY_STRINGS;
   }
+
+  /**
+   * Return the type(s) of scopes that this module provides
+   */
+  default String[] definesScopes() {
+    return EMPTY_STRINGS;
+  }
+
+  /**
+   * Return the type names of types this module needs to be provided externally or via other
+   * modules.
+   */
+  default String[] requiresBeans() {
+    return EMPTY_STRINGS;
+  }
+
+  /** Return the type names of packages this module needs to be provided via other modules. */
+  default String[] requiresPackagesFromType() {
+    return EMPTY_STRINGS;
+  }
+
+  /** Marker for custom scoped modules. */
+  interface Custom extends AvajeModule {}
 }

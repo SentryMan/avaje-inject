@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -28,15 +29,16 @@ final class TypeReader {
       TypeElement beanType,
       ImportTypeMap importTypes,
       boolean factory) {
-    this(injectsTypes, genericType, true, beanType, importTypes, factory);
+    this(injectsTypes, genericType, true, beanType, importTypes, factory, beanType);
   }
 
   TypeReader(
       List<TypeMirror> injectsTypes,
       UType genericType,
       TypeElement returnElement,
-      ImportTypeMap importTypes) {
-    this(injectsTypes, genericType, false, returnElement, importTypes, false);
+      ImportTypeMap importTypes,
+      ExecutableElement source) {
+    this(injectsTypes, genericType, false, returnElement, importTypes, false, source);
   }
 
   private TypeReader(
@@ -45,13 +47,15 @@ final class TypeReader {
       boolean forBean,
       TypeElement beanType,
       ImportTypeMap importTypes,
-      boolean factory) {
+      boolean factory,
+      Element source) {
     this.injectsTypes = injectsTypes.stream().map(UType::parse).collect(toList());
     this.forBean = forBean;
     this.beanType = beanType;
     this.importTypes = importTypes;
     final boolean proxyBean = forBean && ProxyPrism.isPresent(beanType);
-    this.extendsReader = new TypeExtendsReader(genericType, beanType, factory, importTypes, proxyBean);
+    this.extendsReader =
+        new TypeExtendsReader(genericType, beanType, factory, importTypes, proxyBean, source);
     this.annotationReader = new TypeAnnotationReader(beanType);
   }
 
@@ -60,13 +64,19 @@ final class TypeReader {
   }
 
   List<String> provides() {
+    var provides = providedTypes();
+    provides.addAll(autoProvides());
+    return provides;
+  }
+
+  private List<String> providedTypes() {
     if (!injectsTypes.isEmpty()) {
       return injectsTypes.stream().map(UType::full).collect(toList());
     }
     return extendsReader.provides().stream().map(UType::full).collect(toList());
   }
 
-  List<String> autoProvides() {
+  private List<String> autoProvides() {
     if (!injectsTypes.isEmpty()) {
       return injectsTypes.stream().map(UType::full).collect(toList());
     }
@@ -74,10 +84,6 @@ final class TypeReader {
       .filter(u -> u.componentTypes().stream().noneMatch(p -> p.kind() == TypeKind.TYPEVAR))
       .map(UType::full)
       .collect(toList());
-  }
-
-  String providesAspect() {
-    return extendsReader.providesAspect();
   }
 
   boolean isClosable() {

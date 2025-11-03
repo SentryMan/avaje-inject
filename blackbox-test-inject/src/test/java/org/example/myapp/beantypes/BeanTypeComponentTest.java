@@ -16,6 +16,7 @@ class BeanTypesTest {
       assertFalse(scope.contains(BeanTypeComponent.class));
       assertThat(scope.get(AbstractSuperClass.class)).isNotNull();
       assertThat(scope.get(LimitedInterface.class)).isNotNull();
+      assertThat(scope.get(CharSequence.class)).isEqualTo("IAmNullable");
     }
   }
 }
