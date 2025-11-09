@@ -9,7 +9,7 @@ import org.mockito.Spy;
 
 import io.avaje.inject.BeanScope;
 import io.avaje.inject.test.InjectTest;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @InjectTest
 class SpyMeterTest {

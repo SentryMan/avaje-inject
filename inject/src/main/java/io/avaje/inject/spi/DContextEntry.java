@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.avaje.inject.BeanEntry;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 
 /**
  * Entry for a given key (bean class, interface class or annotation class).

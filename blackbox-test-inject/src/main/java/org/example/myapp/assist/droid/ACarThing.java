@@ -1,6 +1,6 @@
 package org.example.myapp.assist.droid;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 import java.util.List;
 

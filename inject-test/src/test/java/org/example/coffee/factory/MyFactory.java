@@ -5,7 +5,7 @@ import io.avaje.inject.BeanScope;
 import io.avaje.inject.Factory;
 import org.example.coffee.factory.other.Something;
 
-import jakarta.inject.Named;
+import javax.inject.Named;
 import org.example.coffee.parent.DesEngi;
 import org.example.request.MyHttpClient;
 

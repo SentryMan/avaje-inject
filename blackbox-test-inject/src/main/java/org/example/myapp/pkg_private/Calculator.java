@@ -1,6 +1,6 @@
 package org.example.myapp.pkg_private;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class Calculator {

@@ -1,6 +1,6 @@
 package io.avaje.inject.generator.models.valid.pkg_private;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class Calculator {

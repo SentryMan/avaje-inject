@@ -1,7 +1,7 @@
 package org.example.coffee.provider;
 
 import io.avaje.inject.Component;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 
 @Component
 class BProvUser {

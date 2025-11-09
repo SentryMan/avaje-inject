@@ -1,7 +1,7 @@
 package org.example.myapp;
 
 import io.avaje.inject.test.InjectTest;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

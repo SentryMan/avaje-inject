@@ -1,7 +1,7 @@
 package org.multi.parents;
 
 import io.avaje.inject.RequiresBean;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import org.multi.scope.Mod4Scope;
 
 @Singleton

@@ -1,6 +1,6 @@
 package org.example.inherit.sub;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.example.iface.MySomeNested;
 
 public abstract class MySubAbstract {

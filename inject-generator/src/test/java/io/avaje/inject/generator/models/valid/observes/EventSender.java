@@ -5,9 +5,9 @@ import java.util.List;
 import io.avaje.inject.events.Event;
 import io.avaje.inject.generator.models.valid.qualifier.TempQualifier;
 import io.avaje.inject.generator.models.valid.qualifier.TempQualifier.Scale;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 @Singleton
 public class EventSender {

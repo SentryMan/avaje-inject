@@ -1,7 +1,7 @@
 package org.example.myapp.other;
 
 import io.avaje.inject.test.InjectTest;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

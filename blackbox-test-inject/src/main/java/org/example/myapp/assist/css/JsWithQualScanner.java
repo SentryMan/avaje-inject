@@ -2,7 +2,7 @@ package org.example.myapp.assist.css;
 
 import io.avaje.inject.AssistFactory;
 import io.avaje.inject.Assisted;
-import jakarta.inject.Named;
+import javax.inject.Named;
 import org.example.myapp.assist.JsFactory;
 import org.example.myapp.assist.MyJsName;
 import org.example.myapp.assist.Scanner;

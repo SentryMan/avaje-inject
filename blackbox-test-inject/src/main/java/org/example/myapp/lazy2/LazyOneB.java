@@ -1,7 +1,7 @@
 package org.example.myapp.lazy2;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.example.myapp.HelloService;
 
 import java.util.concurrent.atomic.AtomicBoolean;

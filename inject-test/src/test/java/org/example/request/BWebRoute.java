@@ -4,7 +4,7 @@ import io.avaje.inject.spi.BeanFactory2;
 import io.helidon.webserver.http.ServerRequest;
 import io.helidon.webserver.http.ServerResponse;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 /**
  * Simulate web route generation for Helidon.

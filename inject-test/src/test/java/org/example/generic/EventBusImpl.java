@@ -1,6 +1,6 @@
 package org.example.generic;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class EventBusImpl implements EventBus<Object, Subscriber<?>> {

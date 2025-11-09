@@ -1,6 +1,6 @@
 package org.example.inherit;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.example.coffee.core.Steamer;
 import org.example.inherit.sub.MySubAbstract;
 

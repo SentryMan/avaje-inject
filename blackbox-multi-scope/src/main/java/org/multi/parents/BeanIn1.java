@@ -1,6 +1,6 @@
 package org.multi.parents;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import org.multi.scope.Mod1Scope;
 
 @Singleton

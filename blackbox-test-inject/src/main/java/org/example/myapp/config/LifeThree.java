@@ -1,7 +1,7 @@
 package org.example.myapp.config;
 
 import io.avaje.inject.PostConstruct;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class LifeThree {

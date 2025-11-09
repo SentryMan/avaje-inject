@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 
 import io.avaje.inject.AssistFactory;
 import io.avaje.inject.Assisted;
-import jakarta.inject.Named;
+import javax.inject.Named;
 
 @Named("tomato")
 @AssistFactory(CarFactory.class)

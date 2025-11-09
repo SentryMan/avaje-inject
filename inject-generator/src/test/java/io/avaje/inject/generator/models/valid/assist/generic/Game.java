@@ -2,7 +2,7 @@ package io.avaje.inject.generator.models.valid.assist.generic;
 
 import io.avaje.inject.generator.models.valid.assist.generic.NightLord.Caligo;
 import io.avaje.inject.generator.models.valid.assist.generic.NightLord.Heolstor;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class Game {

@@ -4,7 +4,7 @@ import io.avaje.inject.Bean;
 import io.avaje.inject.Factory;
 import org.example.iface.Some;
 
-import jakarta.inject.Named;
+import javax.inject.Named;
 
 @Factory
 public class MyAutoNameFactory {

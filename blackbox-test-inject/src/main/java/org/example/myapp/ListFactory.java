@@ -6,7 +6,7 @@ import io.avaje.inject.Bean;
 import io.avaje.inject.Factory;
 import io.avaje.inject.PostConstruct;
 import io.avaje.inject.PreDestroy;
-import jakarta.inject.Named;
+import javax.inject.Named;
 
 @Factory
 public class ListFactory {

@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import io.avaje.inject.Bean;
 import io.avaje.inject.Factory;
 import io.avaje.inject.Secondary;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 
 @Factory
 public class FactoryProvider {

@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 import org.jspecify.annotations.Nullable;
 
 import io.avaje.applog.AppLog;

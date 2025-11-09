@@ -1,6 +1,6 @@
 package org.example.coffee.qualifier;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 // no qualifier on this one
 @Singleton

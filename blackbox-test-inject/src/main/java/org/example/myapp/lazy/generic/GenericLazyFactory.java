@@ -8,7 +8,7 @@ import io.avaje.inject.Bean;
 import io.avaje.inject.BeanTypes;
 import io.avaje.inject.Factory;
 import io.avaje.inject.Lazy;
-import jakarta.inject.Named;
+import javax.inject.Named;
 
 @Lazy
 @Factory

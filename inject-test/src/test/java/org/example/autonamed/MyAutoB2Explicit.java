@@ -1,8 +1,8 @@
 package org.example.autonamed;
 
 import io.avaje.inject.Component;
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 @Singleton
 @Component.Import(MyAutoB2.class)

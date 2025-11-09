@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
 
 import io.avaje.inject.BeanEntry;
 import io.avaje.inject.BeanScope;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 
 class DBuilder implements Builder {
 

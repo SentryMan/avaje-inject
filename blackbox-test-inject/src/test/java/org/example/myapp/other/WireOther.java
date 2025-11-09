@@ -3,7 +3,7 @@ package org.example.myapp.other;
 import org.example.external.aspect.PluginProvidedClass;
 import org.other.one.OtherComponent;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class WireOther {

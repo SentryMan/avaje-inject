@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.jspecify.annotations.Nullable;
 
 import io.avaje.inject.External;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class ExternalDeps {

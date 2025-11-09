@@ -14,7 +14,7 @@ import java.util.Set;
 
 import io.avaje.inject.BeanEntry;
 import io.avaje.inject.BeanScope;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 import org.jspecify.annotations.Nullable;
 
 /**

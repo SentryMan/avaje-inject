@@ -1,6 +1,6 @@
 package org.example.myapp.lifecycle;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class GreetingService extends ServiceCreator {

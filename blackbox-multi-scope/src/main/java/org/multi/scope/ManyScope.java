@@ -3,7 +3,7 @@ package org.multi.scope;
 import org.other.one.custom.ExternalScope;
 
 import io.avaje.inject.InjectModule;
-import jakarta.inject.Scope;
+import javax.inject.Scope;
 
 @Scope
 @InjectModule(

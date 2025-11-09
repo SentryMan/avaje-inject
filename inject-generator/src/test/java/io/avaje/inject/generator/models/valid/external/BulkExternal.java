@@ -3,7 +3,7 @@ package io.avaje.inject.generator.models.valid.external;
 import java.lang.ref.WeakReference;
 
 import io.avaje.inject.External;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class BulkExternal {

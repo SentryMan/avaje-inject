@@ -1,7 +1,7 @@
 package org.example.myapp;
 
 import io.avaje.inject.PreDestroy;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 import java.util.ArrayList;
 import java.util.Collections;

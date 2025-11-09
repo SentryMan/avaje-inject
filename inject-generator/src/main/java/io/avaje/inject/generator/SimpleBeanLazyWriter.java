@@ -89,7 +89,7 @@ final class SimpleBeanLazyWriter {
   String imports() {
     importTypes.add("io.avaje.inject.spi.Proxy");
     importTypes.add("io.avaje.inject.spi.Generated");
-    importTypes.add("jakarta.inject.Provider");
+    importTypes.add("javax.inject.Provider");
 
     StringBuilder writer = new StringBuilder();
     for (String importType : importTypes.forImport()) {

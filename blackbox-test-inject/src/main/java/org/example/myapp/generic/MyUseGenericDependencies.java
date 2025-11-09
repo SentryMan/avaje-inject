@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 class MyUseGenericDependencies {

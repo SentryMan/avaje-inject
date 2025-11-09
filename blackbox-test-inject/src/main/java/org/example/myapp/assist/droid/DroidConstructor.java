@@ -2,7 +2,7 @@ package org.example.myapp.assist.droid;
 
 import io.avaje.inject.Assisted;
 import io.avaje.inject.AssistFactory;
-import jakarta.inject.Named;
+import javax.inject.Named;
 
 @Named("android")
 @AssistFactory(DroidFactory.class)

@@ -3,8 +3,8 @@ package io.avaje.inject.generator.models.valid.observes;
 import java.util.List;
 
 import io.avaje.inject.events.Observes;
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 @Singleton
 public class TestQualifiedObserver {

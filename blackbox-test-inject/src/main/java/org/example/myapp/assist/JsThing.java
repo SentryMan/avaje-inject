@@ -1,7 +1,7 @@
 package org.example.myapp.assist;
 
 import io.avaje.inject.Component;
-import jakarta.inject.Named;
+import javax.inject.Named;
 
 @Component
 public class JsThing {

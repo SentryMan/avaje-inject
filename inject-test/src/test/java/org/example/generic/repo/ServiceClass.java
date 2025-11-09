@@ -1,6 +1,6 @@
 package org.example.generic.repo;
 
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 import java.util.Map;
 

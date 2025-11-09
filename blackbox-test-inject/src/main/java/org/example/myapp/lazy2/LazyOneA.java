@@ -1,7 +1,7 @@
 package org.example.myapp.lazy2;
 
 import io.avaje.inject.PostConstruct;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

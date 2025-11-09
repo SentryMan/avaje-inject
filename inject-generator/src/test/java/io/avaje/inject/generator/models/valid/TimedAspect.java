@@ -3,7 +3,7 @@ package io.avaje.inject.generator.models.valid;
 import io.avaje.inject.aop.AspectProvider;
 import io.avaje.inject.aop.Invocation;
 import io.avaje.inject.aop.MethodInterceptor;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import java.lang.reflect.Method;
 
 @Singleton

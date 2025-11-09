@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import io.avaje.config.Config;
 import io.avaje.inject.BeanScope;
 import io.avaje.inject.test.InjectTest;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @InjectTest(profiles = {"Fish", "testRepeatable"})
 class ProfileTests {
