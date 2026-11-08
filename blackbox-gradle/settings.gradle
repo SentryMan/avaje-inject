@@ -1,0 +1,10 @@
+pluginManagement {
+  // use the local source of the avaje-inject gradle plugin
+  includeBuild '../inject-gradle-plugin'
+  repositories {
+    mavenLocal()
+    gradlePluginPortal()
+  }
+}
+
+rootProject.name = 'blackbox-gradle'

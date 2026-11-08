@@ -1,0 +1,49 @@
+plugins {
+  id 'java'
+  id 'io.avaje.inject'
+}
+
+group = 'org.example'
+version = '1.0'
+
+def avajeInjectVersion = '12.7'
+
+repositories {
+  // requires avaje-inject artifacts installed via: mvn clean install
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  implementation "io.avaje:avaje-inject:${avajeInjectVersion}"
+  annotationProcessor "io.avaje:avaje-inject-generator:${avajeInjectVersion}"
+
+  testImplementation "io.avaje:avaje-inject-test:${avajeInjectVersion}"
+  testImplementation platform('org.junit:junit-bom:5.13.4')
+  testImplementation 'org.junit.jupiter:junit-jupiter'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  testAnnotationProcessor "io.avaje:avaje-inject-generator:${avajeInjectVersion}"
+}
+
+test {
+  useJUnitPlatform()
+  systemProperty 'buildDir', layout.buildDirectory.get().asFile.absolutePath
+}
+
+// verify the gradle plugin configured the jar Main-Class from @MainClass
+tasks.register('verifyJarMainClass') {
+  dependsOn tasks.named('jar')
+  def jarFile = tasks.named('jar').flatMap { it.archiveFile }
+  doLast {
+    def mainClass = new java.util.jar.JarFile(jarFile.get().asFile).withCloseable {
+      it.manifest.mainAttributes.getValue('Main-Class')
+    }
+    if (mainClass != 'org.example.gradle.Main') {
+      throw new GradleException("Expected jar Main-Class org.example.gradle.Main but was ${mainClass}")
+    }
+  }
+}
+
+tasks.named('check') {
+  dependsOn 'verifyJarMainClass'
+}
