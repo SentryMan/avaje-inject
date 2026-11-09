@@ -23,6 +23,21 @@ updates:
       - "dependencies"
     target-branch: "master"
 
+  - package-ecosystem: "gradle"
+    directories:
+      - "/inject-gradle-plugin"
+      - "/blackbox-gradle"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      gradle-dependencies:
+        patterns:
+          - "*"
+    labels:
+      - "dependencies"
+    target-branch: "master"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
