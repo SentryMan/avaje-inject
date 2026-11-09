@@ -41,6 +41,8 @@ jobs:
       run: mvn --version
     - name: Build with Maven
       run: mvn clean install
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v5
     - name: Build Gradle plugin
       working-directory: inject-gradle-plugin
       run: ./gradlew build
