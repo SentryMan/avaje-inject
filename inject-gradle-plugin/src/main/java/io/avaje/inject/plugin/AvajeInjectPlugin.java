@@ -41,14 +41,18 @@ public class AvajeInjectPlugin implements org.gradle.api.Plugin<Project> {
           // run it automatically before build
           Task buildTask = prj.getTasks().getByName("compileJava");
           buildTask.doFirst(it -> writeProvides(project));
-          buildTask.doLast(it -> configureMainClass(project));
         });
+    // read @MainClass output when the jar runs, so it applies even if compileJava is up to date
+    var mainClassFile = new File(project.getBuildDir(), "avaje-main-class.txt");
+    project.getTasks().withType(Jar.class).configureEach(jar -> {
+      jar.getInputs().files(mainClassFile).withPropertyName("avajeMainClass").optional();
+      jar.doFirst(it -> configureMainClass(jar, mainClassFile));
+    });
     // register a task to run it manually
     project.task("discoverModules").doLast(task -> writeProvides(project));
   }
 
-  private void configureMainClass(Project project) {
-    var mainClassFile = new File(project.getBuildDir(), "avaje-main-class.txt");
+  private static void configureMainClass(Jar jar, File mainClassFile) {
     if (!mainClassFile.exists()) {
       return;
     }
@@ -57,8 +61,7 @@ public class AvajeInjectPlugin implements org.gradle.api.Plugin<Project> {
       if (mainClass.isEmpty()) {
         return;
       }
-      project.getTasks().withType(Jar.class).configureEach(jar ->
-        jar.getManifest().getAttributes().put("Main-Class", mainClass));
+      jar.getManifest().getAttributes().put("Main-Class", mainClass);
       System.out.println("Configured JAR Main-Class: " + mainClass);
     } catch (IOException e) {
       System.err.println("Unable to read avaje-main-class.txt: " + e.getMessage());
