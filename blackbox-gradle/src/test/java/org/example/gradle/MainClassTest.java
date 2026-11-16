@@ -24,9 +24,9 @@ class MainClassTest {
   @Test
   void gradlePluginFilesInBuildDir() throws Exception {
     Path buildDir = Path.of(System.getProperty("buildDir"));
-    // written by the gradle plugin, checked by the processor for @MainClass
-    assertTrue(Files.exists(buildDir.resolve("avaje-gradle-plugin.txt")));
+    // written by the gradle plugin, avaje-plugins.csv is checked by the processor for @MainClass
     assertTrue(Files.exists(buildDir.resolve("avaje-plugins.csv")));
+    assertTrue(Files.exists(buildDir.resolve("avaje-module-dependencies.csv")));
     // written by the processor for @MainClass
     assertEquals("org.example.gradle.Main", Files.readString(buildDir.resolve("avaje-main-class.txt")).trim());
   }
